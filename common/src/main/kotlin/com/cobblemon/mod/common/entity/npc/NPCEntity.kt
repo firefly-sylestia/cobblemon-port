@@ -70,7 +70,6 @@ import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
-import net.minecraft.network.protocol.game.DebugPackets
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
@@ -368,9 +367,9 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         return brain
     }
 
-    override fun doHurtTarget(target: Entity): Boolean {
+    override fun doHurtTarget(level: ServerLevel, target: Entity): Boolean {
         val source = this.damageSources().mobAttack(this)
-        val hurt = target.hurt(source, attributes.getValue(Attributes.ATTACK_DAMAGE).toFloat() * 5F)
+        val hurt = target.hurtServer(level, source, attributes.getValue(Attributes.ATTACK_DAMAGE).toFloat() * 5F)
         if (hurt) {
             playAttackSound()
         }
@@ -395,16 +394,9 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         schedulingTracker.update(1/20F)
     }
 
-    override fun customServerAiStep() {
-        super.customServerAiStep()
-        getBrain().tick(level() as ServerLevel, this)
-    }
-
-    override fun sendDebugPackets() {
-        super.sendDebugPackets()
-        DebugPackets.sendEntityBrain(this)
-        DebugPackets.sendGoalSelector(level(), this, this.goalSelector)
-        DebugPackets.sendPathFindingPacket(level(), this, this.navigation.path, this.navigation.path?.distToTarget ?: 0F)
+    override fun customServerAiStep(level: ServerLevel) {
+        super.customServerAiStep(level)
+        getBrain().tick(level, this)
     }
 
     override fun broadcastToPlayer(player: ServerPlayer): Boolean {
@@ -606,7 +598,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
     }
 
     override fun isPushable() = isMovable ?: npc.isMovable
-    override fun isInvulnerableTo(source: DamageSource) = (isInvulnerable ?: npc.isInvulnerable) && !source.`is`(BYPASSES_INVULNERABILITY)
+    override fun isInvulnerableTo(level: ServerLevel, source: DamageSource) = (isInvulnerable ?: npc.isInvulnerable) && !source.`is`(BYPASSES_INVULNERABILITY)
     override fun canBeLeashed() = isLeashable ?: npc.isLeashable
     override fun canBeHitByProjectile() = allowProjectileHits ?: npc.allowProjectileHits
 

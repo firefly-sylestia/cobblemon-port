@@ -1,4 +1,4 @@
-accessWidener	v2	named
+accessWidener	v2	official
 
 # Cobblemon makes use of the v2 protocol for access wideners. This allows for plugins
 # and mods depending on Cobblemon to apply theses wideners to their own environments,

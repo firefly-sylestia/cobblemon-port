@@ -76,7 +76,7 @@ object CobblemonTradeOffers {
             ))
         )
         VillagerProfession.FISHERMAN -> listOf(
-            VillagerTradeOffer(BuiltInRegistries.VILLAGER_PROFESSION.getValue(VillagerProfession.FISHERMAN), 5, listOf(
+            VillagerTradeOffer(BuiltInRegistries.VILLAGER_PROFESSION.getValue(VillagerProfession.FISHERMAN)!!, 5, listOf(
                 VillagerTrades.ItemsForEmeralds(CobblemonItems.POKEROD_SMITHING_TEMPLATE, 12, 1, 3, 30)
             ))
         )

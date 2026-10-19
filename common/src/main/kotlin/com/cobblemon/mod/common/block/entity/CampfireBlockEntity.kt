@@ -382,7 +382,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
 
     override fun setRecipeUsed(recipe: RecipeHolder<*>?) {
         if (recipe != null) {
-            val resourceLocation = recipe.id().location()
+            val resourceLocation = recipe.id().identifier()
             this.recipesUsed.addTo(resourceLocation, 1)
         }
     }

@@ -75,8 +75,7 @@ jobs:
               line=${line//'%'/'%25'}
               line=${line//$'\r'/}
               echo "::error::$line"
-              annotation_count=$((annotation_count + 1))
-            done < <(grep -E '^e: |^FAILURE|^What went wrong|^Caused by|Invalid|widener|Exception|error:' "$log" | head -n 30 || true)
+              annotation_count=$((annotation_count + 1))              done < <(grep -E '^e: |^FAILURE|^What went wrong|^Caused by|Invalid|widener|Exception|error:' "$log" | head -n 20 || true)
             if [[ "$annotation_count" -eq 0 ]]; then
               while IFS= read -r line && [[ "$annotation_count" -lt 20 ]]; do
                 line=${line//'%'/'%25'}
@@ -94,6 +93,20 @@ jobs:
               echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
           fi
+
+      - name: Expose diagnostic totals
+        if: always()
+        shell: bash
+        run: |
+          report=fabric-26.3/build/ci/diagnostics.txt
+          [[ -f "$report" ]] || exit 0
+          count=0
+          while IFS= read -r line && [[ "$count" -lt 10 ]]; do
+            line=${line//'%'/'%25'}
+            line=${line//$'\r'/}
+            echo "::error::$line"
+            count=$((count + 1))
+          done < <(grep -E '^(Compiler diagnostic lines:|Affected source files:)' "$report"; grep -E '^ *[0-9]+ ' "$report" | head -n 8)
 
       - name: Upload build log
         if: always()

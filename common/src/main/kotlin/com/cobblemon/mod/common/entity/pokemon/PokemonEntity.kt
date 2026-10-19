@@ -203,6 +203,7 @@ open class PokemonEntity(
         @JvmStatic val PLATFORM_TYPE = SynchedEntityData.defineId(PokemonEntity::class.java, PlatformTypeDataSerializer)
         @JvmStatic val BEAM_MODE = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BYTE)
         @JvmStatic val BATTLE_ID = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.OPTIONAL_UUID)
+        @JvmStatic val OWNER_UUID = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.OPTIONAL_UUID)
         @JvmStatic val ASPECTS = SynchedEntityData.defineId(PokemonEntity::class.java, StringSetDataSerializer)
         @JvmStatic val DYING_EFFECTS_STARTED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
         @JvmStatic val POSE_TYPE = SynchedEntityData.defineId(PokemonEntity::class.java, PoseTypeDataSerializer)
@@ -286,6 +287,9 @@ open class PokemonEntity(
     var battleId: UUID?
         get() = entityData.get(BATTLE_ID).orElse(null)
         set(value) = entityData.set(BATTLE_ID, Optional.ofNullable(value))
+    var ownerUUID: UUID?
+        get() = entityData.get(OWNER_UUID).orElse(null)
+        set(value) = entityData.set(OWNER_UUID, Optional.ofNullable(value))
     val battle: PokemonBattle?
         get() = battleId?.let { BattleRegistry.getBattle(it) }
     val isBattling: Boolean
@@ -453,6 +457,7 @@ open class PokemonEntity(
         builder.define(PLATFORM_TYPE, PlatformType.NONE)
         builder.define(PHASING_TARGET_ID, -1)
         builder.define(BATTLE_ID, Optional.empty())
+        builder.define(OWNER_UUID, Optional.empty())
         builder.define(ASPECTS, emptySet())
         builder.define(DYING_EFFECTS_STARTED, false)
         builder.define(POSE_TYPE, PoseType.STAND)

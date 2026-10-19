@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "cobblemon",
+  "version": "${version}",
+  "name": "Cobblemon",
+  "description": "Adds Pokémon to the world, letting you find, battle, capture, and evolve them.",
+  "authors": ["The Cobblemon Team"],
+  "contact": {
+    "homepage": "https://cobblemon.com/",
+    "sources": "https://gitlab.com/cable-mc/cobblemon",
+    "issues": "https://gitlab.com/cable-mc/cobblemon/-/issues"
+  },
+  "license": "MPL-2.0",
+  "icon": "assets/cobblemon/icon_cobblemon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.cobblemon.mod.fabric.FabricBootstrap"],
+    "client": ["com.cobblemon.mod.fabric.client.CobblemonFabricClient"],
+    "fabric-datagen": ["com.cobblemon.mod.fabric.data.generator.CobblemonFabricDataGenerator"],
+    "modmenu": ["com.cobblemon.mod.fabric.client.integration.modmenu.CobblemonModMenu"]
+  },
+  "mixins": ["mixins.cobblemon-common.json", "mixins.cobblemon-fabric.json"],
+  "accessWidener": "cobblemon-common.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "fabric-api": ">=0.163.0+26.3",
+    "minecraft": "26.3",
+    "java": ">=25"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/cobblemon",
+        "modmenu.modrinth": "https://modrinth.com/mod/cobblemon",
+        "modmenu.discord": "https://discord.gg/cobblemon"
+      }
+    }
+  }
+}

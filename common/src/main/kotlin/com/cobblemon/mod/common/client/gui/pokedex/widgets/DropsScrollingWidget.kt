@@ -25,7 +25,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.util.FastColor
+import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 
@@ -76,8 +76,8 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
         var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + yStart
         if (yTop < yStart) yTop = yStart
 
-        context.fill(xLeft + 1, yStart, xRight - 1, this.bottom, FastColor.ARGB32.color(255, 126, 231, 229)) // track
-        context.fill(xLeft, yTop, xRight, yTop + yBottom, FastColor.ARGB32.color(255, 58, 150, 182)) // bar
+        context.fill(xLeft + 1, yStart, xRight - 1, this.bottom, ARGB.color(255, 126, 231, 229)) // track
+        context.fill(xLeft, yTop, xRight, yTop + yBottom, ARGB.color(255, 58, 150, 182)) // bar
     }
 
     override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {

@@ -23,7 +23,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.resources.model.BakedModel
 import net.minecraft.core.Direction
-import net.minecraft.util.FastColor
+import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import org.joml.Vector3f
@@ -96,9 +96,9 @@ class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Bl
             .setValue(CampfirePotBlock.OCCUPIED, (!blockEntity.getSeasonings().isEmpty() || !blockEntity.getIngredients().isEmpty()))
         val bakedModel: BakedModel = blockRenderer.getBlockModel(state)
 
-        val red = FastColor.ARGB32.red(blockEntity.brothColor) / 255F
-        val green = FastColor.ARGB32.green(blockEntity.brothColor) / 255F
-        val blue = FastColor.ARGB32.blue(blockEntity.brothColor) / 255F
+        val red = ARGB.red(blockEntity.brothColor) / 255F
+        val green = ARGB.green(blockEntity.brothColor) / 255F
+        val blue = ARGB.blue(blockEntity.brothColor) / 255F
 
         blockRenderer.modelRenderer.renderModel(
             poseStack.last(),

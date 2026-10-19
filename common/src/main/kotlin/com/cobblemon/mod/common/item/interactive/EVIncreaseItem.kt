@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.item.interactive
 
+import com.cobblemon.mod.common.util.CobblemonInteractionResults
+
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.pokemon.stats.ItemEvSource
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
@@ -17,7 +19,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 
@@ -35,13 +37,13 @@ interface EVIncreaseItem: PokemonSelectingItem {
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
-    ): InteractionResultHolder<ItemStack> {
+    ): InteractionResult {
         val evsGained = pokemon.evs.add(stat, evIncreaseAmount, ItemEvSource(player, stack, pokemon))
         return if (evsGained > 0) {
             onSuccessfulApply(player, stack, pokemon)
-            InteractionResultHolder.success(stack)
+            CobblemonInteractionResults.success(stack)
         } else {
-            InteractionResultHolder.fail(stack)
+            CobblemonInteractionResults.fail(stack)
         }
     }
 

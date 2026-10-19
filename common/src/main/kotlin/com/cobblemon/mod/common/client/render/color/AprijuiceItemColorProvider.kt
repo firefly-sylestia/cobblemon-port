@@ -29,7 +29,7 @@ object AprijuiceItemColorProvider : ItemColor {
                 CookingQuality.HIGH -> ChatFormatting.GREEN.color
             }
 
-            color?.let { return FastColor.ARGB32.opaque(color) }
+            color?.let { return ARGB.opaque(color) }
         }*/
 
         if (layer == JUICE_INDEX) {

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.util.CobblemonInteractionResults
+
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.api.multiblock.MultiblockBlock
 import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
@@ -19,7 +21,7 @@ import net.minecraft.core.Direction
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -85,15 +87,15 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
         player: Player,
         hand: InteractionHand,
         hit: BlockHitResult
-    ): ItemInteractionResult {
+    ): InteractionResult {
         val entity = level.getBlockEntity(pos) as? FossilMultiblockEntity
-            ?: return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
+            ?: return InteractionResult.SUCCESS
         val result = entity.handleUseItem(stack, state, level, pos, player, hand)
-        if (result == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION) {
+        if (result == InteractionResult.PASS) {
             return if (entity.handleUseWithoutItem(state, level, pos, player).consumesAction()) {
-                ItemInteractionResult.sidedSuccess(level.isClientSide)
+                CobblemonInteractionResults.sidedSuccess(level.isClientSide)
             } else {
-                ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+                InteractionResult.PASS
             }
         }
         return result

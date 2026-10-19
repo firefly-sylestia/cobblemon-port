@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.villager.VillagerGatherableItems;
 
 import java.util.Objects;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.ItemStack;
 
 @Mixin(Villager.class)

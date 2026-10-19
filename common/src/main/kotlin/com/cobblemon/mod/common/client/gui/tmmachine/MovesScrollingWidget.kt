@@ -29,7 +29,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
-import net.minecraft.util.FastColor
+import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 
 class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<MutableList<TechnicalMachine>>, val setTM: (TechnicalMachine?, Boolean) -> (Unit)): ScrollingWidget<ScrollSlot>(
@@ -103,8 +103,8 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<
             yTop = this.y
         }
 
-        context.fill(xLeft, this.y, xRight, this.bottom, FastColor.ARGB32.color(255, 75, 75, 75)) // background
-        context.fill(xLeft,yTop, xRight, yTop + yBottom, FastColor.ARGB32.color(255, 141, 141, 141)) // base
+        context.fill(xLeft, this.y, xRight, this.bottom, ARGB.color(255, 75, 75, 75)) // background
+        context.fill(xLeft,yTop, xRight, yTop + yBottom, ARGB.color(255, 141, 141, 141)) // base
     }
 
     override fun getEntry(index: Int): ScrollSlot = children()[index] as ScrollSlot

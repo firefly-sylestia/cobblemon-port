@@ -156,7 +156,7 @@ import net.minecraft.util.Mth.clamp
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.MobSpawnType
+import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -804,7 +804,7 @@ open class Pokemon : ShowdownIdentifiable {
             val adjustedPosition = entity.getAdjustedSendoutPosition(position)
             entity.setPositionSafely(adjustedPosition)
             mutation(entity)
-            entity.finalizeSpawn(level, level.getCurrentDifficultyAt(adjustedPosition.toBlockPos()), MobSpawnType.EVENT, null)
+            entity.finalizeSpawn(level, level.getCurrentDifficultyAt(adjustedPosition.toBlockPos()), EntitySpawnReason.EVENT, null)
             level.addFreshEntity(entity)
             state = SentOutState(entity)
             return entity

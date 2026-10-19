@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block.entity
 
+import com.cobblemon.mod.common.util.CobblemonInteractionResults
+
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.block.DiscShelfBlock
@@ -38,11 +40,11 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
     private val accessibleSlots = IntArray(14) { it }
     private var lastNotePulseTick: Long = Long.MIN_VALUE
 
-    fun handleUseItem(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hit: BlockHitResult): ItemInteractionResult {
-        if (stack.isEmpty) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+    fun handleUseItem(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hit: BlockHitResult): InteractionResult {
+        if (stack.isEmpty) return InteractionResult.PASS
         val slot = getHitSlot(hit, state).orElse(-1)
-        if (slot !in 0 until 14) return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
-        if (!isValidItem(stack)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+        if (slot !in 0 until 14) return InteractionResult.SUCCESS
+        if (!isValidItem(stack)) return InteractionResult.PASS
 
         val oldStack = items[slot]
         if (!oldStack.isEmpty) {
@@ -58,7 +60,7 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
         lastInteractedSlot = slot
         onInventoryChanged(level, pos)
 
-        return ItemInteractionResult.sidedSuccess(level.isClientSide)
+        return CobblemonInteractionResults.sidedSuccess(level.isClientSide)
     }
 
     fun handleUseWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hit: BlockHitResult): InteractionResult {

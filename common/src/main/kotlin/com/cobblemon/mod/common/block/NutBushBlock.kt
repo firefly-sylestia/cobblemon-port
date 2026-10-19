@@ -18,7 +18,7 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
@@ -84,9 +84,9 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
         player: Player,
         hand: InteractionHand,
         hitResult: BlockHitResult
-    ): ItemInteractionResult {
+    ): InteractionResult {
         return if (isValidBonemealTarget(level, pos, state) && stack.`is`(Items.BONE_MEAL))
-            ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
+            InteractionResult.SUCCESS
         else super.useItemOn(stack, state, level, pos, player, hand, hitResult)
     }
 

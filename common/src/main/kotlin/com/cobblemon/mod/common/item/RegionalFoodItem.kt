@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.item
 
+import com.cobblemon.mod.common.util.CobblemonInteractionResults
+
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
@@ -15,7 +17,6 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
@@ -26,17 +27,17 @@ import net.minecraft.world.level.Level
 class RegionalFoodItem(properties: Properties) : Item(properties), PokemonSelectingItem {
     override val bagItem = null
 
-    override fun use(world: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(world: Level, player: Player, hand: InteractionHand): InteractionResult {
         val stack = player.getItemInHand(hand)
 
         if (player !is ServerPlayer) {
-            return InteractionResultHolder.pass(stack);
+            return CobblemonInteractionResults.pass(stack);
         }
 
         // Prioritizes eating the food
         if ((player.foodData.needsFood() || player.isCreative) && !player.isShiftKeyDown) {
             player.startUsingItem(hand)
-            return InteractionResultHolder.consume(stack)
+            return CobblemonInteractionResults.consume(stack)
         }
 
         // Otherwise heal pokémon with the item
@@ -45,22 +46,22 @@ class RegionalFoodItem(properties: Properties) : Item(properties), PokemonSelect
             return superInteractionResult
         }
 
-        return InteractionResultHolder.pass(stack)
+        return CobblemonInteractionResults.pass(stack)
     }
 
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
-    ): InteractionResultHolder<ItemStack> {
+    ): InteractionResult {
         if (pokemon.status != null) {
             pokemon.status = null
             pokemon.entity?.playSound(SoundEvents.GENERIC_EAT, 1F, 1F)
             stack.consume(1, player)
-            return InteractionResultHolder.success(stack)
+            return CobblemonInteractionResults.success(stack)
         }
 
-        return InteractionResultHolder.fail(stack)
+        return CobblemonInteractionResults.fail(stack)
     }
 
     override fun getUseAnimation(stack: ItemStack): UseAnim = UseAnim.EAT

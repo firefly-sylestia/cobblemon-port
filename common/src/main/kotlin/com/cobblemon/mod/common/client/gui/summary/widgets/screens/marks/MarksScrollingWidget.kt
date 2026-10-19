@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksSc
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.Component
-import net.minecraft.util.FastColor
+import net.minecraft.util.ARGB
 import net.minecraft.util.Mth
 
 class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> (Unit), val setHoveredMark: (Mark?) -> (Unit)): ScrollingWidget<ScrollSlotRow>(
@@ -59,8 +59,8 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
                 yTop = this.y
             }
 
-            context.fill(xLeft, this.y, xRight, this.bottom, FastColor.ARGB32.color(255, 75, 75, 75)) // background
-            context.fill(xLeft,yTop, xRight, yTop + yBottom, FastColor.ARGB32.color(255, 141, 141, 141)) // base
+            context.fill(xLeft, this.y, xRight, this.bottom, ARGB.color(255, 75, 75, 75)) // background
+            context.fill(xLeft,yTop, xRight, yTop + yBottom, ARGB.color(255, 141, 141, 141)) // base
         }
     }
 

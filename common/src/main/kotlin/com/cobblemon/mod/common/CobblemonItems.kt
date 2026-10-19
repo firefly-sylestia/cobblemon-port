@@ -57,7 +57,7 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.HangingSignItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
-import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.Rarity
@@ -206,7 +206,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val CAMPFIRE_POT_WHITE = campfirePotItem(CobblemonBlocks.WHITE_CAMPFIRE_POT, CampfirePotColor.WHITE)
 
     @JvmField
-    val HEARTY_GRAINS = compostableItem("hearty_grains", ItemNameBlockItem(CobblemonBlocks.HEARTY_GRAINS, Properties().rarity(Rarity.COMMON)))
+    val HEARTY_GRAINS = compostableItem("hearty_grains", BlockItem(CobblemonBlocks.HEARTY_GRAINS, Properties().rarity(Rarity.COMMON)))
     @JvmField
     val HEARTY_GRAIN_BALE = compostableBlockItem("hearty_grain_bale", CobblemonBlocks.HEARTY_GRAIN_BALE, 0.85f)
 
@@ -606,7 +606,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val HABITAT_BLOCK = blockItem("habitat_block", CobblemonBlocks.HABITAT_BLOCK)
 
     @JvmField
-    val GALARICA_NUTS = compostableItemNameBlockItem("galarica_nuts", CobblemonBlocks.GALARICA_NUT_BUSH)
+    val GALARICA_NUTS = compostableBlockItem("galarica_nuts", CobblemonBlocks.GALARICA_NUT_BUSH)
 
     // Hyper Training Items
     val hyperTrainingItems = mutableListOf<HyperTrainingItem>()
@@ -748,27 +748,27 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val RED_MINT_SEEDS = mintSeed("red", MintType.RED.getCropBlock())
     @JvmField
-    val RED_MINT_LEAF = compostableItemNameBlockItem("red_mint_leaf", CobblemonBlocks.RED_MINT_LEAF_LITTER, 0.50f)
+    val RED_MINT_LEAF = compostableBlockItem("red_mint_leaf", CobblemonBlocks.RED_MINT_LEAF_LITTER, 0.50f)
     @JvmField
     val BLUE_MINT_SEEDS = mintSeed("blue", MintType.BLUE.getCropBlock())
     @JvmField
-    val BLUE_MINT_LEAF = compostableItemNameBlockItem("blue_mint_leaf", CobblemonBlocks.BLUE_MINT_LEAF_LITTER, 0.50f)
+    val BLUE_MINT_LEAF = compostableBlockItem("blue_mint_leaf", CobblemonBlocks.BLUE_MINT_LEAF_LITTER, 0.50f)
     @JvmField
     val CYAN_MINT_SEEDS = mintSeed("cyan", MintType.CYAN.getCropBlock())
     @JvmField
-    val CYAN_MINT_LEAF = compostableItemNameBlockItem("cyan_mint_leaf", CobblemonBlocks.CYAN_MINT_LEAF_LITTER, 0.50f)
+    val CYAN_MINT_LEAF = compostableBlockItem("cyan_mint_leaf", CobblemonBlocks.CYAN_MINT_LEAF_LITTER, 0.50f)
     @JvmField
     val PINK_MINT_SEEDS = mintSeed("pink", MintType.PINK.getCropBlock())
     @JvmField
-    val PINK_MINT_LEAF = compostableItemNameBlockItem("pink_mint_leaf", CobblemonBlocks.PINK_MINT_LEAF_LITTER, 0.50f)
+    val PINK_MINT_LEAF = compostableBlockItem("pink_mint_leaf", CobblemonBlocks.PINK_MINT_LEAF_LITTER, 0.50f)
     @JvmField
     val GREEN_MINT_SEEDS = mintSeed("green", MintType.GREEN.getCropBlock())
     @JvmField
-    val GREEN_MINT_LEAF = compostableItemNameBlockItem("green_mint_leaf", CobblemonBlocks.GREEN_MINT_LEAF_LITTER, 0.50f)
+    val GREEN_MINT_LEAF = compostableBlockItem("green_mint_leaf", CobblemonBlocks.GREEN_MINT_LEAF_LITTER, 0.50f)
     @JvmField
     val WHITE_MINT_SEEDS = mintSeed("white", MintType.WHITE.getCropBlock())
     @JvmField
-    val WHITE_MINT_LEAF = compostableItemNameBlockItem("white_mint_leaf", CobblemonBlocks.WHITE_MINT_LEAF_LITTER, 0.50f)
+    val WHITE_MINT_LEAF = compostableBlockItem("white_mint_leaf", CobblemonBlocks.WHITE_MINT_LEAF_LITTER, 0.50f)
 
     val mints = mutableMapOf<String, MintItem>()
 
@@ -1579,7 +1579,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     private fun blockItem(name: String, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 
-    private fun itemNameBlockItem(name: String, block: Block, rarity: Rarity = Rarity.COMMON): ItemNameBlockItem = this.create(name, ItemNameBlockItem(block, Item.Properties().rarity(rarity)))
+    private fun itemNameBlockItem(name: String, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 
     private fun noSettingsItem(name: String): CobblemonItem = this.create(name, CobblemonItem(Item.Properties()))
 
@@ -1770,7 +1770,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         return createdItem
     }
 
-    private fun compostableItemNameBlockItem(name: String, block: Block, increaseLevelChance: Float = .30f): Item {
+    private fun compostableBlockItem(name: String, block: Block, increaseLevelChance: Float = .30f): Item {
         val createdItem = this.itemNameBlockItem(name, block)
         compostable(createdItem, increaseLevelChance)
         return createdItem

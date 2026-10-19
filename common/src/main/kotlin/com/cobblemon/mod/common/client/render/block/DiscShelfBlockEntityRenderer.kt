@@ -18,13 +18,13 @@ import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
-import net.minecraft.util.FastColor
+import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
@@ -150,9 +150,9 @@ class DiscShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
 
         val (rBase, gBase, bBase, a) = if (tint) {
             listOf(
-                    FastColor.ARGB32.red(color) / 255f,
-                    FastColor.ARGB32.green(color) / 255f,
-                    FastColor.ARGB32.blue(color) / 255f,
+                    ARGB.red(color) / 255f,
+                    ARGB.green(color) / 255f,
+                    ARGB.blue(color) / 255f,
                     1.0f
             )
         } else listOf(1f, 1f, 1f, 1f)

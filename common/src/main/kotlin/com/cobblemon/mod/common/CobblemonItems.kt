@@ -57,7 +57,6 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.HangingSignItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
-import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.Rarity
@@ -1766,12 +1765,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     private fun compostableBlockItem(name: String, block: Block, increaseLevelChance: Float = .85f): Item {
         val createdItem = this.blockItem(name, block)
-        compostable(createdItem, increaseLevelChance)
-        return createdItem
-    }
-
-    private fun compostableBlockItem(name: String, block: Block, increaseLevelChance: Float = .30f): Item {
-        val createdItem = this.itemNameBlockItem(name, block)
         compostable(createdItem, increaseLevelChance)
         return createdItem
     }

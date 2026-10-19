@@ -805,7 +805,7 @@ open class PokemonEntity(
     /**
      * Prevents flying type Pokémon from taking fall damage.
      */
-    override fun causeFallDamage(fallDistance: Float, damageMultiplier: Float, damageSource: DamageSource): Boolean {
+    override fun causeFallDamage(level: ServerLevel, fallDistance: Float, damageMultiplier: Float, damageSource: DamageSource): Boolean {
         /*return if (pokemon.ability.name == "levitate") {
             false
         } else {
@@ -817,10 +817,10 @@ open class PokemonEntity(
                 pokemon.species.behaviour.moving.fly.canFly -> FALL_DAMAGE_MULT_MOVEMENT_FLY
                 else -> { 1.0f }
             }*/
-        return super.causeFallDamage(fallDistance, damageMultiplier, damageSource)
+        return super.causeFallDamage(level, fallDistance, damageMultiplier, damageSource)
     }
 
-    override fun isInvulnerableTo(damageSource: DamageSource): Boolean {
+    override fun isInvulnerableTo(level: ServerLevel, damageSource: DamageSource): Boolean {
         // If the entity is busy, it cannot be hurt.
         if (busyLocks.isNotEmpty()) {
             return true
@@ -840,7 +840,7 @@ open class PokemonEntity(
             return true
         }
 
-        return super.isInvulnerableTo(damageSource)
+        return super.isInvulnerableTo(level, damageSource)
     }
 
     /**
@@ -1203,12 +1203,12 @@ open class PokemonEntity(
                             // reset the flower fed state
                             pokemon.lastFlowerFed = ItemStack.EMPTY
                         }
-                        return InteractionResult.sidedSuccess(level().isClientSide)
+                        return InteractionResult.SUCCESS
                     } else {
                         val mushroomStew =
                             ItemUtils.createFilledResult(itemStack, player, Items.MUSHROOM_STEW.defaultInstance)
                         player.setItemInHand(hand, mushroomStew)
-                        return InteractionResult.sidedSuccess(level().isClientSide)
+                        return InteractionResult.SUCCESS
                     }
                 }
             }
@@ -1233,7 +1233,7 @@ open class PokemonEntity(
                     player.playSound(SoundEvents.MOOSHROOM_EAT, 1.0f, 1.0f)
                     pokemon.lastFlowerFed = itemStack.copyWithCount(1)
                     if (!player.isCreative && !level().isClientSide) itemStack.shrink(1)
-                    return InteractionResult.sidedSuccess(level().isClientSide)
+                    return InteractionResult.SUCCESS
                 }
             } else if (!player.isShiftKeyDown && StashHandler.interactMob(player, pokemon, itemStack)) {
                 return InteractionResult.SUCCESS
@@ -1255,7 +1255,7 @@ open class PokemonEntity(
                         this.pokemon.updateAspects()
                         itemStack.consume(1, player)
                     }
-                    return InteractionResult.sidedSuccess(level().isClientSide)
+                    return InteractionResult.SUCCESS
                 }
             } else if (itemStack.item.equals(Items.WATER_BUCKET) && colorFeatureType != null) {
                 if (player is ServerPlayer) {
@@ -1269,21 +1269,21 @@ open class PokemonEntity(
                         this.pokemon.updateAspects()
                     }
                 }
-                return InteractionResult.sidedSuccess(level().isClientSide)
+                return InteractionResult.SUCCESS
             } else if (itemStack.`is`(CobblemonItems.NPC_EDITOR) && (player is ServerPlayer) && player.isCreative) {
                 BehaviourEditingTracker.startEditing(player, this)
                 player.sendPacket(OpenBehaviourEditorPacket(id, (this as MoLangScriptingEntity).behaviours.toSet()))
-                return InteractionResult.sidedSuccess(level().isClientSide)
+                return InteractionResult.SUCCESS
             }
         }
 
         if (hand == InteractionHand.MAIN_HAND) {
             if (player.isShiftKeyDown && player is ServerPlayer) {
                 showInteractionWheel(player, itemStack)
-                return InteractionResult.sidedSuccess(level().isClientSide)
+                return InteractionResult.SUCCESS
             }
             else if (this.ownerUUID == player.uuid && this.attemptItemInteraction(player, player.getItemInHand(hand))) {
-                return InteractionResult.sidedSuccess(level().isClientSide)
+                return InteractionResult.SUCCESS
             }
         }
 
@@ -1314,7 +1314,8 @@ open class PokemonEntity(
     }
 
     fun isRideableFor(player: ServerPlayer): Boolean = ifRidingAvailableSupply(false) canRide@{ behaviour, settings, state ->
-        if (!player.canInteractWithEntity(this, player.entityInteractionRange())) return@canRide false
+        val interactionRange = player.entityInteractionRange()
+        if (player.distanceToSqr(this) > interactionRange * interactionRange) return@canRide false
         if (platform != PlatformType.NONE) return@canRide false
         if (tethering != null) return@canRide false
         if (seats.isEmpty()) return@canRide false
@@ -1335,13 +1336,13 @@ open class PokemonEntity(
 
     override fun canBeSeenAsEnemy() = super.canBeSeenAsEnemy() && !isBusy
 
-    override fun doHurtTarget(target: Entity): Boolean {
+    override fun doHurtTarget(level: ServerLevel, target: Entity): Boolean {
         if (beamMode != 0) return false
-        return super.doHurtTarget(target)
+        return super.doHurtTarget(level, target)
     }
 
-    override fun hurt(source: DamageSource, amount: Float): Boolean {
-        return if (super.hurt(source, amount)) {
+    override fun hurtServer(level: ServerLevel, source: DamageSource, amount: Float): Boolean {
+        return if (super.hurtServer(level, source, amount)) {
             effects.mockEffect?.takeIf { it is IllusionEffect && this.battleId == null }?.end(this)
 
             if (this.health == 0F) {
@@ -2184,7 +2185,7 @@ open class PokemonEntity(
 
     override fun setAirSupply(air: Int) {
         if (this.isBattling) {
-            this.entityData.set(DATA_AIR_SUPPLY_ID, 300)
+            super.setAirSupply(300)
             return
         }
         super.setAirSupply(air)
@@ -2369,7 +2370,6 @@ open class PokemonEntity(
                     //val velocity = Vec3d(-sin(f) * jumpVector.x, jumpVector.y, cos(f) * jumpVector.z)
 
                     this.addDeltaMovement(velocity)
-                    hasImpulse = true
                     jumping = false
                 }
 

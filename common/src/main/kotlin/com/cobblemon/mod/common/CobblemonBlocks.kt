@@ -63,9 +63,9 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     override val resourceKey: ResourceKey<Registry<Block>> = Registries.BLOCK
 
     val APRICORN_BLOCK_SET_TYPE = BlockSetType("apricorn")
-    val APRICORN_WOOD_TYPE = WoodType.register(WoodType("apricorn", APRICORN_BLOCK_SET_TYPE))
+    val APRICORN_WOOD_TYPE = WoodType("apricorn", APRICORN_BLOCK_SET_TYPE)
     val SACCHARINE_BLOCK_SET_TYPE = BlockSetType("saccharine")
-    val SACCHARINE_WOOD_TYPE = WoodType.register(WoodType("saccharine", SACCHARINE_BLOCK_SET_TYPE))
+    val SACCHARINE_WOOD_TYPE = WoodType("saccharine", SACCHARINE_BLOCK_SET_TYPE)
 
     // Evolution Ores
     @JvmField
@@ -141,7 +141,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val APRICORN_BUTTON = this.create("apricorn_button", BlocksInvoker.createWoodenButtonBlock(APRICORN_BLOCK_SET_TYPE))
     @JvmField
-    val APRICORN_PRESSURE_PLATE = this.create("apricorn_pressure_plate", PressurePlateBlockInvoker.`cobblemon$create`(APRICORN_BLOCK_SET_TYPE, BlockBehaviour.Properties.of().mapColor(APRICORN_PLANKS.defaultMapColor()).noCollission().strength(0.5F).sound(SoundType.WOOD)))
+    val APRICORN_PRESSURE_PLATE = this.create("apricorn_pressure_plate", PressurePlateBlockInvoker.`cobblemon$create`(APRICORN_BLOCK_SET_TYPE, BlockBehaviour.Properties.of().mapColor(APRICORN_PLANKS.defaultMapColor()).noCollision().strength(0.5F).sound(SoundType.WOOD)))
     @JvmField
     val APRICORN_SIGN = this.create("apricorn_sign", CobblemonSignBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SIGN), APRICORN_WOOD_TYPE))
 
@@ -166,7 +166,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val APRICORN_TRAPDOOR = this.create("apricorn_trapdoor", TrapdoorBlockInvoker.`cobblemon$create`(APRICORN_BLOCK_SET_TYPE, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(3.0F).sound(SoundType.WOOD).noOcclusion().isValidSpawn { _, _, _, _ -> false }))
 
-    private val PLANT_PROPERTIES = BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)
+    private val PLANT_PROPERTIES = BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.POPPED)
     @JvmField
     val BLACK_APRICORN_SAPLING = this.create("black_apricorn_sapling", ApricornSaplingBlock(PLANT_PROPERTIES, Apricorn.BLACK))
     @JvmField
@@ -201,14 +201,15 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         BlockBehaviour.Properties.of().mapColor(
             MapColor.PLANT
         ).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion()
-            .isValidSpawn { _: BlockState?, _: BlockGetter?, _: BlockPos?, entity: EntityType<*>? ->
-                entity === EntityType.OCELOT || entity === EntityType.PARROT
+            .isValidSpawn { _: BlockState, _: BlockGetter, _: BlockPos, entity: EntityType<*> ->
+                entity === BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.withDefaultNamespace("ocelot")) ||
+                    entity === BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.withDefaultNamespace("parrot"))
             }.isSuffocating { _: BlockState?, _: BlockGetter?, _: BlockPos? ->
                 false
-            }.isViewBlocking { _: BlockState?, _: BlockGetter?, _: BlockPos? ->
+            }.isViewBlocking { _: BlockState?, _: BlockGetter?, _: BlockPos?, _ ->
                 false
-            }.ignitedByLava().pushReaction(PushReaction.DESTROY)
-            .isRedstoneConductor { _: BlockState?, _: BlockGetter?, _: BlockPos? ->
+            }.ignitedByLava().pushReaction(PushReaction.POPPED)
+            .isRedstoneConductor { _: BlockState?, _: BlockGetter?, _: BlockPos?, _ ->
                 false
             }))
     @JvmField
@@ -218,7 +219,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val SACCHARINE_BUTTON = this.create("saccharine_button", BlocksInvoker.createWoodenButtonBlock(BlockSetType.OAK))
     @JvmField
-    val SACCHARINE_PRESSURE_PLATE = this.create("saccharine_pressure_plate", PressurePlateBlockInvoker.`cobblemon$create`(SACCHARINE_BLOCK_SET_TYPE, BlockBehaviour.Properties.of().mapColor(SACCHARINE_PLANKS.defaultMapColor()).instrument(NoteBlockInstrument.BASS).noCollission().strength(0.5F).sound(SoundType.WOOD)))
+    val SACCHARINE_PRESSURE_PLATE = this.create("saccharine_pressure_plate", PressurePlateBlockInvoker.`cobblemon$create`(SACCHARINE_BLOCK_SET_TYPE, BlockBehaviour.Properties.of().mapColor(SACCHARINE_PLANKS.defaultMapColor()).instrument(NoteBlockInstrument.BASS).noCollision().strength(0.5F).sound(SoundType.WOOD)))
     @JvmField
     val SACCHARINE_SIGN = this.create("saccharine_sign", CobblemonSignBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SIGN), SACCHARINE_WOOD_TYPE))
     @JvmField
@@ -239,22 +240,22 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val SACCHARINE_SAPLING = this.create("saccharine_sapling", SaplingBlock(SaccharineTreeGrower(), PLANT_PROPERTIES))
 
     @JvmField
-    val MEDICINAL_LEEK = this.create("medicinal_leek", MedicinalLeekBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.CRIMSON_NYLIUM).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MEDICINAL_LEEK_SOUNDS)))
+    val MEDICINAL_LEEK = this.create("medicinal_leek", MedicinalLeekBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.POPPED).ignitedByLava().mapColor(MapColor.CRIMSON_NYLIUM).noCollision().randomTicks().instabreak().sound(CobblemonSounds.MEDICINAL_LEEK_SOUNDS)))
 
     // TODO after 1.7
 //    @JvmField
-//    val BUGWORT = this.create("bugwort", BugwortBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.COLOR_PURPLE).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MEDICINAL_LEEK_SOUNDS)))
+//    val BUGWORT = this.create("bugwort", BugwortBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.POPPED).ignitedByLava().mapColor(MapColor.COLOR_PURPLE).noCollision().randomTicks().instabreak().sound(CobblemonSounds.MEDICINAL_LEEK_SOUNDS)))
     @JvmField
-    val ENERGY_ROOT = this.create("energy_root", EnergyRootBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.DIRT).noCollission().randomTicks().instabreak().sound(CobblemonSounds.ENERGY_ROOT_SOUNDS)))
+    val ENERGY_ROOT = this.create("energy_root", EnergyRootBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.POPPED).ignitedByLava().mapColor(MapColor.DIRT).noCollision().randomTicks().instabreak().sound(CobblemonSounds.ENERGY_ROOT_SOUNDS)))
     @JvmField
-    val BIG_ROOT = this.create("big_root", BigRootBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(CobblemonSounds.BIG_ROOT_SOUNDS)))
+    val BIG_ROOT = this.create("big_root", BigRootBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.POPPED).ignitedByLava().mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(CobblemonSounds.BIG_ROOT_SOUNDS)))
     @JvmField
-    val REVIVAL_HERB = this.create("revival_herb", RevivalHerbBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).mapColor(MapColor.PLANT).ignitedByLava().noCollission().instabreak().sound(CobblemonSounds.REVIVAL_HERB_SOUNDS)))
+    val REVIVAL_HERB = this.create("revival_herb", RevivalHerbBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.POPPED).mapColor(MapColor.PLANT).ignitedByLava().noCollision().instabreak().sound(CobblemonSounds.REVIVAL_HERB_SOUNDS)))
 
     @JvmField
-    val POKE_CAKE = this.create("poke_cake", PokeSnackBlock(BlockBehaviour.Properties.of().forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY).lightLevel { if (it.getValue(BlockStateProperties.LIT)) 3 else 0 }, false))
+    val POKE_CAKE = this.create("poke_cake", PokeSnackBlock(BlockBehaviour.Properties.of().forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.POPPED).lightLevel { if (it.getValue(BlockStateProperties.LIT)) 3 else 0 }, false))
     @JvmField
-    val POKE_SNACK = this.create("poke_snack", PokeSnackBlock(BlockBehaviour.Properties.of().forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY).lightLevel { if (it.getValue(BlockStateProperties.LIT)) 3 else 0 }, true))
+    val POKE_SNACK = this.create("poke_snack", PokeSnackBlock(BlockBehaviour.Properties.of().forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.POPPED).lightLevel { if (it.getValue(BlockStateProperties.LIT)) 3 else 0 }, true))
 
     @JvmField
     val TUMBLESTONE_CLUSTER = tumblestoneBlock("tumblestone_cluster", TumblestoneBlock.STAGE_3, 7, 3, null, MapColor.TERRACOTTA_ORANGE)
@@ -492,42 +493,42 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val BLACK_CAMPFIRE_POT = create("campfire_pot_black",
         CampfirePotBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS)
-                .strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()
+                .strength(0.5F).pushReaction(PushReaction.IMMOVEABLE).noOcclusion()
         )
     )
     @JvmField
     val BLUE_CAMPFIRE_POT = create("campfire_pot_blue",
         CampfirePotBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS)
-                .strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()
+                .strength(0.5F).pushReaction(PushReaction.IMMOVEABLE).noOcclusion()
         )
     )
     @JvmField
     val GREEN_CAMPFIRE_POT = create("campfire_pot_green",
         CampfirePotBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS)
-                .strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()
+                .strength(0.5F).pushReaction(PushReaction.IMMOVEABLE).noOcclusion()
         )
     )
     @JvmField
     val PINK_CAMPFIRE_POT = create("campfire_pot_pink",
         CampfirePotBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS)
-                .strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()
+                .strength(0.5F).pushReaction(PushReaction.IMMOVEABLE).noOcclusion()
         )
     )
     @JvmField
     val RED_CAMPFIRE_POT = create("campfire_pot_red",
         CampfirePotBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS)
-                .strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()
+                .strength(0.5F).pushReaction(PushReaction.IMMOVEABLE).noOcclusion()
         )
     )
     @JvmField
     val WHITE_CAMPFIRE_POT = create("campfire_pot_white",
         CampfirePotBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY)
-                .sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS).strength(0.5F).pushReaction(PushReaction.BLOCK)
+                .sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS).strength(0.5F).pushReaction(PushReaction.IMMOVEABLE)
                 .noOcclusion()
         )
     )
@@ -535,7 +536,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val YELLOW_CAMPFIRE_POT = create("campfire_pot_yellow",
         CampfirePotBlock(
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS)
-                .strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()
+                .strength(0.5F).pushReaction(PushReaction.IMMOVEABLE).noOcclusion()
         )
     )
 
@@ -546,21 +547,21 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
             properties = BlockBehaviour.Properties.of()
                 .mapColor(MapColor.STONE)
                 .strength(1.5F, Blocks.OBSIDIAN.explosionResistance)
-                .pushReaction(PushReaction.BLOCK)
+                .pushReaction(PushReaction.IMMOVEABLE)
         )
     )
 
 
     @JvmField
-    val CAMPFIRE = create("campfire", CampfireBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.PODZOL).strength(2.0F).lightLevel{14}, false))
+    val CAMPFIRE = create("campfire", CampfireBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.IMMOVEABLE).mapColor(MapColor.PODZOL).strength(2.0F).lightLevel{14}, false))
 
     @JvmField
-    val SOUL_CAMPFIRE = create("soul_campfire", CampfireBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.PODZOL).strength(2.0F).lightLevel{9}, true))
+    val SOUL_CAMPFIRE = create("soul_campfire", CampfireBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.IMMOVEABLE).mapColor(MapColor.PODZOL).strength(2.0F).lightLevel{9}, true))
 
     @JvmField
-    val RELIC_COIN_POUCH = create("relic_coin_pouch", CoinPouchBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).pushReaction(PushReaction.DESTROY).noOcclusion(), true))
+    val RELIC_COIN_POUCH = create("relic_coin_pouch", CoinPouchBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).pushReaction(PushReaction.POPPED).noOcclusion(), true))
     @JvmField
-    val RELIC_COIN_SACK = create("relic_coin_sack", CoinPouchBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_SACK_SOUNDS).pushReaction(PushReaction.DESTROY).strength(0.4F).mapColor(MapColor.GOLD), false))
+    val RELIC_COIN_SACK = create("relic_coin_sack", CoinPouchBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_SACK_SOUNDS).pushReaction(PushReaction.POPPED).strength(0.4F).mapColor(MapColor.GOLD), false))
 
     @JvmField
     val GILDED_CHEST = create("gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.RED))
@@ -580,54 +581,54 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val GIMMIGHOUL_CHEST = create("gimmighoul_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.FAKE))
 
     @JvmField
-    val WHITE_PLAQUE = create("white_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val WHITE_PLAQUE = create("white_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val LIGHT_GRAY_PLAQUE = create("light_gray_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val LIGHT_GRAY_PLAQUE = create("light_gray_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val GRAY_PLAQUE = create("gray_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val GRAY_PLAQUE = create("gray_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val BLACK_PLAQUE = create("black_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val BLACK_PLAQUE = create("black_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val BROWN_PLAQUE = create("brown_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val BROWN_PLAQUE = create("brown_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val RED_PLAQUE = create("red_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val RED_PLAQUE = create("red_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val ORANGE_PLAQUE = create("orange_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val ORANGE_PLAQUE = create("orange_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val YELLOW_PLAQUE = create("yellow_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val YELLOW_PLAQUE = create("yellow_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val LIME_PLAQUE = create("lime_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val LIME_PLAQUE = create("lime_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val GREEN_PLAQUE = create("green_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val GREEN_PLAQUE = create("green_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val CYAN_PLAQUE = create("cyan_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val CYAN_PLAQUE = create("cyan_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val LIGHT_BLUE_PLAQUE = create("light_blue_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val LIGHT_BLUE_PLAQUE = create("light_blue_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val BLUE_PLAQUE = create("blue_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val BLUE_PLAQUE = create("blue_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val PURPLE_PLAQUE = create("purple_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val PURPLE_PLAQUE = create("purple_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val MAGENTA_PLAQUE = create("magenta_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val MAGENTA_PLAQUE = create("magenta_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
     @JvmField
-    val PINK_PLAQUE = create("pink_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))
+    val PINK_PLAQUE = create("pink_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.POPPED).strength(5.0F)))
 
     @JvmField
-    val CLEANSE_TAG = create("cleanse_tag", WallAttachedStackableItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.ITEM_BLOCK_PAPER_SMALL_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().noCollission(), WallAttachedStackableItemBlock.WallStackableItemBlockType.TAG))
+    val CLEANSE_TAG = create("cleanse_tag", WallAttachedStackableItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.ITEM_BLOCK_PAPER_SMALL_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.POPPED).noOcclusion().noCollision(), WallAttachedStackableItemBlock.WallStackableItemBlockType.TAG))
     @JvmField
-    val SPELL_TAG = create("spell_tag", WallAttachedStackableItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.ITEM_BLOCK_PAPER_SMALL_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().noCollission(), WallAttachedStackableItemBlock.WallStackableItemBlockType.TAG))
+    val SPELL_TAG = create("spell_tag", WallAttachedStackableItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.ITEM_BLOCK_PAPER_SMALL_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.POPPED).noOcclusion().noCollision(), WallAttachedStackableItemBlock.WallStackableItemBlockType.TAG))
 
     @JvmField
-    val BLUNDER_POLICY = create("blunder_policy", WallAttachedDirectionalShapeBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.ITEM_BLOCK_PAPER_LARGE_SOUNDS).mapColor(MapColor.NONE).noOcclusion().noCollission(), 14, 12, 1))
+    val BLUNDER_POLICY = create("blunder_policy", WallAttachedDirectionalShapeBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.ITEM_BLOCK_PAPER_LARGE_SOUNDS).mapColor(MapColor.NONE).noOcclusion().noCollision(), 14, 12, 1))
     @JvmField
-    val WEAKNESS_POLICY = create("weakness_policy", WallAttachedDirectionalShapeBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.ITEM_BLOCK_PAPER_LARGE_SOUNDS).mapColor(MapColor.NONE).noOcclusion().noCollission(), 14, 12, 1))
+    val WEAKNESS_POLICY = create("weakness_policy", WallAttachedDirectionalShapeBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.ITEM_BLOCK_PAPER_LARGE_SOUNDS).mapColor(MapColor.NONE).noOcclusion().noCollision(), 14, 12, 1))
 
     @JvmField
     val RING_TARGET = create("ring_target", RingTargetBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().strength(0.125f)))
     @JvmField
     val MAGNET = create("magnet", MagnetBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion().strength(0.075f)))
     @JvmField
-    val GALARICA_WREATH = create("galarica_wreath", GalaricaWreathBlock(BlockBehaviour.Properties.of().sound(SoundType.AZALEA_LEAVES).mapColor(MapColor.NONE).noOcclusion().noCollission()))
+    val GALARICA_WREATH = create("galarica_wreath", GalaricaWreathBlock(BlockBehaviour.Properties.of().sound(SoundType.AZALEA_LEAVES).mapColor(MapColor.NONE).noOcclusion().noCollision()))
 
     @JvmField
     val FLAME_ORB = create("flame_orb", OrbBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{15}))
@@ -644,7 +645,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val KINGS_ROCK = create("kings_rock", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), DecorativeItemBlock.DecorativeItemBlockType.CENTERED_6x))
 
     @JvmField
-    val GALARICA_CUFF = create("galarica_cuff", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.AZALEA_LEAVES).mapColor(MapColor.NONE).noCollission().noOcclusion(), DecorativeItemBlock.DecorativeItemBlockType.FLATTENED_10x4))
+    val GALARICA_CUFF = create("galarica_cuff", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.AZALEA_LEAVES).mapColor(MapColor.NONE).noCollision().noOcclusion(), DecorativeItemBlock.DecorativeItemBlockType.FLATTENED_10x4))
     @JvmField
     val UNREMARKABLE_TEACUP = create("unremarkable_teacup", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.DECORATED_POT).mapColor(MapColor.NONE).noOcclusion(), DecorativeItemBlock.DecorativeItemBlockType.TEACUP))
     @JvmField
@@ -692,9 +693,9 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val LUMINOUS_MOSS = create("luminous_moss", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.MOSS).mapColor(MapColor.NONE).noOcclusion().lightLevel{5}, DecorativeItemBlock.DecorativeItemBlockType.CENTERED_8x))
 
     @JvmField
-    val METRONOME = create("metronome", ActivatableDecorationBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion(), ActivatableDecorationBlock.ActivatableDecorationBlockType.METRONOME))
+    val METRONOME = create("metronome", ActivatableDecorationBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).pushReaction(PushReaction.POPPED).noOcclusion(), ActivatableDecorationBlock.ActivatableDecorationBlockType.METRONOME))
     @JvmField
-    val EJECT_BUTTON = create("eject_button", EjectButtonBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().strength(0.125f), 40))
+    val EJECT_BUTTON = create("eject_button", EjectButtonBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).pushReaction(PushReaction.POPPED).noOcclusion().strength(0.125f), 40))
 
     @JvmField
     val LOADED_DICE = create("loaded_dice", StackableItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.ITEM_BLOCK_DICE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), StackableItemBlock.StackableItemBlockType.DICE))
@@ -784,19 +785,19 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val PP_MAX = create("pp_max", StackableItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.ITEM_BLOCK_BOTTLE_PILLS_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), StackableItemBlock.StackableItemBlockType.VITAMIN))
 
     @JvmField
-    val MONITOR = create("monitor", MonitorBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(5.0F, 6.0F).lightLevel { if (it.getValue(MonitorBlock.SCREEN) != MonitorBlock.MonitorScreen.OFF) 13 else 0 }))
+    val MONITOR = create("monitor", MonitorBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.IMMOVEABLE).requiresCorrectToolForDrops().strength(5.0F, 6.0F).lightLevel { if (it.getValue(MonitorBlock.SCREEN) != MonitorBlock.MonitorScreen.OFF) 13 else 0 }))
     @JvmField
-    val DAMAGED_MONITOR = create("damaged_monitor", DamagedMonitorBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(5.0F, 6.0F).lightLevel { when (it.getValue(DamagedMonitorBlock.SCREEN)) { DamagedMonitorBlock.BrokenMonitorScreen.GLITCHING -> 10; else -> 0 } }))
+    val DAMAGED_MONITOR = create("damaged_monitor", DamagedMonitorBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.IMMOVEABLE).requiresCorrectToolForDrops().strength(5.0F, 6.0F).lightLevel { when (it.getValue(DamagedMonitorBlock.SCREEN)) { DamagedMonitorBlock.BrokenMonitorScreen.GLITCHING -> 10; else -> 0 } }))
     @JvmField
-    val FOSSIL_ANALYZER = create("fossil_analyzer", FossilAnalyzerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(5.0F, 6.0F).noOcclusion()))
+    val FOSSIL_ANALYZER = create("fossil_analyzer", FossilAnalyzerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.IMMOVEABLE).requiresCorrectToolForDrops().strength(5.0F, 6.0F).noOcclusion()))
     @JvmField
-    val RESTORATION_TANK = create("restoration_tank", RestorationTankBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.GLASS).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(5.0F, 6.0F).noOcclusion()))
+    val RESTORATION_TANK = create("restoration_tank", RestorationTankBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.GLASS).pushReaction(PushReaction.IMMOVEABLE).requiresCorrectToolForDrops().strength(5.0F, 6.0F).noOcclusion()))
 
     @JvmField
-    val HEALING_MACHINE = create("healing_machine", HealingMachineBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).strength(2F).noOcclusion().lightLevel { if (it.getValue(HealingMachineBlock.CHARGE_LEVEL) >= HealingMachineBlock.MAX_CHARGE_LEVEL) 12 else 5 }))
+    val HEALING_MACHINE = create("healing_machine", HealingMachineBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.IMMOVEABLE).strength(2F).noOcclusion().lightLevel { if (it.getValue(HealingMachineBlock.CHARGE_LEVEL) >= HealingMachineBlock.MAX_CHARGE_LEVEL) 12 else 5 }))
 
     @JvmField
-    val PC = create("pc", PCBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).strength(2F).noOcclusion().lightLevel { if ((it.getValue(PCBlock.ON) as Boolean) && (it.getValue(PCBlock.PART) == PCBlock.PCPart.TOP)) 13 else 0 }))
+    val PC = create("pc", PCBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.IMMOVEABLE).strength(2F).noOcclusion().lightLevel { if ((it.getValue(PCBlock.ON) as Boolean) && (it.getValue(PCBlock.PART) == PCBlock.PCPart.TOP)) 13 else 0 }))
 
     @JvmField
     val TM_MACHINE = create(
@@ -805,7 +806,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
             BlockBehaviour.Properties.of()
                 .mapColor(MapColor.COLOR_GREEN)
                 .sound(SoundType.METAL)
-                .pushReaction(PushReaction.BLOCK)
+                .pushReaction(PushReaction.IMMOVEABLE)
                 .strength(2F)
                 .noOcclusion()
         )
@@ -819,35 +820,35 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val DISC_SHELF = create("disc_shelf", DiscShelfBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).sound(SoundType.METAL).strength(2.5F)))
 
     @JvmField
-    val DISPLAY_CASE = create("display_case", DisplayCaseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3F).requiresCorrectToolForDrops()))
+    val DISPLAY_CASE = create("display_case", DisplayCaseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.IMMOVEABLE).mapColor(MapColor.STONE).strength(0.3F).requiresCorrectToolForDrops()))
 
     // TODO after 1.7
 //    @JvmField
-//    val INCENSE_SWEET = create("incense_sweet", SweetIncenseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3F)))
+//    val INCENSE_SWEET = create("incense_sweet", SweetIncenseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.IMMOVEABLE).mapColor(MapColor.STONE).strength(0.3F)))
 
     @JvmField
-    val PASTURE = create("pasture", PastureBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).sound(SoundType.WOOD).strength(2F).noOcclusion().pushReaction(PushReaction.BLOCK).lightLevel { if ((it.getValue(PastureBlock.ON) as Boolean) && (it.getValue(PastureBlock.PART) == PastureBlock.PasturePart.TOP)) 13 else 0 }))
+    val PASTURE = create("pasture", PastureBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).sound(SoundType.WOOD).strength(2F).noOcclusion().pushReaction(PushReaction.IMMOVEABLE).lightLevel { if ((it.getValue(PastureBlock.ON) as Boolean) && (it.getValue(PastureBlock.PART) == PastureBlock.PasturePart.TOP)) 13 else 0 }))
     @JvmField
-    val RED_MINT = create("red_mint", MintBlock(MintType.RED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)))
+    val RED_MINT = create("red_mint", MintBlock(MintType.RED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).noCollision().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.POPPED)))
     @JvmField
-    val BLUE_MINT = create("blue_mint", MintBlock(MintType.BLUE, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)))
+    val BLUE_MINT = create("blue_mint", MintBlock(MintType.BLUE, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).noCollision().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.POPPED)))
     @JvmField
-    val CYAN_MINT = create("cyan_mint", MintBlock(MintType.CYAN, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)))
+    val CYAN_MINT = create("cyan_mint", MintBlock(MintType.CYAN, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).noCollision().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.POPPED)))
     @JvmField
-    val PINK_MINT = create("pink_mint", MintBlock(MintType.PINK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)))
+    val PINK_MINT = create("pink_mint", MintBlock(MintType.PINK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollision().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.POPPED)))
     @JvmField
-    val GREEN_MINT = create("green_mint", MintBlock(MintType.GREEN, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)))
+    val GREEN_MINT = create("green_mint", MintBlock(MintType.GREEN, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).noCollision().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.POPPED)))
     @JvmField
-    val WHITE_MINT = create("white_mint", MintBlock(MintType.WHITE, BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)))
+    val WHITE_MINT = create("white_mint", MintBlock(MintType.WHITE, BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).noCollision().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.POPPED)))
 
     @JvmField
-    val VIVICHOKE_SEEDS = this.create("vivichoke_seeds", VivichokeBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(CobblemonSounds.VIVICHOKE_SOUNDS)))
+    val VIVICHOKE_SEEDS = this.create("vivichoke_seeds", VivichokeBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.POPPED).ignitedByLava().mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(CobblemonSounds.VIVICHOKE_SOUNDS)))
     @JvmField
-    val PEP_UP_FLOWER = this.create("pep_up_flower", FlowerBlock(MobEffects.LEVITATION, 10F, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY)))
+    val PEP_UP_FLOWER = this.create("pep_up_flower", FlowerBlock(MobEffects.LEVITATION, 10F, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.POPPED)))
     @JvmField
-    val HEARTY_GRAINS = this.create("hearty_grains", HeartyGrainsBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak()))
+    val HEARTY_GRAINS = this.create("hearty_grains", HeartyGrainsBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.POPPED).ignitedByLava().mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak()))
     @JvmField
-    val GALARICA_NUT_BUSH = this.create("galarica_nut_bush", NutBushBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).randomTicks().noCollission().sound(SoundType.SWEET_BERRY_BUSH).pushReaction(PushReaction.DESTROY)))
+    val GALARICA_NUT_BUSH = this.create("galarica_nut_bush", NutBushBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).randomTicks().noCollision().sound(SoundType.SWEET_BERRY_BUSH).pushReaction(PushReaction.POPPED)))
 
 
     @JvmField
@@ -876,15 +877,15 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val POTTED_WHITE_MINT = this.flowerPot("potted_white_mint", WHITE_MINT_LEAF_LITTER)
 
     @JvmField
-    val LOBAILA = this.create("lobaila", LobailaFlowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).ignitedByLava().pushReaction(PushReaction.DESTROY)))
+    val LOBAILA = this.create("lobaila", LobailaFlowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).ignitedByLava().pushReaction(PushReaction.POPPED)))
     @JvmField
-    val POMOHANA = this.create("pomohana", PomohanaFlowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().instabreak().sound(SoundType.GRASS).ignitedByLava().pushReaction(PushReaction.DESTROY)))
+    val POMOHANA = this.create("pomohana", PomohanaFlowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().instabreak().sound(SoundType.GRASS).ignitedByLava().pushReaction(PushReaction.POPPED)))
     @JvmField
-    val PAUVILLEA = this.create("pauvillea",PauvilleaFlowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().sound(SoundType.GRASS).instabreak().ignitedByLava().pushReaction(PushReaction.DESTROY)))
+    val PAUVILLEA = this.create("pauvillea",PauvilleaFlowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().sound(SoundType.GRASS).instabreak().ignitedByLava().pushReaction(PushReaction.POPPED)))
     @JvmField
-    val WISTENSU = this.create("wistensu", WistensuFlowerHeadBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().sound(SoundType.GRASS).instabreak().ignitedByLava().pushReaction(PushReaction.DESTROY).lightLevel{11}))
+    val WISTENSU = this.create("wistensu", WistensuFlowerHeadBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().sound(SoundType.GRASS).instabreak().ignitedByLava().pushReaction(PushReaction.POPPED).lightLevel{11}))
     @JvmField
-    val WISTENSU_VINE = this.create("wistensu_vine", WistensuFlowerVineBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().sound(SoundType.GRASS).instabreak().ignitedByLava().pushReaction(PushReaction.DESTROY)))
+    val WISTENSU_VINE = this.create("wistensu_vine", WistensuFlowerVineBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().sound(SoundType.GRASS).instabreak().ignitedByLava().pushReaction(PushReaction.POPPED)))
 
     @JvmField
     val ELECTRIC_SEED = this.terrainSeed("electric_seed", TerrainSeedBlock.TerrainSeedType.ELECTRIC)
@@ -933,7 +934,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     private fun tumblestoneBlock(name: String, stage: Int, height: Int, xzOffset: Int, nextStage: Block?, mapColor: MapColor) : Block {
         return this.create(name, TumblestoneBlock(BlockBehaviour.Properties.of()
             .mapColor(mapColor)
-            .pushReaction(PushReaction.DESTROY)
+            .pushReaction(PushReaction.POPPED)
             .noOcclusion()
             .strength(1.5F)
             .sound(CobblemonSounds.TUMBLESTONE_SOUNDS),
@@ -1333,7 +1334,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     fun typeGemBlocks() = typeGemBlocks.toMap()
 
     private fun typeGemCluster(name: String, gemBlock: Block, dropItemId: Identifier, mapColor: MapColor): Block {
-        val gemClusterBlock = this.create(name, TypeGemClusterBlock(BlockBehaviour.Properties.of().mapColor(mapColor).strength(2.0F, 3.0F).sound(CobblemonSounds.TYPE_GEM_CLUSTER_SOUNDS).pushReaction(PushReaction.DESTROY), gemBlock, dropItemId))
+        val gemClusterBlock = this.create(name, TypeGemClusterBlock(BlockBehaviour.Properties.of().mapColor(mapColor).strength(2.0F, 3.0F).sound(CobblemonSounds.TYPE_GEM_CLUSTER_SOUNDS).pushReaction(PushReaction.POPPED), gemBlock, dropItemId))
 
         TypeGemClusterBlock.gemToClusterMap[gemBlock] = gemClusterBlock
 
@@ -1352,7 +1353,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
             BlockBehaviour.Properties.of()
                 .instabreak()
                 .noOcclusion()
-                .pushReaction(PushReaction.DESTROY)
+                .pushReaction(PushReaction.POPPED)
         )
     )
 
@@ -1363,8 +1364,8 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
                 .sound(CobblemonSounds.MINT_SOUNDS)
                 .mapColor(color)
                 .noOcclusion()
-                .noCollission()
-                .pushReaction(PushReaction.DESTROY)
+                .noCollision()
+                .pushReaction(PushReaction.POPPED)
         )
     )
 
@@ -1373,11 +1374,11 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         TerrainSeedBlock(
             type,
             BlockBehaviour.Properties.of()
-                .pushReaction(PushReaction.DESTROY)
+                .pushReaction(PushReaction.POPPED)
                 .ignitedByLava()
                 .mapColor(MapColor.PLANT)
                 .offsetType(BlockBehaviour.OffsetType.XZ)
-                .noCollission()
+                .noCollision()
                 .randomTicks()
                 .instabreak()
         )
@@ -1388,12 +1389,12 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         TerrainPlantBlock(
             BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
-                .noCollission()
+                .noCollision()
                 .instabreak()
                 .sound(SoundType.GRASS)
                 .offsetType(BlockBehaviour.OffsetType.XZ)
                 .ignitedByLava()
-                .pushReaction(PushReaction.DESTROY)
+                .pushReaction(PushReaction.POPPED)
                 .lightLevel(lightLevel)
         )
     )

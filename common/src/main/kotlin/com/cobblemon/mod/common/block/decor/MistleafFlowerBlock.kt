@@ -38,12 +38,12 @@ class MistleafFlowerBlock(lightLevel: (BlockState) -> Int) :
     TallFlowerBlock(
         Properties.of()
             .mapColor(MapColor.PLANT)
-            .noCollission()
+            .noCollision()
             .instabreak()
             .sound(SoundType.GRASS)
             .offsetType(OffsetType.XZ)
             .ignitedByLava()
-            .pushReaction(PushReaction.DESTROY)
+            .pushReaction(PushReaction.POPPED)
             .lightLevel(lightLevel)
     ) {
 

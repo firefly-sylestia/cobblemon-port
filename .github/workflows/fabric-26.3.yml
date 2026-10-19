@@ -65,6 +65,18 @@ jobs:
             } > "$report"
             cat "$report"
           fi
+          # Surface the failure in the public check-run summary; downloadable logs require
+          # repository write access.
+          cat "$report" >> "$GITHUB_STEP_SUMMARY"
+          if [[ -f "$log" ]]; then
+            {
+              echo
+              echo '## Build log excerpt'
+              echo '```'
+              head -n 120 "$log"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Upload build log
         if: always()

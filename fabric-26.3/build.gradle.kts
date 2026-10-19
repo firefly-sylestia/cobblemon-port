@@ -8,6 +8,12 @@ version = "1.8.3+26.3-port"
 
 val sourceRoot = rootDir.parentFile
 
+loom {
+    // The shared Cobblemon access widener is required at compile time as well as at runtime;
+    // without this the Minecraft jar is not widened and every private-field access fails.
+    accessWidenerPath.set(sourceRoot.resolve("common/src/main/resources/cobblemon-common.accesswidener"))
+}
+
 repositories {
     maven(sourceRoot.resolve("deps"))
     maven("https://maven.terraformersmc.com/releases/")

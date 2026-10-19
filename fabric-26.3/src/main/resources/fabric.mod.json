@@ -34,6 +34,9 @@
         "modmenu.modrinth": "https://modrinth.com/mod/cobblemon",
         "modmenu.discord": "https://discord.gg/cobblemon"
       }
+    },
+    "loom:injected_interfaces": {
+      "net/minecraft/client/model/geom/ModelPart": ["com/cobblemon/mod/common/client/render/models/blockbench/pose/Bone"]
     }
   }
 }

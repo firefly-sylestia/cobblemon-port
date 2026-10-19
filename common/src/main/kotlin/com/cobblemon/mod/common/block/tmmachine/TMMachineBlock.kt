@@ -172,7 +172,7 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
                     val recipeOpt = level.server?.recipeManager?.byKey(recipeKey)
                     recipeOpt?.ifPresent { recipe ->
                         if (!serverPlayer.recipeBook.contains(recipe.id)) {
-                            serverPlayer.awardRecipes(listOf(recipe.id))
+                            serverPlayer.awardRecipes(listOf(recipe))
                         }
                     }
                 }

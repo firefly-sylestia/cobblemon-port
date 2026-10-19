@@ -74,7 +74,7 @@ class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
         if (startTime == WAIT_TIME) {
             entity as PokemonEntity
             val world = entity.level()
-            if (!world.gameRules.getRule(GameRules.RULE_MOBGRIEFING).get()) {
+            if (!world.gameRules.get(GameRules.MOB_GRIEFING)) {
                 return
             }
             val blockPos = entity.brain.getMemory(CobblemonMemories.NEARBY_SWEET_BERRY_BUSH).get()

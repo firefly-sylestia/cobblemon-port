@@ -45,6 +45,7 @@ import com.cobblemon.mod.common.util.simplify
 import com.cobblemon.mod.common.util.splitMap
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.mojang.brigadier.StringReader
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
@@ -60,6 +61,7 @@ import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
@@ -716,37 +718,42 @@ open class PokemonProperties {
 
     // TODO Codecs at some point
     fun loadFromNBT(tag: CompoundTag, registryLookup: HolderLookup.Provider): PokemonProperties {
-        originalString = tag.getString(DataKeys.POKEMON_PROPERTIES_ORIGINAL_TEXT)
-        level = if (tag.contains(DataKeys.POKEMON_LEVEL)) tag.getInt(DataKeys.POKEMON_LEVEL) else null
-        shiny = if (tag.contains(DataKeys.POKEMON_SHINY)) tag.getBoolean(DataKeys.POKEMON_SHINY) else null
-        gender = if (tag.contains(DataKeys.POKEMON_GENDER)) Gender.valueOf(tag.getString(DataKeys.POKEMON_GENDER)) else null
-        species = if (tag.contains(DataKeys.POKEMON_SPECIES_TEXT)) tag.getString(DataKeys.POKEMON_SPECIES_TEXT) else null
-        nickname = if (tag.contains(DataKeys.POKEMON_NICKNAME)) Component.Serializer.fromJson(tag.getString(DataKeys.POKEMON_NICKNAME), registryLookup) else null
-        form = if (tag.contains(DataKeys.POKEMON_FORM_ID)) tag.getString(DataKeys.POKEMON_FORM_ID) else null
-        friendship = if (tag.contains(DataKeys.POKEMON_FRIENDSHIP)) tag.getInt(DataKeys.POKEMON_FRIENDSHIP) else null
-        fullness = if (tag.contains(DataKeys.POKEMON_FULLNESS)) tag.getInt(DataKeys.POKEMON_FULLNESS) else null
-        pokeball = if (tag.contains(DataKeys.POKEMON_CAUGHT_BALL)) tag.getString(DataKeys.POKEMON_CAUGHT_BALL) else null
-        nature = if (tag.contains(DataKeys.POKEMON_NATURE)) tag.getString(DataKeys.POKEMON_NATURE) else null
-        ability = if (tag.contains(DataKeys.POKEMON_ABILITY)) tag.getString(DataKeys.POKEMON_ABILITY) else null
-        isAlpha = if (tag.contains(DataKeys.POKEMON_ALPHA)) tag.getBoolean(DataKeys.POKEMON_ALPHA) else null
-        status = if (tag.contains(DataKeys.POKEMON_STATUS_NAME)) tag.getString(DataKeys.POKEMON_STATUS_NAME) else null
-        minPerfectIVs = if (tag.contains(DataKeys.POKEMON_MIN_PERFECT_IVS)) tag.getInt(DataKeys.POKEMON_MIN_PERFECT_IVS) else null
-        ivs = if (tag.contains(DataKeys.POKEMON_IVS)) IVs.CODEC.decode(NbtOps.INSTANCE, tag.getCompound(DataKeys.POKEMON_IVS)).result().getOrNull()?.first else null
-        evs = if (tag.contains(DataKeys.POKEMON_EVS)) EVs.CODEC.decode(NbtOps.INSTANCE, tag.getCompound(DataKeys.POKEMON_EVS)).result().getOrNull()?.first else null
-        type = if (tag.contains(DataKeys.ELEMENTAL_TYPE)) tag.getString(DataKeys.ELEMENTAL_TYPE) else null
-        teraType = if (tag.contains(DataKeys.POKEMON_TERA_TYPE)) tag.getString(DataKeys.POKEMON_TERA_TYPE) else null
-        dmaxLevel = if (tag.contains(DataKeys.POKEMON_DMAX_LEVEL)) tag.getInt(DataKeys.POKEMON_DMAX_LEVEL) else null
-        gmaxFactor = if (tag.contains(DataKeys.POKEMON_GMAX_FACTOR)) tag.getBoolean(DataKeys.POKEMON_GMAX_FACTOR) else null
-        tradeable = if (tag.contains(DataKeys.POKEMON_TRADEABLE)) tag.getBoolean(DataKeys.POKEMON_TRADEABLE) else null
-        originalTrainerType = if (tag.contains(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE)) OriginalTrainerType.valueOf(tag.getString(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE)) else null
-        originalTrainer = if (tag.contains(DataKeys.POKEMON_ORIGINAL_TRAINER)) tag.getString(DataKeys.POKEMON_ORIGINAL_TRAINER) else null
-        moves = if (tag.contains(DataKeys.POKEMON_PROPERTIES_MOVES)) tag.getString(DataKeys.POKEMON_PROPERTIES_MOVES).split(",") else null
-        movesetBuilders = if (tag.contains(DataKeys.POKEMON_PROPERTIES_MOVESET_BUILDERS)) tag.getString(DataKeys.POKEMON_PROPERTIES_MOVESET_BUILDERS).split(",").map { it.asIdentifierDefaultingNamespace() } else null
-        heldItem = if (tag.contains(DataKeys.POKEMON_PROPERTIES_HELDITEM)) tag.getString(DataKeys.POKEMON_PROPERTIES_HELDITEM) else null
-        scaleModifier = if (tag.contains(DataKeys.POKEMON_SCALE_MODIFIER)) tag.getFloat(DataKeys.POKEMON_SCALE_MODIFIER) else null
-        val custom = tag.getList(DataKeys.POKEMON_PROPERTIES_CUSTOM, Tag.TAG_STRING.toInt())
+        originalString = tag.getString(DataKeys.POKEMON_PROPERTIES_ORIGINAL_TEXT).orElse("")
+        level = if (tag.contains(DataKeys.POKEMON_LEVEL)) tag.getInt(DataKeys.POKEMON_LEVEL).orElse(0) else null
+        shiny = if (tag.contains(DataKeys.POKEMON_SHINY)) tag.getBoolean(DataKeys.POKEMON_SHINY).orElse(false) else null
+        gender = if (tag.contains(DataKeys.POKEMON_GENDER)) Gender.valueOf(tag.getString(DataKeys.POKEMON_GENDER).orElse("")) else null
+        species = if (tag.contains(DataKeys.POKEMON_SPECIES_TEXT)) tag.getString(DataKeys.POKEMON_SPECIES_TEXT).orElse("") else null
+        nickname = if (tag.contains(DataKeys.POKEMON_NICKNAME)) {
+            ComponentSerialization.CODEC.parse(
+                registryLookup.createSerializationContext(JsonOps.INSTANCE),
+                JsonParser.parseString(tag.getString(DataKeys.POKEMON_NICKNAME).orElse(""))
+            ).result().orElse(null)
+        } else null
+        form = if (tag.contains(DataKeys.POKEMON_FORM_ID)) tag.getString(DataKeys.POKEMON_FORM_ID).orElse("") else null
+        friendship = if (tag.contains(DataKeys.POKEMON_FRIENDSHIP)) tag.getInt(DataKeys.POKEMON_FRIENDSHIP).orElse(0) else null
+        fullness = if (tag.contains(DataKeys.POKEMON_FULLNESS)) tag.getInt(DataKeys.POKEMON_FULLNESS).orElse(0) else null
+        pokeball = if (tag.contains(DataKeys.POKEMON_CAUGHT_BALL)) tag.getString(DataKeys.POKEMON_CAUGHT_BALL).orElse("") else null
+        nature = if (tag.contains(DataKeys.POKEMON_NATURE)) tag.getString(DataKeys.POKEMON_NATURE).orElse("") else null
+        ability = if (tag.contains(DataKeys.POKEMON_ABILITY)) tag.getString(DataKeys.POKEMON_ABILITY).orElse("") else null
+        isAlpha = if (tag.contains(DataKeys.POKEMON_ALPHA)) tag.getBoolean(DataKeys.POKEMON_ALPHA).orElse(false) else null
+        status = if (tag.contains(DataKeys.POKEMON_STATUS_NAME)) tag.getString(DataKeys.POKEMON_STATUS_NAME).orElse("") else null
+        minPerfectIVs = if (tag.contains(DataKeys.POKEMON_MIN_PERFECT_IVS)) tag.getInt(DataKeys.POKEMON_MIN_PERFECT_IVS).orElse(0) else null
+        ivs = if (tag.contains(DataKeys.POKEMON_IVS)) IVs.CODEC.decode(NbtOps.INSTANCE, tag.getCompound(DataKeys.POKEMON_IVS).orElse(CompoundTag())).result().getOrNull()?.first else null
+        evs = if (tag.contains(DataKeys.POKEMON_EVS)) EVs.CODEC.decode(NbtOps.INSTANCE, tag.getCompound(DataKeys.POKEMON_EVS).orElse(CompoundTag())).result().getOrNull()?.first else null
+        type = if (tag.contains(DataKeys.ELEMENTAL_TYPE)) tag.getString(DataKeys.ELEMENTAL_TYPE).orElse("") else null
+        teraType = if (tag.contains(DataKeys.POKEMON_TERA_TYPE)) tag.getString(DataKeys.POKEMON_TERA_TYPE).orElse("") else null
+        dmaxLevel = if (tag.contains(DataKeys.POKEMON_DMAX_LEVEL)) tag.getInt(DataKeys.POKEMON_DMAX_LEVEL).orElse(0) else null
+        gmaxFactor = if (tag.contains(DataKeys.POKEMON_GMAX_FACTOR)) tag.getBoolean(DataKeys.POKEMON_GMAX_FACTOR).orElse(false) else null
+        tradeable = if (tag.contains(DataKeys.POKEMON_TRADEABLE)) tag.getBoolean(DataKeys.POKEMON_TRADEABLE).orElse(false) else null
+        originalTrainerType = if (tag.contains(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE)) OriginalTrainerType.valueOf(tag.getString(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE).orElse("")) else null
+        originalTrainer = if (tag.contains(DataKeys.POKEMON_ORIGINAL_TRAINER)) tag.getString(DataKeys.POKEMON_ORIGINAL_TRAINER).orElse("") else null
+        moves = if (tag.contains(DataKeys.POKEMON_PROPERTIES_MOVES)) tag.getString(DataKeys.POKEMON_PROPERTIES_MOVES).orElse("").split(",") else null
+        movesetBuilders = if (tag.contains(DataKeys.POKEMON_PROPERTIES_MOVESET_BUILDERS)) tag.getString(DataKeys.POKEMON_PROPERTIES_MOVESET_BUILDERS).orElse("").split(",").map { it.asIdentifierDefaultingNamespace() } else null
+        heldItem = if (tag.contains(DataKeys.POKEMON_PROPERTIES_HELDITEM)) tag.getString(DataKeys.POKEMON_PROPERTIES_HELDITEM).orElse("") else null
+        scaleModifier = if (tag.contains(DataKeys.POKEMON_SCALE_MODIFIER)) tag.getFloat(DataKeys.POKEMON_SCALE_MODIFIER).orElse(0f) else null
+        val custom = tag.getList(DataKeys.POKEMON_PROPERTIES_CUSTOM).orElse(ListTag())
         // This is kinda gross
-        custom.forEach { customProperties.addAll(parse(it.asString).customProperties) }
+        custom.forEach { customProperties.addAll(parse(it.asString().orElse("")).customProperties) }
         updateAspects()
         return this
     }

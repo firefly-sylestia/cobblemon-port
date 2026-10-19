@@ -257,10 +257,10 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
     override fun loadAdditional(compound: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(compound, registries)
         loadTint(compound)
-        burnActive = compound.getBoolean(BURN_ACTIVE_TAG)
-        repeatProcess = compound.getBoolean(REPEAT_PROCESS_TAG)
-        burnProgress = compound.getInt(BURN_PROGRESS_TAG)
-        activeMove = compound.getString(ACTIVE_MOVE_TAG)
+        burnActive = compound.getBoolean(BURN_ACTIVE_TAG).orElse(false)
+        repeatProcess = compound.getBoolean(REPEAT_PROCESS_TAG).orElse(false)
+        burnProgress = compound.getInt(BURN_PROGRESS_TAG).orElse(0)
+        activeMove = compound.getString(ACTIVE_MOVE_TAG).orElse("")
         ContainerHelper.loadAllItems(compound, tmMachineInventory.items, registries)
     }
 

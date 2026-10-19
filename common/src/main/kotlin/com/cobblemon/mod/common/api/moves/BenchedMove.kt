@@ -152,7 +152,7 @@ data class BenchedMove(val moveTemplate: MoveTemplate, val ppRaisedStages: Int) 
             val name = nbt.getString(DataKeys.POKEMON_MOVESET_MOVENAME)
             return BenchedMove(
                 Moves.getByName(name) ?: MoveTemplate.dummy(name),
-                nbt.getByte(DataKeys.POKEMON_MOVESET_RAISED_PP_STAGES).toInt()
+                nbt.getByte(DataKeys.POKEMON_MOVESET_RAISED_PP_STAGES).orElse(0).toInt()
             )
         }
 

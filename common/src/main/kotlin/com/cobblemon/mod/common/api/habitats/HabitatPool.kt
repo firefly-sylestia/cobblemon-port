@@ -53,13 +53,13 @@ class HabitatPool {
         }
 
         fun readPoolFromNBT(nbt: CompoundTag): HabitatPool {
-            val poolId = nbt.getString(DataKeys.HABITAT_POOL_ID).asIdentifierDefaultingNamespace()
+            val poolId = nbt.getString(DataKeys.HABITAT_POOL_ID).orElse("").asIdentifierDefaultingNamespace()
             if (nbt.contains(DataKeys.HABITAT_POOL_NAME)) {
                 // It's one that was stored on the block
                 val pool = HabitatPool()
                 pool.id = poolId
-                pool.name = nbt.getString(DataKeys.HABITAT_POOL_NAME)
-                val spawnsListNBT = nbt.getList(DataKeys.HABITAT_POOL_SPAWNS, Tag.TAG_COMPOUND.toInt())
+                pool.name = nbt.getString(DataKeys.HABITAT_POOL_NAME).orElse("")
+                val spawnsListNBT = nbt.getList(DataKeys.HABITAT_POOL_SPAWNS).orElse(ListTag())
                 val spawns = mutableListOf<HabitatSpawn>()
                 spawnsListNBT.forEach { spawnTag ->
                     try {

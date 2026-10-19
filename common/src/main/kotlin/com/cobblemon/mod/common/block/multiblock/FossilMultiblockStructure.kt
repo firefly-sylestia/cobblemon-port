@@ -667,9 +667,9 @@ class FossilMultiblockStructure (
             val tankBasePos = NbtUtils.readBlockPos(nbt, DataKeys.TANK_BASE_POS).get()
 
             val result = FossilMultiblockStructure(monitorPos, compartmentPos, tankBasePos, animAge, partialTicks)
-            result.organicMaterialInside = nbt.getInt(DataKeys.ORGANIC_MATERIAL)
-            result.timeRemaining = nbt.getInt(DataKeys.TIME_LEFT)
-            result.protectionTime = if (nbt.contains(DataKeys.PROTECTED_TIME_LEFT)) nbt.getInt(DataKeys.PROTECTED_TIME_LEFT) else -1
+            result.organicMaterialInside = nbt.getInt(DataKeys.ORGANIC_MATERIAL).orElse(0)
+            result.timeRemaining = nbt.getInt(DataKeys.TIME_LEFT).orElse(0)
+            result.protectionTime = if (nbt.contains(DataKeys.PROTECTED_TIME_LEFT)) nbt.getInt(DataKeys.PROTECTED_TIME_LEFT).orElse(0) else -1
             result.fossilOwnerUUID = if (nbt.contains(DataKeys.FOSSIL_OWNER)) nbt.getUUID(DataKeys.FOSSIL_OWNER) else null
 
             val fossilInv = if (nbt.contains(DataKeys.FOSSIL_INVENTORY)) { (nbt.get(DataKeys.FOSSIL_INVENTORY) as ListTag) } else ListTag()
@@ -679,10 +679,10 @@ class FossilMultiblockStructure (
             fossilInv.forEach { ItemStack.CODEC.parse(ops, it).result().ifPresent(actualFossilList::add) }
 
             result.fossilInventory = actualFossilList
-            result.tankConnectorDirection = Direction.byName(nbt.getString(DataKeys.CONNECTOR_DIRECTION))
+            result.tankConnectorDirection = Direction.byName(nbt.getString(DataKeys.CONNECTOR_DIRECTION).orElse(""))
 
             if (nbt.contains(DataKeys.INSERTED_FOSSIL)) {
-                val id = Identifier.parse(nbt.getString(DataKeys.INSERTED_FOSSIL))
+                val id = Identifier.parse(nbt.getString(DataKeys.INSERTED_FOSSIL).orElse(""))
                 val fossil = Fossils.getByIdentifier(id)
 
                 if (fossil != null) {
@@ -696,7 +696,7 @@ class FossilMultiblockStructure (
                 // migration of instances that saved the created pokeon in the nbt
                 result.hasCreatedPokemon = true
             } else if (nbt.contains(DataKeys.HAS_CREATED_POKEMON)){
-                result.hasCreatedPokemon = nbt.getBoolean(DataKeys.HAS_CREATED_POKEMON)
+                result.hasCreatedPokemon = nbt.getBoolean(DataKeys.HAS_CREATED_POKEMON).orElse(false)
             }
             result.fillLevel = result.organicMaterialInside * 8 / MATERIAL_TO_START
             return result

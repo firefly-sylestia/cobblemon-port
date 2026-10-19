@@ -88,7 +88,7 @@ internal class ClientPokemonP1(
             val feature = speciesFeatureProviders.firstNotNullOfOrNull { provider -> provider(featureNbt) } ?: return@forEach
             if (
                 featureNbt.contains("keys", Tag.TAG_STRING.toInt()) &&
-                !featureNbt.getList("keys", Tag.TAG_STRING.toInt()).contains(StringTag.valueOf(featureId))
+                !featureNbt.getList("keys").orElse(ListTag()).contains(StringTag.valueOf(featureId))
             ) {
                 return@forEach
             }

@@ -12,6 +12,7 @@
     "client.ScreenMixin"
   ],
   "mixins": [
+    "common.invoker.BooleanRuleInvoker",
     "EntityMixin",
     "GenericPacketSplitterMixin",
     "NeoforgeBrewingStandMenuMixin",

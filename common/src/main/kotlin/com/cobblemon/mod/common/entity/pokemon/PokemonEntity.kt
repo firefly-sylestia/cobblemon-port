@@ -988,7 +988,7 @@ open class PokemonEntity(
             // this will fuck with storages, as they are tied to these very pokemon instances and their observables
             val ops = registryAccess().createSerializationContext(NbtOps.INSTANCE)
             pokemon = try {
-                this.sidedCodec().decode(ops, nbt.getCompound(DataKeys.POKEMON)).orThrow.first
+                this.sidedCodec().decode(ops, nbt.getCompound(DataKeys.POKEMON).orElse(CompoundTag())).orThrow.first
             } catch (_: IllegalStateException) {
                 health = 0F
                 this.createSidedPokemon()
@@ -1007,7 +1007,7 @@ open class PokemonEntity(
 
         // apply active effects
         if (nbt.contains(DataKeys.ENTITY_EFFECTS)) effects.loadFromNBT(
-            nbt.getCompound(DataKeys.ENTITY_EFFECTS),
+            nbt.getCompound(DataKeys.ENTITY_EFFECTS).orElse(CompoundTag()),
             this.level().registryAccess()
         )
 
@@ -1016,27 +1016,27 @@ open class PokemonEntity(
         entityData.set(NICKNAME, pokemon.nickname ?: Component.empty())
         entityData.set(MARK, pokemon.activeMark?.identifier.toString())
         entityData.set(LABEL_LEVEL, pokemon.level)
-        entityData.set(POSE_TYPE, PoseType.valueOf(nbt.getString(DataKeys.POKEMON_POSE_TYPE)))
-        entityData.set(BEHAVIOUR_FLAGS, nbt.getByte(DataKeys.POKEMON_BEHAVIOUR_FLAGS))
+        entityData.set(POSE_TYPE, PoseType.valueOf(nbt.getString(DataKeys.POKEMON_POSE_TYPE).orElse("")))
+        entityData.set(BEHAVIOUR_FLAGS, nbt.getByte(DataKeys.POKEMON_BEHAVIOUR_FLAGS).orElse(0))
         if (nbt.contains(DataKeys.POKEMON_FREEZE_FRAME)) {
-            entityData.set(FREEZE_FRAME, nbt.getFloat(DataKeys.POKEMON_FREEZE_FRAME))
+            entityData.set(FREEZE_FRAME, nbt.getFloat(DataKeys.POKEMON_FREEZE_FRAME).orElse(0f))
         }
 
         if (nbt.contains(DataKeys.POKEMON_HIDE_LABEL)) {
-            entityData.set(HIDE_LABEL, nbt.getBoolean(DataKeys.POKEMON_HIDE_LABEL))
+            entityData.set(HIDE_LABEL, nbt.getBoolean(DataKeys.POKEMON_HIDE_LABEL).orElse(false))
         }
         if (nbt.contains(DataKeys.POKEMON_UNBATTLEABLE)) {
-            entityData.set(UNBATTLEABLE, nbt.getBoolean(DataKeys.POKEMON_UNBATTLEABLE))
+            entityData.set(UNBATTLEABLE, nbt.getBoolean(DataKeys.POKEMON_UNBATTLEABLE).orElse(false))
         }
         if (nbt.contains(DataKeys.POKEMON_COUNTS_TOWARDS_SPAWN_CAP)) {
-            countsTowardsSpawnCap = nbt.getBoolean(DataKeys.POKEMON_COUNTS_TOWARDS_SPAWN_CAP)
+            countsTowardsSpawnCap = nbt.getBoolean(DataKeys.POKEMON_COUNTS_TOWARDS_SPAWN_CAP).orElse(false)
         }
         if (nbt.contains(DataKeys.POKEMON_RECALCULATE_POSE)) {
-            enablePoseTypeRecalculation = nbt.getBoolean(DataKeys.POKEMON_RECALCULATE_POSE)
+            enablePoseTypeRecalculation = nbt.getBoolean(DataKeys.POKEMON_RECALCULATE_POSE).orElse(false)
         }
 
         if (nbt.contains(DataKeys.POKEMON_PLATFORM_TYPE)) {
-            entityData.set(PLATFORM_TYPE, PlatformType.valueOf(nbt.getString(DataKeys.POKEMON_PLATFORM_TYPE)))
+            entityData.set(PLATFORM_TYPE, PlatformType.valueOf(nbt.getString(DataKeys.POKEMON_PLATFORM_TYPE).orElse("")))
         }
 
         if (nbt.contains("Brain", 10)) {
@@ -1046,7 +1046,7 @@ open class PokemonEntity(
         remakeBrain()
 
         if (nbt.contains(DataKeys.POKEMON_SCALE_MODIFIER)) {
-            entityData.set(SCALE_MODIFIER, nbt.getFloat(DataKeys.POKEMON_SCALE_MODIFIER))
+            entityData.set(SCALE_MODIFIER, nbt.getFloat(DataKeys.POKEMON_SCALE_MODIFIER).orElse(0f))
         }
 
         CobblemonEvents.POKEMON_ENTITY_LOAD.postThen(
@@ -1845,9 +1845,7 @@ open class PokemonEntity(
             (isAlwaysExperienceDropper ||
                     this.lastHurtByPlayer != null &&
                     shouldDropExperience() &&
-                    serverLevel.gameRules.getBoolean(
-                        CobblemonGameRules.DO_POKEMON_LOOT
-                    ))
+                    Cobblemon.implementation.getBooleanGameRule(serverLevel, CobblemonGameRules.DO_POKEMON_LOOT))
         ) {
             ExperienceOrb.award(serverLevel, position(), this.getBaseExperienceReward(serverLevel))
         }

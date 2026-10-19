@@ -136,7 +136,7 @@ public abstract class ServerPlayerMixin implements PlayerSpawnerAccessor {
     @Unique
     private boolean cobblemon$canSpawn() {
         return Cobblemon.config.getEnableSpawning() &&
-                this.serverLevel().getGameRules().getBoolean(CobblemonGameRules.DO_POKEMON_SPAWNING) &&
+                Cobblemon.INSTANCE.getImplementation().getBooleanGameRule(this.serverLevel(), CobblemonGameRules.DO_POKEMON_SPAWNING) &&
                 // intentionally last as this is a more expensive check, even with all the caching
                 !Cobblemon.config.getWorldSpawningBlocklist().contains(
                         ((ServerLevelDuck) this.serverLevel()).cobblemon$getLevelIdentifier()

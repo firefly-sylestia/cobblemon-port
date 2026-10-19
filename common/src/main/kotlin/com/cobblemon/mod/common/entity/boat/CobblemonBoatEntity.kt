@@ -74,7 +74,7 @@ open class CobblemonBoatEntity(entityType: EntityType<out Boat>, world: Level) :
 
     override fun readAdditionalSaveData(nbt: CompoundTag) {
         if (nbt.contains(TYPE_KEY, Tag.TAG_STRING.toInt())) {
-            this.boatType = CobblemonBoatType.valueOf(nbt.getString(TYPE_KEY))
+            this.boatType = CobblemonBoatType.valueOf(nbt.getString(TYPE_KEY).orElse(""))
         }
     }
 
@@ -113,7 +113,7 @@ open class CobblemonBoatEntity(entityType: EntityType<out Boat>, world: Level) :
             return
         }
         this.kill()
-        if (this.level().gameRules.getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+        if (this.level().gameRules.get(GameRules.ENTITY_DROPS)) {
             repeat(3) {
                 this.spawnAtLocation(this.boatType.baseBlock)
             }

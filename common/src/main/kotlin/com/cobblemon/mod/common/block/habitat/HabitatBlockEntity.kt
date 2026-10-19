@@ -190,8 +190,8 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
             mimicId = Identifier.tryParse(it) ?: BuiltInRegistries.BLOCK.getKey(Blocks.STONE)
         }
         displaySpeciesIds = if (tag.contains(DISPLAY_SPECIES_KEY, Tag.TAG_LIST.toInt())) {
-            tag.getList(DISPLAY_SPECIES_KEY, Tag.TAG_STRING.toInt())
-                .mapNotNull { speciesTag -> Identifier.tryParse(speciesTag.asString) }
+            tag.getList(DISPLAY_SPECIES_KEY).orElse(ListTag())
+                .mapNotNull { speciesTag -> Identifier.tryParse(speciesTag.asString().orElse("")).orElse(null) }
                 .distinct()
         } else {
             emptyList()
@@ -201,10 +201,10 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
             return // Client doesn't need to try loading the rest
         }
 
-        phaseOrder = HabitatPhaseOrder.valueOf(tag.getString(DataKeys.HABITAT_PHASE_ORDER))
-        levelRange = tag.getString(DataKeys.HABITAT_LEVEL_RANGE).takeIf { it.isNotBlank() }?.let(IntRangeAdapter::deserialize) ?: 1..Cobblemon.config.maxPokemonLevel
-        modifiers = tag.getString(DataKeys.HABITAT_MODIFIERS).takeIf { it.isNotBlank() }?.let(PokemonProperties::parse) ?: PokemonProperties()
-        val spawningStyleType = tag.getString(DataKeys.HABITAT_SPAWNING_STYLE).asIdentifierDefaultingNamespace()
+        phaseOrder = HabitatPhaseOrder.valueOf(tag.getString(DataKeys.HABITAT_PHASE_ORDER).orElse(""))
+        levelRange = tag.getString(DataKeys.HABITAT_LEVEL_RANGE).orElse("").takeIf { it.isNotBlank() }?.let(IntRangeAdapter::deserialize) ?: 1..Cobblemon.config.maxPokemonLevel
+        modifiers = tag.getString(DataKeys.HABITAT_MODIFIERS).orElse("").takeIf { it.isNotBlank() }?.let(PokemonProperties::parse) ?: PokemonProperties()
+        val spawningStyleType = tag.getString(DataKeys.HABITAT_SPAWNING_STYLE).orElse("").asIdentifierDefaultingNamespace()
         spawningStyle = if (spawningStyleType == ActivatedHabitatSpawning.TYPE) {
             ActivatedHabitatSpawning(this)
         } else {

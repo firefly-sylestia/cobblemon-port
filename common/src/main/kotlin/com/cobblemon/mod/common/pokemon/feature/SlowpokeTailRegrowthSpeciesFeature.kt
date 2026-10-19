@@ -37,7 +37,7 @@ class SlowpokeTailRegrowthSpeciesFeature(var regrowthSeconds: Int = 0) : Species
     }
 
     override fun loadFromNBT(pokemonNBT: CompoundTag): SpeciesFeature {
-        regrowthSeconds = pokemonNBT.getInt(DataKeys.TAIL_REGROWTH_SECONDS)
+        regrowthSeconds = pokemonNBT.getInt(DataKeys.TAIL_REGROWTH_SECONDS).orElse(0)
         return this
     }
 

@@ -21,11 +21,11 @@ import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.tags.TagKey
 import net.minecraft.world.inventory.MenuType
-import net.minecraft.world.level.gamerules.GameRules
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
+import net.minecraft.world.level.Level
 
 interface CobblemonImplementation {
     val modAPI: ModAPI
@@ -154,7 +154,9 @@ interface CobblemonImplementation {
      * @param type
      * @return
      */
-    fun <T : GameRules.Value<T>> registerGameRule(name: String, category: GameRules.Category, type: GameRules.Type<T>): GameRules.Key<T>
+    fun registerGameRule(name: String, category: String, defaultValue: Boolean): Any
+
+    fun getBooleanGameRule(level: Level, rule: Any): Boolean
 
     /**
      * TODO

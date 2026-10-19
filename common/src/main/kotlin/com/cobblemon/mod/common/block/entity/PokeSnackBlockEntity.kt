@@ -286,7 +286,7 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
 
         loadTint(tag)
 
-        amountSpawned = tag.getInt(DataKeys.AMOUNT_SPAWNED)
+        amountSpawned = tag.getInt(DataKeys.AMOUNT_SPAWNED).orElse(0)
 
         if (tag.contains(DataKeys.FOOD_COLOUR)) {
             CobblemonItemComponents.FOOD_COLOUR.codec()
@@ -316,7 +316,7 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
         }
 
         if (tag.contains(DataKeys.TICKS_UNTIL_NEXT_SPAWN)) {
-            randomTicksUntilNextSpawn = tag.getFloat(DataKeys.TICKS_UNTIL_NEXT_SPAWN)
+            randomTicksUntilNextSpawn = tag.getFloat(DataKeys.TICKS_UNTIL_NEXT_SPAWN).orElse(0f)
         }
 
         if (tag.contains(DataKeys.PLACED_BY)) {

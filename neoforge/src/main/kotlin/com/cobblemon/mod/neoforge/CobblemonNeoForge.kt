@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_SEARCH
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.predicate.CobblemonEntitySubPredicates
 import com.cobblemon.mod.common.CobblemonMobEffects
+import com.cobblemon.mod.neoforge.mixin.common.invoker.BooleanRuleInvoker
 import com.cobblemon.mod.common.api.net.serializers.*
 import com.cobblemon.mod.common.item.group.CobblemonItemGroups
 import com.cobblemon.mod.common.loot.LootInjector
@@ -61,6 +62,7 @@ import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTab.TabVisibility
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.GameRules
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Blocks
@@ -447,7 +449,11 @@ class CobblemonNeoForge : CobblemonImplementation {
         CobblemonCommands.register(e.dispatcher, e.buildContext, e.commandSelection)
     }
 
-    override fun <T : GameRules.Value<T>> registerGameRule(name: String, category: GameRules.Category, type: GameRules.Type<T>): GameRules.Key<T> = GameRules.register(name, category, type)
+    override fun registerGameRule(name: String, category: String, defaultValue: Boolean): Any =
+        GameRules.register(name, GameRules.Category.valueOf(category), BooleanRuleInvoker.`cobblemon$create`(defaultValue))
+
+    @Suppress("UNCHECKED_CAST")
+    override fun getBooleanGameRule(level: Level, rule: Any): Boolean = level.gameRules.getBoolean(rule as GameRules.Key<GameRules.BooleanValue>)
 
 
     override fun registerCriteria() {

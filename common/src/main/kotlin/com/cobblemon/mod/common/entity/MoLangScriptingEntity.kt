@@ -87,13 +87,13 @@ interface MoLangScriptingEntity {
     }
 
     fun loadScriptingFromNBT(nbt: CompoundTag) {
-        behavioursAreCustom = nbt.getBoolean(DataKeys.SCRIPTED_BEHAVIOURS_ARE_CUSTOM)
+        behavioursAreCustom = nbt.getBoolean(DataKeys.SCRIPTED_BEHAVIOURS_ARE_CUSTOM).orElse(false)
         behaviours.clear()
-        behaviours.addAll(nbt.getList(DataKeys.SCRIPTED_BEHAVIOURS, ListTag.TAG_STRING.toInt()).map { Identifier.parse(it.asString) })
+        behaviours.addAll(nbt.getList(DataKeys.SCRIPTED_BEHAVIOURS).orElse(ListTag()).map { Identifier.parse(it.asString().orElse("")).orElseThrow() })
         val dataKey = if (nbt.contains(DataKeys.SCRIPTED_DATA)) DataKeys.SCRIPTED_DATA else "Data" // migrate old use of "Data"
-        data = MoLangFunctions.readMoValueFromNBT(nbt.getCompound(dataKey)) as VariableStruct
+        data = MoLangFunctions.readMoValueFromNBT(nbt.getCompound(dataKey).orElse(CompoundTag())) as VariableStruct
         val configKey = if (nbt.contains(DataKeys.SCRIPTED_CONFIG)) DataKeys.SCRIPTED_CONFIG else "Config" // migrate old use of "Config"
-        config = if (nbt.contains(configKey)) MoLangFunctions.readMoValueFromNBT(nbt.getCompound(configKey)) as VariableStruct else VariableStruct()
+        config = if (nbt.contains(configKey)) MoLangFunctions.readMoValueFromNBT(nbt.getCompound(configKey).orElse(CompoundTag())) as VariableStruct else VariableStruct()
     }
 
     fun registerFunctionsForScripting(struct: QueryStruct) {

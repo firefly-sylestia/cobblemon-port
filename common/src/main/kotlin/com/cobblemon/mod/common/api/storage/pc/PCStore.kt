@@ -172,9 +172,9 @@ open class PCStore(
     override fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PokemonStore<PCPosition> {
         val boxCountStored = nbt.getShort(DataKeys.STORE_BOX_COUNT)
         for (boxNumber in 0 until boxCountStored) {
-            boxes.add(PCBox(this).loadFromNBT(nbt.getCompound(DataKeys.STORE_BOX + boxNumber), registryAccess))
+            boxes.add(PCBox(this).loadFromNBT(nbt.getCompound(DataKeys.STORE_BOX + boxNumber).orElse(CompoundTag()), registryAccess))
         }
-        lockedSize = nbt.getBoolean(DataKeys.STORE_BOX_COUNT_LOCKED)
+        lockedSize = nbt.getBoolean(DataKeys.STORE_BOX_COUNT_LOCKED).orElse(false)
         if (!lockedSize && boxes.size != Cobblemon.config.defaultBoxCount) {
             resize(Cobblemon.config.defaultBoxCount, lockNewSize = false)
         } else {
@@ -184,10 +184,10 @@ open class PCStore(
         removeDuplicates()
 
         if (nbt.contains(DataKeys.STORE_UNLOCKED_WALLPAPERS)) {
-            unlockedWallpapers.addAll(nbt.getList(DataKeys.STORE_UNLOCKED_WALLPAPERS, Tag.TAG_STRING.toInt()).map { Identifier.parse(it.asString) })
+            unlockedWallpapers.addAll(nbt.getList(DataKeys.STORE_UNLOCKED_WALLPAPERS).orElse(ListTag()).map { Identifier.parse(it.asString().orElse("")).orElseThrow() })
         }
         if (nbt.contains(DataKeys.STORE_UNSEEN_WALLPAPERS)) {
-            unseenWallpapers.addAll(nbt.getList(DataKeys.STORE_UNSEEN_WALLPAPERS, Tag.TAG_STRING.toInt()).map { Identifier.parse(it.asString) })
+            unseenWallpapers.addAll(nbt.getList(DataKeys.STORE_UNSEEN_WALLPAPERS).orElse(ListTag()).map { Identifier.parse(it.asString().orElse("")).orElseThrow() })
         }
         return this
     }
@@ -271,7 +271,7 @@ open class PCStore(
     }
 
     override fun loadPositionFromNBT(nbt: CompoundTag): StoreCoordinates<PCPosition> {
-        return StoreCoordinates(this, PCPosition(nbt.getShort(DataKeys.STORE_BOX).toInt(), nbt.getByte(DataKeys.STORE_SLOT).toInt()))
+        return StoreCoordinates(this, PCPosition(nbt.getShort(DataKeys.STORE_BOX).orElse(0).toInt(), nbt.getByte(DataKeys.STORE_SLOT).orElse(0).toInt()))
     }
 
     override fun savePositionToNBT(position: PCPosition, nbt: CompoundTag) {

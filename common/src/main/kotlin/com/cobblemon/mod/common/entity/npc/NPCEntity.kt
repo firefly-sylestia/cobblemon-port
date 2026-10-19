@@ -487,20 +487,20 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
     }
 
     override fun load(nbt: CompoundTag) {
-        npc = NPCClasses.getByIdentifier(Identifier.parse(nbt.getString(DataKeys.NPC_CLASS))) ?: NPCClasses.classes.first()
+        npc = NPCClasses.getByIdentifier(Identifier.parse(nbt.getString(DataKeys.NPC_CLASS).orElse(""))) ?: NPCClasses.classes.first()
         forcedResourceIdentifier = if (nbt.contains(DataKeys.NPC_FORCED_RESOURCE_IDENTIFIER)) {
-            Identifier.parse(nbt.getString(DataKeys.NPC_FORCED_RESOURCE_IDENTIFIER))
+            Identifier.parse(nbt.getString(DataKeys.NPC_FORCED_RESOURCE_IDENTIFIER).orElse(""))
         } else {
             null
         }
-        entityData.set(LEVEL, nbt.getInt(DataKeys.NPC_LEVEL).takeIf { it != 0 } ?: 1)
-        entityData.set(HIDE_NAME_TAG, nbt.getBoolean(DataKeys.NPC_HIDE_NAME_TAG))
+        entityData.set(LEVEL, nbt.getInt(DataKeys.NPC_LEVEL).orElse(0).takeIf { it != 0 } ?: 1)
+        entityData.set(HIDE_NAME_TAG, nbt.getBoolean(DataKeys.NPC_HIDE_NAME_TAG).orElse(false))
         super.load(nbt)
         loadScriptingFromNBT(nbt)
-        appliedAspects.addAll(nbt.getList(DataKeys.NPC_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString })
-        variationAspects.addAll(nbt.getList(DataKeys.NPC_VARIATION_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString })
+        appliedAspects.addAll(nbt.getList(DataKeys.NPC_ASPECTS).orElse(ListTag()).map { it.asString().orElse("") })
+        variationAspects.addAll(nbt.getList(DataKeys.NPC_VARIATION_ASPECTS).orElse(ListTag()).map { it.asString().orElse("") })
         nbt.getCompound(DataKeys.NPC_INTERACTION).takeIf { !it.isEmpty }?.let { nbt ->
-            val type = nbt.getString(DataKeys.NPC_INTERACT_TYPE)
+            val type = nbt.getString(DataKeys.NPC_INTERACT_TYPE).orElse("")
             val configType = NPCInteractConfiguration.types[type] ?: return@let
             interaction = configType.clazz.getConstructor().newInstance().also { it.readFromNBT(nbt) }
         }
@@ -508,7 +508,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         if (!battleNBT.isEmpty) {
             battle = NPCBattleConfiguration().also { it.loadFromNBT(battleNBT) }
         }
-        this.skill = if (nbt.contains(DataKeys.NPC_SKILL)) nbt.getInt(DataKeys.NPC_SKILL) else null
+        this.skill = if (nbt.contains(DataKeys.NPC_SKILL)) nbt.getInt(DataKeys.NPC_SKILL).orElse(0) else null
         val partyNBT = nbt.getCompound(DataKeys.NPC_PARTY)
         if (!partyNBT.isEmpty) {
             party = NPCPartyStore(this).also {
@@ -518,30 +518,30 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         }
         if (nbt.contains(DataKeys.NPC_PLAYER_TEXTURE)) {
             val textureNBT = nbt.getCompound(DataKeys.NPC_PLAYER_TEXTURE)
-            val model = NPCPlayerModelType.valueOf(textureNBT.getString(DataKeys.NPC_PLAYER_TEXTURE_MODEL))
+            val model = NPCPlayerModelType.valueOf(textureNBT.getString(DataKeys.NPC_PLAYER_TEXTURE_MODEL).orElse(""))
             val texture = textureNBT.getByteArray(DataKeys.NPC_PLAYER_TEXTURE_TEXTURE)
             entityData.set(NPC_PLAYER_TEXTURE, NPCPlayerTexture(texture, model))
         }
-        this.isMovable = if (nbt.contains(DataKeys.NPC_IS_MOVABLE)) nbt.getBoolean(DataKeys.NPC_IS_MOVABLE) else null
-        this.isInvulnerable = if (nbt.contains(DataKeys.NPC_IS_INVULNERABLE)) nbt.getBoolean(DataKeys.NPC_IS_INVULNERABLE) else null
-        this.isLeashable = if (nbt.contains(DataKeys.NPC_IS_LEASHABLE)) nbt.getBoolean(DataKeys.NPC_IS_LEASHABLE) else null
-        this.allowProjectileHits = if (nbt.contains(DataKeys.NPC_ALLOW_PROJECTILE_HITS)) nbt.getBoolean(DataKeys.NPC_ALLOW_PROJECTILE_HITS) else null
+        this.isMovable = if (nbt.contains(DataKeys.NPC_IS_MOVABLE)) nbt.getBoolean(DataKeys.NPC_IS_MOVABLE).orElse(false) else null
+        this.isInvulnerable = if (nbt.contains(DataKeys.NPC_IS_INVULNERABLE)) nbt.getBoolean(DataKeys.NPC_IS_INVULNERABLE).orElse(false) else null
+        this.isLeashable = if (nbt.contains(DataKeys.NPC_IS_LEASHABLE)) nbt.getBoolean(DataKeys.NPC_IS_LEASHABLE).orElse(false) else null
+        this.allowProjectileHits = if (nbt.contains(DataKeys.NPC_ALLOW_PROJECTILE_HITS)) nbt.getBoolean(DataKeys.NPC_ALLOW_PROJECTILE_HITS).orElse(false) else null
         if (nbt.contains(DataKeys.NPC_BASE_SCALE)) {
             val baseScale = nbt.getFloat(DataKeys.NPC_BASE_SCALE)
             entityData.set(HITBOX_SCALE, baseScale)
         }
         if (nbt.contains(DataKeys.NPC_BOX_SCALE)) {
-            hitboxScale = nbt.getFloat(DataKeys.NPC_BOX_SCALE)
+            hitboxScale = nbt.getFloat(DataKeys.NPC_BOX_SCALE).orElse(0f)
         }
         if (nbt.contains(DataKeys.NPC_RENDER_SCALE)) {
-            renderScale = nbt.getFloat(DataKeys.NPC_RENDER_SCALE)
+            renderScale = nbt.getFloat(DataKeys.NPC_RENDER_SCALE).orElse(0f)
         }
         this.hitbox = if (nbt.contains(DataKeys.NPC_HITBOX)) {
             val hitboxNBT = nbt.getCompound(DataKeys.NPC_HITBOX)
 
-            val width = hitboxNBT.getFloat(DataKeys.NPC_HITBOX_WIDTH)
-            val height = hitboxNBT.getFloat(DataKeys.NPC_HITBOX_HEIGHT)
-            val fixed = hitboxNBT.getBoolean(DataKeys.NPC_HITBOX_FIXED)
+            val width = hitboxNBT.getFloat(DataKeys.NPC_HITBOX_WIDTH).orElse(0f)
+            val height = hitboxNBT.getFloat(DataKeys.NPC_HITBOX_HEIGHT).orElse(0f)
+            val fixed = hitboxNBT.getBoolean(DataKeys.NPC_HITBOX_FIXED).orElse(false)
 
             if (fixed) EntityDimensions.fixed(width, height) else EntityDimensions.scalable(width, height)
         } else {

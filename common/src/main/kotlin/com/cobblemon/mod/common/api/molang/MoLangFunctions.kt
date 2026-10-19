@@ -455,11 +455,11 @@ object MoLangFunctions {
     fun readMoValueFromNBT(nbt: Tag): MoValue =
         when (nbt) {
             is DoubleTag -> {
-                DoubleValue(nbt.asDouble)
+                DoubleValue(nbt.asDouble())
             }
 
             is StringTag -> {
-                StringValue(nbt.asString)
+                StringValue(nbt.asString().orElse(""))
             }
 
             is ListTag -> {

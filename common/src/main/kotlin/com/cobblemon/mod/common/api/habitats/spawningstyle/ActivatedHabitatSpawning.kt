@@ -78,12 +78,12 @@ class ActivatedHabitatSpawning(val habitatBlockEntity: HabitatBlockEntity) : Hab
     }
 
     override fun readFromNBT(nbt: CompoundTag) {
-        chance = nbt.getFloat(DataKeys.HABITAT_ACTIVATED_CHANCE)
-        trigger = Trigger.valueOf(nbt.getString(DataKeys.HABITAT_ACTIVATED_TRIGGER) ?: Trigger.REDSTONE.name)
-        cancelledNaturalSpawningRange = nbt.getInt(DataKeys.HABITAT_ACTIVATED_CANCEL_RANGE)
-        spawnRange = nbt.getInt(DataKeys.HABITAT_ACTIVATED_SPAWN_RANGE)
-        maxSpawns = nbt.getInt(DataKeys.HABITAT_ACTIVATED_MAX_SPAWNS)
-        maxSpawnsPerActivation = nbt.getInt(DataKeys.HABITAT_ACTIVATED_MAX_SPAWNS_PER_ACTIVATION)
+        chance = nbt.getFloat(DataKeys.HABITAT_ACTIVATED_CHANCE).orElse(0f)
+        trigger = Trigger.valueOf(nbt.getString(DataKeys.HABITAT_ACTIVATED_TRIGGER).orElse("") ?: Trigger.REDSTONE.name)
+        cancelledNaturalSpawningRange = nbt.getInt(DataKeys.HABITAT_ACTIVATED_CANCEL_RANGE).orElse(0)
+        spawnRange = nbt.getInt(DataKeys.HABITAT_ACTIVATED_SPAWN_RANGE).orElse(0)
+        maxSpawns = nbt.getInt(DataKeys.HABITAT_ACTIVATED_MAX_SPAWNS).orElse(0)
+        maxSpawnsPerActivation = nbt.getInt(DataKeys.HABITAT_ACTIVATED_MAX_SPAWNS_PER_ACTIVATION).orElse(0)
     }
 
     fun generateSpawnDetails(world: ServerLevel, pos: BlockPos) {

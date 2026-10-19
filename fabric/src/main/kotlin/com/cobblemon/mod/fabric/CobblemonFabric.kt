@@ -35,28 +35,27 @@ import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityLevelChangeEvents
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
-import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents
+import net.fabricmc.fabric.api.gamerule.v1.GameRuleBuilder
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabOutput
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.trade.TradeOfferHelper
-import net.fabricmc.fabric.api.`object`.builder.v1.world.poi.PointOfInterestHelper
-import net.fabricmc.fabric.api.registry.CompostingChanceRegistry
+import net.fabricmc.fabric.api.`object`.builder.v1.world.poi.PoiHelper
+import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
-import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
@@ -76,11 +75,17 @@ import net.minecraft.stats.Stats
 import net.minecraft.tags.TagKey
 import net.minecraft.util.profiling.ProfilerFiller
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.level.gamerules.GameRules
+import net.minecraft.world.level.gamerules.GameRule
+import net.minecraft.world.level.gamerules.GameRuleCategory
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
+import net.minecraft.world.item.Item
+import net.minecraft.core.component.DataComponents
+import net.minecraft.world.item.component.Compostable
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import kotlin.reflect.KClass
@@ -90,11 +95,20 @@ object CobblemonFabric : CobblemonImplementation {
     override val modAPI = ModAPI.FABRIC
 
     private var server: MinecraftServer? = null
+    private val compostables = mutableMapOf<Item, Float>()
 
     override val networkManager = CobblemonFabricNetworkManager
 
     fun initialize() {
         Cobblemon.preInitialize(this)
+
+        DefaultItemComponentEvents.MODIFY.register { context ->
+            compostables.forEach { (item, chance) ->
+                context.modify(item) { components ->
+                    components.set(DataComponents.COMPOSTABLE, Compostable(ResolvableInt.Constant((chance * 100).toInt())))
+                }
+            }
+        }
 
         Cobblemon.statistics.registerStats()
         Cobblemon.statistics.stats.forEach { entry ->
@@ -150,7 +164,7 @@ object CobblemonFabric : CobblemonImplementation {
                 }
                 val id = cobblemonResource(it.id)
                 val subPath = "${ if (it.packType == PackType.CLIENT_RESOURCES) "resourcepacks" else "datapacks" }/${id.path}"
-                ResourceManagerHelperImpl.registerBuiltinResourcePack(id, subPath, mod, it.displayName, resourcePackActivationType)
+                ResourceManagerHelper.registerBuiltinResourcePack(id, subPath, mod, it.displayName, resourcePackActivationType)
             }
 
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register { player, isLogin ->
@@ -188,7 +202,7 @@ object CobblemonFabric : CobblemonImplementation {
             return@register true
         }
 
-        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register { player, origin, destination ->
+        ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register { player, origin, destination ->
             PlatformEvents.CHANGE_DIMENSION.post(ChangeDimensionEvent(player, origin, destination))
         }
 
@@ -261,7 +275,7 @@ object CobblemonFabric : CobblemonImplementation {
     override fun registerItems() {
         CobblemonItems.register { identifier, item -> Registry.register(CobblemonItems.registry, identifier, item) }
         CobblemonItemGroups.register { provider ->
-            Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, provider.key, FabricItemGroup.builder()
+            Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, provider.key, FabricCreativeModeTab.builder()
                 .title(provider.displayName)
                 .icon(provider.displayIconProvider)
                 .displayItems(provider.entryCollector)
@@ -269,7 +283,7 @@ object CobblemonFabric : CobblemonImplementation {
         }
 
         CobblemonItemGroups.injectorKeys().forEach { key ->
-            ItemGroupEvents.modifyEntriesEvent(key).register { content ->
+            CreativeModeTabEvents.modifyOutputEvent(key).register { content ->
                 val fabricInjector = FabricItemGroupInjector(content)
                 CobblemonItemGroups.inject(key, fabricInjector)
             }
@@ -294,7 +308,7 @@ object CobblemonFabric : CobblemonImplementation {
     }
 
     override fun registerPoiTypes() {
-        CobblemonPoiTypes.register { identifier, type -> PointOfInterestHelper.register(identifier, type.maxTickets, type.validRange, type.matchingStates) }
+        CobblemonPoiTypes.register { identifier, type -> PoiHelper.register(identifier, type.maxTickets, type.validRange, type.matchingStates) }
     }
 
     override fun registerVillagers() {
@@ -335,7 +349,13 @@ object CobblemonFabric : CobblemonImplementation {
         ArgumentTypeRegistry.registerArgumentType(identifier, argumentClass.java, serializer)
     }
 
-    override fun <T : GameRules.Value<T>> registerGameRule(name: String, category: GameRules.Category, type: GameRules.Type<T>): GameRules.Key<T> = GameRuleRegistry.register(name, category, type)
+    override fun registerGameRule(name: String, category: String, defaultValue: Boolean): Any =
+        GameRuleBuilder.forBoolean(defaultValue)
+            .category(GameRuleCategory.valueOf(category))
+            .buildAndRegister(cobblemonResource(name.replace(Regex("([a-z])([A-Z])"), "$1_$2").lowercase()))
+
+    @Suppress("UNCHECKED_CAST")
+    override fun getBooleanGameRule(level: Level, rule: Any): Boolean = level.gameRules.get(rule as GameRule<Boolean>)
 
     override fun registerCriteria() {
         CobblemonCriteria.register { id, obj ->
@@ -400,7 +420,7 @@ object CobblemonFabric : CobblemonImplementation {
     override fun server(): MinecraftServer? = if (this.environment() == Environment.CLIENT) Minecraft.getInstance().singleplayerServer else this.server
 
     override fun registerCompostable(item: ItemLike, chance: Float) {
-        CompostingChanceRegistry.INSTANCE.add(item, chance)
+        compostables[item.asItem()] = chance
     }
 
     override fun registerMobEffects() {
@@ -420,17 +440,17 @@ object CobblemonFabric : CobblemonImplementation {
         override fun getFabricDependencies(): MutableCollection<Identifier> = this.dependencies.toMutableList()
     }
 
-    private class FabricItemGroupInjector(private val fabricItemGroupEntries: FabricItemGroupEntries) : CobblemonItemGroups.Injector {
+    private class FabricItemGroupInjector(private val fabricItemGroupEntries: CreativeModeTabOutput) : CobblemonItemGroups.Injector {
         override fun putFirst(item: ItemLike) {
             this.fabricItemGroupEntries.prepend(item)
         }
 
         override fun putBefore(item: ItemLike, target: ItemLike) {
-            this.fabricItemGroupEntries.addBefore(target, item)
+            this.fabricItemGroupEntries.insertBefore(target, item)
         }
 
         override fun putAfter(item: ItemLike, target: ItemLike) {
-            this.fabricItemGroupEntries.addAfter(target, item)
+            this.fabricItemGroupEntries.insertAfter(target, item)
         }
 
         override fun putLast(item: ItemLike) {

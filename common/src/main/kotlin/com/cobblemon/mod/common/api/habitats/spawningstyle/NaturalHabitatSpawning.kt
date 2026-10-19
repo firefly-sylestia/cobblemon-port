@@ -55,7 +55,7 @@ class NaturalHabitatSpawning(val habitatBlockEntity: HabitatBlockEntity) : Habit
     }
 
     override fun readFromNBT(nbt: CompoundTag) {
-        replaceSpawns = nbt.getBoolean(DataKeys.HABITAT_NATURAL_REPLACE_SPAWNS)
-        rangeOfInfluence = nbt.getInt(DataKeys.HABITAT_NATURAL_RANGE_OF_INFLUENCE)
+        replaceSpawns = nbt.getBoolean(DataKeys.HABITAT_NATURAL_REPLACE_SPAWNS).orElse(false)
+        rangeOfInfluence = nbt.getInt(DataKeys.HABITAT_NATURAL_RANGE_OF_INFLUENCE).orElse(0)
     }
 }

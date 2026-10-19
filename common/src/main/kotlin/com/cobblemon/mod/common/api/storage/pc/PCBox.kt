@@ -158,11 +158,11 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
 
     open fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PCBox {
         if (nbt.contains(DataKeys.STORE_BOX_NAME)) {
-            name = nbt.getString(DataKeys.STORE_BOX_NAME)
+            name = nbt.getString(DataKeys.STORE_BOX_NAME).orElse("")
         }
 
         if (nbt.contains(DataKeys.STORE_BOX_WALLPAPER)) {
-            wallpaper = Identifier.parse(nbt.getString(DataKeys.STORE_BOX_WALLPAPER))
+            wallpaper = Identifier.parse(nbt.getString(DataKeys.STORE_BOX_WALLPAPER).orElse(""))
         }
 
         for (slot in 0 until POKEMON_PER_BOX) {

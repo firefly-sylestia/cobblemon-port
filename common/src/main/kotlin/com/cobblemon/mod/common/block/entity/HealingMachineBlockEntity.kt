@@ -136,7 +136,7 @@ class HealingMachineBlockEntity(
         if (player != null) {
             val party = player.party()
             party.heal()
-            val healPC = player.level().gameRules.getBoolean(CobblemonGameRules.HEALERS_HEAL_PC);
+            val healPC = Cobblemon.implementation.getBooleanGameRule(player.level(), CobblemonGameRules.HEALERS_HEAL_PC)
             if (healPC){
                 player.pc().forEach {it.heal()}
             }
@@ -171,7 +171,7 @@ class HealingMachineBlockEntity(
             // Keep around for compat with old format
             var index = 0
             for (key in pokeBallsTag.allKeys) {
-                val pokeBallId = pokeBallsTag.getString(key)
+                val pokeBallId = pokeBallsTag.getString(key).orElse("")
                 if (pokeBallId.isEmpty()) {
                     continue
                 }
@@ -184,13 +184,13 @@ class HealingMachineBlockEntity(
             }
         }
         if (compoundTag.contains(DataKeys.HEALER_MACHINE_TIME_LEFT)) {
-            this.healTimeLeft = compoundTag.getInt(DataKeys.HEALER_MACHINE_TIME_LEFT)
+            this.healTimeLeft = compoundTag.getInt(DataKeys.HEALER_MACHINE_TIME_LEFT).orElse(0)
         }
         if (compoundTag.contains(DataKeys.HEALER_MACHINE_CHARGE)) {
-            this.healingCharge = compoundTag.getFloat(DataKeys.HEALER_MACHINE_CHARGE).coerceIn(0F..maxCharge)
+            this.healingCharge = compoundTag.getFloat(DataKeys.HEALER_MACHINE_CHARGE).orElse(0f).coerceIn(0F..maxCharge)
         }
         if (compoundTag.contains(DataKeys.HEALER_MACHINE_INFINITE)) {
-            this.infinite = compoundTag.getBoolean(DataKeys.HEALER_MACHINE_INFINITE)
+            this.infinite = compoundTag.getBoolean(DataKeys.HEALER_MACHINE_INFINITE).orElse(false)
         }
     }
 

@@ -353,9 +353,9 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
 
     override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.loadAdditional(nbt, registryLookup)
-        val list = nbt.getList(DataKeys.TETHER_POKEMON, CompoundTag.TAG_COMPOUND.toInt())
+        val list = nbt.getList(DataKeys.TETHER_POKEMON).orElse(ListTag())
         this.ownerId = if (nbt.hasUUID(DataKeys.TETHER_OWNER_ID)) nbt.getUUID(DataKeys.TETHER_OWNER_ID) else null
-        this.ownerName = nbt.getString(DataKeys.TETHER_OWNER_NAME).takeIf { it.isNotEmpty() } ?: ""
+        this.ownerName = nbt.getString(DataKeys.TETHER_OWNER_NAME).orElse("").takeIf { it.isNotEmpty() } ?: ""
         for (tetheringNBT in list) {
             tetheringNBT as CompoundTag
             val tetheringId = tetheringNBT.getUUID(DataKeys.TETHERING_ID)

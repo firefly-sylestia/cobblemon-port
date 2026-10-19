@@ -23,7 +23,6 @@ import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.endsWith
 import java.util.concurrent.ExecutionException
-import java.util.function.Predicate
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
@@ -57,10 +56,10 @@ object CobblemonCallbacks : DataRegistry {
 
         val unsortedCallbacks = mutableMapOf<Identifier, MutableList<Pair<String, ExpressionLike>>>()
         val folderBeforeNameRegex = ".*\\/([^\\/]+)\\/[^\\/]+\$".toRegex()
-        val predicate: Predicate<Identifier> = Predicate { path -> path.endsWith(CobblemonScripts.MOLANG_EXTENSION) }
+        val selector = ResourceManager.Selector { path -> path.endsWith(CobblemonScripts.MOLANG_EXTENSION) }
 
-        manager.listResources("callbacks", predicate)
-            .plus(manager.listResources("flows", predicate)) // old name
+        manager.listResources("callbacks", selector)
+            .plus(manager.listResources("flows", selector)) // old name
             .forEach { (identifier, resource) ->
                 resource.openAsReader().use { stream ->
                     stream.buffered().use { reader ->

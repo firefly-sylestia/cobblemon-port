@@ -52,6 +52,6 @@ interface TintBlockEntity {
     }
 
     fun loadTint(tag: CompoundTag) {
-        if (tag.contains(TINT)) tint = tag.getInt(TINT)
+        if (tag.contains(TINT)) tint = tag.getInt(TINT).orElse(0)
     }
 }

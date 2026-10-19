@@ -277,7 +277,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
 
         private fun extractUuid(shoulderNbt: CompoundTag): UUID {
             if (!shoulderNbt.contains(DataKeys.SHOULDER_UUID)) {
-                return shoulderNbt.getCompound(DataKeys.POKEMON).getUUID(DataKeys.POKEMON_UUID)
+                return shoulderNbt.getCompound(DataKeys.POKEMON).orElse(CompoundTag()).getUUID(DataKeys.POKEMON_UUID)
             }
             return shoulderNbt.getUUID(DataKeys.SHOULDER_UUID)
         }
@@ -285,7 +285,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
         private fun extractData(shoulderNbt: CompoundTag, pokemonUUID: UUID): ShoulderData? {
             // To not crash with existing ones, this will still have the aspect issue
             if (!shoulderNbt.contains(DataKeys.SHOULDER_SPECIES)) {
-                return Pokemon.CLIENT_CODEC.decode(NbtOps.INSTANCE, shoulderNbt.getCompound(DataKeys.POKEMON))
+                return Pokemon.CLIENT_CODEC.decode(NbtOps.INSTANCE, shoulderNbt.getCompound(DataKeys.POKEMON).orElse(CompoundTag()))
                     .map { it.first }
                     .mapOrElse({
                         ShoulderData(
@@ -299,15 +299,15 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
                     }, { null })
             }
             val species =
-                PokemonSpecies.getByIdentifier(Identifier.parse(shoulderNbt.getString(DataKeys.SHOULDER_SPECIES)))
+                PokemonSpecies.getByIdentifier(Identifier.parse(shoulderNbt.getString(DataKeys.SHOULDER_SPECIES).orElse("")))
                     ?: return null
             val formName = shoulderNbt.getString(DataKeys.SHOULDER_FORM)
             val form = species.forms.firstOrNull { it.name == formName } ?: species.standardForm
             val aspects =
-                shoulderNbt.getList(DataKeys.SHOULDER_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString }.toSet()
+                shoulderNbt.getList(DataKeys.SHOULDER_ASPECTS).orElse(ListTag()).map { it.asString().orElse("") }.toSet()
             val scaleModifier = shoulderNbt.getFloat(DataKeys.SHOULDER_SCALE_MODIFIER)
             val shownItem = Minecraft.getInstance().level?.registryAccess()
-                ?.let { ItemStack.parseOptional(it, shoulderNbt.getCompound(DataKeys.SHOULDER_ITEM)) }
+                ?.let { ItemStack.parseOptional(it, shoulderNbt.getCompound(DataKeys.SHOULDER_ITEM).orElse(CompoundTag())) }
                 ?: ItemStack.EMPTY
             return ShoulderData(pokemonUUID, species, form, aspects, scaleModifier, shownItem)
         }

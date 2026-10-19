@@ -11,8 +11,8 @@ package com.cobblemon.mod.fabric.data.generator.providers
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.block.TypeGemClusterBlock
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider
 import net.minecraft.advancements.critereon.*
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.Registries
@@ -35,9 +35,9 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
 import java.util.concurrent.CompletableFuture
 
 class TypeGemsLootTableProvider(
-    dataOutput: FabricDataOutput,
+    dataOutput: FabricPackOutput,
     val registryLookup: CompletableFuture<HolderLookup.Provider>
-) : FabricBlockLootTableProvider(dataOutput, registryLookup) {
+) : FabricBlockLootSubProvider(dataOutput, registryLookup) {
 
     override fun getName(): String? {
         return "Type Gems Loot Tables"

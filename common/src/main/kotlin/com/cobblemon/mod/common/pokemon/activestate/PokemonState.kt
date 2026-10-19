@@ -156,7 +156,7 @@ class ShoulderedState() : ActivePokemonState() {
 
     override fun readFromNBT(nbt: CompoundTag): PokemonState {
         super.readFromNBT(nbt)
-        isLeftShoulder = nbt.getBoolean(DataKeys.POKEMON_STATE_SHOULDER)
+        isLeftShoulder = nbt.getBoolean(DataKeys.POKEMON_STATE_SHOULDER).orElse(false)
         playerUUID = nbt.getUUID(DataKeys.POKEMON_STATE_PLAYER_UUID)
         stateId = nbt.getUUID(DataKeys.POKEMON_STATE_ID)
         pokemonUUID = nbt.getUUID(DataKeys.POKEMON_STATE_POKEMON_UUID)

@@ -131,7 +131,6 @@ import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
-import net.minecraft.network.protocol.game.DebugPackets
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
@@ -537,17 +536,6 @@ open class PokemonEntity(
         super.handleEntityEvent(status)
     }
 
-    override fun sendDebugPackets() {
-        super.sendDebugPackets()
-        DebugPackets.sendEntityBrain(this)
-        DebugPackets.sendGoalSelector(level(), this, this.goalSelector)
-        DebugPackets.sendPathFindingPacket(
-            level(),
-            this,
-            this.navigation.path,
-            this.navigation.path?.distToTarget ?: 0F
-        )
-    }
 
     public override fun removePassenger(passenger: Entity) {
         occupiedSeats.entries.removeIf { it.value == passenger }
@@ -591,15 +579,15 @@ open class PokemonEntity(
         // Deals with special cases in which Pokemon should either be immune or buffed by lightning strikes.
         val isAbilityImmune = when (pokemon.ability.name) {
             "lightningrod" -> {
-                this.addEffect(MobEffectInstance(MobEffects.DAMAGE_BOOST, 1200, 1))
+                this.addEffect(MobEffectInstance(MobEffects.STRENGTH, 1200, 1))
                 true
             }
             "motordrive" -> {
-                this.addEffect(MobEffectInstance(MobEffects.MOVEMENT_SPEED, 1200, 1))
+                this.addEffect(MobEffectInstance(MobEffects.SPEED, 1200, 1))
                 true
             }
             "voltabsorb" -> {
-                this.addEffect(MobEffectInstance(MobEffects.HEAL, 1, 1))
+                this.addEffect(MobEffectInstance(MobEffects.INSTANT_HEALTH, 1, 1))
                 true
             }
             else -> false
@@ -2150,16 +2138,16 @@ open class PokemonEntity(
 
     override fun dampensVibrations(): Boolean = pokemon.dampensVibrations()
 
-    override fun shear(shearedSoundCategory: SoundSource) {
+    override fun shear(level: ServerLevel, soundSource: SoundSource, tool: ItemStack) {
         val slowpokeTailFeature = SlowpokeTailRegrowthSpeciesFeatureProvider.getFromPokemon(pokemon)
         if (slowpokeTailFeature != null && slowpokeTailFeature.regrowthSeconds <= 0) {
-            this.level().playSound(null, this, SoundEvents.SHEEP_SHEAR, shearedSoundCategory, 1.0F, 1.0F)
+            level.playSound(null, this, SoundEvents.SHEEP_SHEAR, soundSource, 1.0F, 1.0F)
             slowpokeTailFeature.onShear(this)
             return
         }
 
         val feature = this.pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED) ?: return
-        this.level().playSound(null, this, SoundEvents.SHEEP_SHEAR, shearedSoundCategory, 1.0F, 1.0F)
+        level.playSound(null, this, SoundEvents.SHEEP_SHEAR, soundSource, 1.0F, 1.0F)
         feature.enabled = true
         this.pokemon.markFeatureDirty(feature)
         this.pokemon.updateAspects()

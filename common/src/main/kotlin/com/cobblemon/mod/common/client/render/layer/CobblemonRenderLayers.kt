@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.resources.Identifier
 import java.util.function.BiFunction
 import java.util.function.Function
-import net.minecraft.Util
+import net.minecraft.util.Util
 import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.client.renderer.RenderStateShard.*
 

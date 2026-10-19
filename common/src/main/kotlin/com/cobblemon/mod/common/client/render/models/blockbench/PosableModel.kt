@@ -49,7 +49,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.renderpearl.api.vertex.VertexFormat
 import com.mojang.math.Axis
-import net.minecraft.Util
+import net.minecraft.util.Util
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderStateShard

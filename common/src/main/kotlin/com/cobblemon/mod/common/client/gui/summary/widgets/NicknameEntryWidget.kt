@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetNicknamePa
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetNicknameHandler.MAX_NAME_LENGTH
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.mojang.blaze3d.platform.InputConstants
-import net.minecraft.Util
+import net.minecraft.util.Util
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.EditBox

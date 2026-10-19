@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.client.render
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -22,6 +21,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import com.mojang.blaze3d.platform.NativeImage
 import net.minecraft.client.Minecraft
+import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.texture.DynamicTexture
 import kotlin.math.floor
 import net.minecraft.resources.Identifier
@@ -40,7 +40,7 @@ class VaryingRenderableResolver(
 ) {
     lateinit var repository: VaryingModelRepository
     val posers = mutableMapOf<Pair<Identifier, Identifier>, PosableModel>()
-    val models = mutableMapOf<Identifier, Bone>()
+    val models = mutableMapOf<Identifier, ModelPart>()
 
     fun getResolvedPoser(state: PosableState): Identifier {
         return getVariationValue(state) { poser }

@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench
 
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.X_AXIS
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.Y_AXIS
@@ -21,23 +20,18 @@ fun ModelPart.getPosition(axis: Int) = when (axis) {
     Y_AXIS -> y
     else -> z
 }
-fun Bone.getRotation(axis: Int) = if (this is ModelPart) {
+fun ModelPart.getRotation(axis: Int) = when (axis) {
+    X_AXIS -> xRot
+    Y_AXIS -> yRot
+    else -> zRot
+}
+
+fun ModelPart.setRotation(axis: Int, angleInRadians: Float): ModelPart {
     when (axis) {
-        X_AXIS -> xRot
-        Y_AXIS -> yRot
-        else -> zRot
+        X_AXIS -> xRot = angleInRadians
+        Y_AXIS -> yRot= angleInRadians
+        else -> zRot = angleInRadians
     }
-} else 0f
-
-fun Bone.setRotation(axis: Int, angleInRadians: Float): Bone {
-    if (this is ModelPart) {
-        when (axis) {
-            X_AXIS -> xRot = angleInRadians
-            Y_AXIS -> yRot= angleInRadians
-            else -> zRot = angleInRadians
-        }
-    }
-
     return this
 }
 fun ModelPart.setPosition(axis: Int, position: Float): ModelPart {
@@ -48,7 +42,7 @@ fun ModelPart.setPosition(axis: Int, position: Float): ModelPart {
     }
     return this
 }
-fun Bone.addRotation(axis: Int, differenceInRadians: Float) = setRotation(axis, getRotation(axis) + differenceInRadians)
+fun ModelPart.addRotation(axis: Int, differenceInRadians: Float) = setRotation(axis, getRotation(axis) + differenceInRadians)
 fun ModelPart.addPosition(axis: Int, difference: Float) = setPosition(axis, getPosition(axis) + difference)
 fun ModelPart.getChildOf(vararg path: String): ModelPart {
     var part = this

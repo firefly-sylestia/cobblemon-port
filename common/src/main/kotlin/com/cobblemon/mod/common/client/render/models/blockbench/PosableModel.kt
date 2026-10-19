@@ -27,7 +27,6 @@ import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animatio
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.ModelFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.client.render.models.blockbench.quirk.ModelQuirk
@@ -77,7 +76,7 @@ import org.joml.Vector3f
  * @author Hiroku
  * @since December 5th, 2021
  */
-open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
+open class PosableModel(@Transient override val rootPart: ModelPart) : ModelFrame {
     @Transient
     lateinit var context: RenderContext
 
@@ -392,12 +391,8 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     fun getPart(name: String) = relevantPartsByName[name]!!
 
-    fun loadAllNamedChildren(bone: Bone) {
-        if (bone is ModelPart) loadAllNamedChildren(bone)
-    }
-
-    fun registerPartAndAllNamedChildren(name: String, bone: Bone) {
-        if (bone is ModelPart) registerRelevantPart(name, bone)
+    fun registerPartAndAllNamedChildren(name: String, bone: ModelPart) {
+        registerRelevantPart(name, bone)
         loadAllNamedChildren(bone)
     }
 
@@ -449,7 +444,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         val color2 = (a2 * 255).toInt() shl 24 or ((r2 * 255).toInt() shl 16) or ((g2 * 255).toInt() shl 8) or (b2 * 255).toInt()
 
         rootPart.render(
-            context,
             stack,
             buffer,
             packedLight,
@@ -481,7 +475,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
                 stack.pushPose()
                 rootPart.render(
-                    context,
                     stack,
                     consumer,
                     packedLight,

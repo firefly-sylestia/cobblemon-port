@@ -33,7 +33,6 @@ import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen6.*
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen7.*
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen8.*
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen9.*
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.client.util.exists
@@ -69,9 +68,9 @@ import net.minecraft.world.phys.Vec3
  * @since February 28th, 2023
  */
 object VaryingModelRepository {
-    val posers = mutableMapOf<Identifier, (Bone) -> PosableModel>()
+    val posers = mutableMapOf<Identifier, (ModelPart) -> PosableModel>()
     val variations = mutableMapOf<Identifier, VaryingRenderableResolver>()
-    val texturedModels = mutableMapOf<Identifier, Bone>()
+    val texturedModels = mutableMapOf<Identifier, ModelPart>()
 
     private val types = listOf(
         "pokemon",
@@ -149,7 +148,7 @@ object VaryingModelRepository {
         }
     }
 
-    fun loadJsonPoser(fileName: String, json: String, poserClass: Class<out PosableModel>): (Bone) -> PosableModel {
+    fun loadJsonPoser(fileName: String, json: String, poserClass: Class<out PosableModel>): (ModelPart) -> PosableModel {
         // Faster to deserialize during asset load rather than rerunning this every time a poser is constructed.
         val jsonObject = gson.fromJson(json, JsonObject::class.java)
         return {
@@ -644,7 +643,7 @@ object VaryingModelRepository {
         return null
     }
 
-    fun registerFactory(id: String, factory: BiFunction<Identifier, Resource, Pair<Identifier, Bone>?>) {
+    fun registerFactory(id: String, factory: BiFunction<Identifier, Resource, Pair<Identifier, ModelPart>?>) {
         MODEL_FACTORIES[id] = factory
     }
 
@@ -652,8 +651,8 @@ object VaryingModelRepository {
         Needs to be java function to work with non kotlin sidemods.
         - Waterpicker
      */
-    private var MODEL_FACTORIES = mutableMapOf<String, BiFunction<Identifier, Resource, Pair<Identifier, Bone>?>>().also {
-        it[".geo.json"] = BiFunction<Identifier, Resource, Pair<Identifier, Bone>?> { identifier: Identifier, resource: Resource ->
+    private var MODEL_FACTORIES = mutableMapOf<String, BiFunction<Identifier, Resource, Pair<Identifier, ModelPart>?>>().also {
+        it[".geo.json"] = BiFunction<Identifier, Resource, Pair<Identifier, ModelPart>?> { identifier: Identifier, resource: Resource ->
             resource.open().use { stream ->
                 val json = String(stream.readAllBytes(), StandardCharsets.UTF_8)
                 val resolvedIdentifier = Identifier.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)

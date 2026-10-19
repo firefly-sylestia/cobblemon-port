@@ -34,7 +34,7 @@ jobs:
         run: |
           set -o pipefail
           mkdir -p fabric-26.3/build/ci
-          ./gradlew -p fabric-26.3 build --stacktrace --console=plain 2>&1 | tee fabric-26.3/build/ci/build.log
+          bash ./gradlew -p fabric-26.3 build --stacktrace --console=plain 2>&1 | tee fabric-26.3/build/ci/build.log
 
       - name: Upload build log
         if: always()

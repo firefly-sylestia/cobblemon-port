@@ -701,7 +701,6 @@ open class PokemonEntity(
         ticksLived++
 
         if (ticksLived <= 20) {
-            restrictTo(BlockPos.ZERO, -1)
             val spawnDirection = entityData.get(SPAWN_DIRECTION).takeIf { it.isFinite() } ?: 0F
             yBodyRot = (spawnDirection * 1000F).toInt() / 1000F
         }
@@ -749,8 +748,7 @@ open class PokemonEntity(
                 val heightAllowance = 4.0 // Allow spawning up to x blocks above the pastureBlock y level
 
                 // Attempt tp and recall if it fails
-                val serverLevel = this.level() as? ServerLevel
-                if (serverLevel == null || !this.randomTeleport(serverLevel, tpPos.x, tpPos.y + heightAllowance, tpPos.z, false)) {
+                if (!this.randomTeleport(tpPos.x, tpPos.y + heightAllowance, tpPos.z, false) { it.isAir }) {
                     // If the teleport was not successful then recall the mon
                     this.tethering = null
                     this.pokemon.recall()
@@ -805,7 +803,7 @@ open class PokemonEntity(
     /**
      * Prevents flying type Pokémon from taking fall damage.
      */
-    override fun causeFallDamage(level: ServerLevel, fallDistance: Float, damageMultiplier: Float, damageSource: DamageSource): Boolean {
+    override fun causeFallDamage(fallDistance: Double, damageMultiplier: Float, damageSource: DamageSource): Boolean {
         /*return if (pokemon.ability.name == "levitate") {
             false
         } else {
@@ -817,7 +815,7 @@ open class PokemonEntity(
                 pokemon.species.behaviour.moving.fly.canFly -> FALL_DAMAGE_MULT_MOVEMENT_FLY
                 else -> { 1.0f }
             }*/
-        return super.causeFallDamage(level, fallDistance, damageMultiplier, damageSource)
+        return super.causeFallDamage(fallDistance, damageMultiplier, damageSource)
     }
 
     override fun isInvulnerableTo(level: ServerLevel, damageSource: DamageSource): Boolean {
@@ -1184,7 +1182,7 @@ open class PokemonEntity(
 
         if (ownerUUID == player.uuid || ownerUUID == null) {
             if (itemStack.`is`(Items.SHEARS) && this.readyForShearing()) {
-                this.shear(SoundSource.PLAYERS)
+                (level() as? ServerLevel)?.let { this.shear(it, SoundSource.PLAYERS, itemStack) }
                 this.gameEvent(GameEvent.SHEAR, player)
                 itemStack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND)
                 return InteractionResult.SUCCESS
@@ -1239,15 +1237,15 @@ open class PokemonEntity(
                 return InteractionResult.SUCCESS
             } else if (itemStack.item is DyeItem && colorFeatureType != null) {
                 val currentColor = colorFeature?.value ?: ""
-                val item = itemStack.item as DyeItem
-                if (!item.dyeColor.name.equals(currentColor, ignoreCase = true)) {
+                val dyeColor = BuiltInRegistries.ITEM.getKey(itemStack.item).path.removeSuffix("_dye")
+                if (!dyeColor.equals(currentColor, ignoreCase = true)) {
                     if (player is ServerPlayer) {
                         if (colorFeature != null) {
-                            colorFeature.value = item.dyeColor.name.lowercase()
+                            colorFeature.value = dyeColor.lowercase()
                             this.pokemon.markFeatureDirty(colorFeature)
                         } else {
                             val newColorFeature =
-                                StringSpeciesFeature(DataKeys.CAN_BE_COLORED, item.dyeColor.name.lowercase())
+                                StringSpeciesFeature(DataKeys.CAN_BE_COLORED, dyeColor.lowercase())
                             this.pokemon.features.add(newColorFeature)
                             this.pokemon.onChange()
                         }
@@ -1326,7 +1324,7 @@ open class PokemonEntity(
         return@canRide behaviour.isActive(settings, state, this)
     }
 
-    override fun getDimensions(pose: Pose): EntityDimensions {
+    override fun getDefaultDimensions(pose: Pose): EntityDimensions {
         val scale = effects.mockEffect?.scale ?: (form.baseScale * pokemon.effectiveScale)
         var result = this.exposedForm.hitbox.scale(scale)
         result = result.withEyeHeight(this.exposedForm.eyeHeight(this) * result.height)
@@ -1679,11 +1677,16 @@ open class PokemonEntity(
         nbt.putString(DataKeys.SHOULDER_FORM, this.pokemon.form.name)
         nbt.put(DataKeys.SHOULDER_ASPECTS, this.pokemon.aspects.map(StringTag::valueOf).toNbtList())
         nbt.putFloat(DataKeys.SHOULDER_SCALE_MODIFIER, this.pokemon.effectiveScale)
-        nbt.put(
-            DataKeys.SHOULDER_ITEM,
-            this.level().registryAccess()
-                .let { if (this.shownItem.isEmpty) CompoundTag() else this.shownItem.saveOptional(it) } as CompoundTag)
-        if (isLeft) player.shoulderEntityLeft = nbt else player.shoulderEntityRight = nbt
+        val registryAccess = this.level().registryAccess()
+        val itemTag = if (this.shownItem.isEmpty) {
+            CompoundTag()
+        } else {
+            ItemStack.OPTIONAL_CODEC.encodeStart(registryAccess.createSerializationContext(NbtOps.INSTANCE), this.shownItem)
+                .result()
+                .orElseGet { CompoundTag() }
+        }
+        nbt.put(DataKeys.SHOULDER_ITEM, itemTag)
+        player.setEntityOnShoulder(nbt)
         return true
     }
 
@@ -1802,14 +1805,14 @@ open class PokemonEntity(
             pokemon.tetheringId = null
         }
         if (evolutionEntity != null) {
-            evolutionEntity!!.kill()
+            (level() as? ServerLevel)?.let { evolutionEntity!!.kill(it) }
             pokemon.entity?.evolutionEntity = null
         }
     }
 
     // Copy and paste of how vanilla checks it, unfortunately no util method you can only add then wait for the result
     fun hasRoomToMount(player: Player): Boolean {
-        return (player.shoulderEntityLeft.isEmpty || player.shoulderEntityRight.isEmpty)
+        return (player.getShoulderEntityLeft().isEmpty || player.getShoulderEntityRight().isEmpty)
                 && !player.isPassenger
                 && player.onGround()
                 && !player.isInWater
@@ -1832,18 +1835,18 @@ open class PokemonEntity(
         }
     }
 
-    override fun dropExperience(attacker: Entity?) {
+    override fun dropExperience(serverLevel: ServerLevel, attacker: Entity) {
         // Copied over the entire function because it's the simplest way to switch out the gamerule check
         if (
-            level() is ServerLevel && !this.wasExperienceConsumed() &&
+            !this.wasExperienceConsumed() &&
             (isAlwaysExperienceDropper ||
-                    lastHurtByPlayerTime > 0 &&
+                    this.lastHurtByPlayer != null &&
                     shouldDropExperience() &&
-                    level().gameRules.getBoolean(
+                    serverLevel.gameRules.getBoolean(
                         CobblemonGameRules.DO_POKEMON_LOOT
                     ))
         ) {
-            ExperienceOrb.award(level() as ServerLevel, position(), baseExperienceReward)
+            ExperienceOrb.award(serverLevel, position(), this.getBaseExperienceReward(serverLevel))
         }
     }
 
@@ -1864,31 +1867,6 @@ open class PokemonEntity(
         }
     }
 
-    override fun handleRelativeFrictionAndCalculateMovement(deltaMovement: Vec3, friction: Float): Vec3 {
-        if (!this.hasRider() || this.controllingPassenger == null) {
-            super.handleRelativeFrictionAndCalculateMovement(deltaMovement, friction)
-        } else {
-            val velocity = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
-                behaviour.velocity(settings, state, this, this.controllingPassenger as Player, deltaMovement)
-            }
-            // Handle ridden pokemon differently to allow vector lerp instead of simple addition.
-            val v = getInputVector(velocity, 1.0f, this.yRot)
-            // Changing this will give the ride more or less inertia/handling/drift
-            val inertia = ifRidingAvailableSupply(fallback = 0.5) { behaviour, settings, state ->
-                behaviour.inertia(settings, state,this)
-            }
-
-            this.deltaMovement = this.deltaMovement.lerp(v, inertia)
-            var pos = this.deltaMovement.scale(this.speed.toDouble())
-            if (super.onGround() && this.deltaMovement.y == 0.0) {
-                pos = pos.subtract(0.0, 0.0001, 0.0)
-            }
-            this.move(MoverType.SELF, pos)
-        }
-
-        return this.deltaMovement
-    }
-
     /*
     override fun shouldDiscardFriction(): Boolean {
         val riders = this.passengers.filterIsInstance<LivingEntity>()
@@ -1903,8 +1881,8 @@ open class PokemonEntity(
     override fun move(type: MoverType, pos: Vec3) {
         if (this.controllingPassenger != null || this.hasRider()) {
             // Reset fall distance every tick if the Pokémon isn't nosediving
-            if (this.deltaMovement.y() > -0.5F && this.fallDistance > 1.0F) {
-                this.fallDistance = 1.0F
+            if (this.deltaMovement.y() > -0.5 && this.fallDistance > 1.0) {
+                this.fallDistance = 1.0
             }
         }
         super.move(type, pos)
@@ -1923,8 +1901,8 @@ open class PokemonEntity(
                 }
 
                 // Rotate velocity vector to face the current y rotation
-                val f = Mth.sin(this.yRot.toRadians())
-                val g = Mth.cos(this.yRot.toRadians())
+                val f = Mth.sin(this.yRot.toRadians().toDouble())
+                val g = Mth.cos(this.yRot.toRadians().toDouble())
                 val v = Vec3(
                     inp.x * g.toDouble() - inp.z * f.toDouble(),
                     inp.y,
@@ -1942,7 +1920,7 @@ open class PokemonEntity(
 
                 this.move(MoverType.SELF, this.deltaMovement)
 
-                if (this.horizontalCollision && this.isControlledByLocalInstance) {
+                if (this.horizontalCollision && this.isLocalInstanceAuthoritative) {
                     ifRidingAvailable { behaviour, settings, state ->
                         // Tried minus performed = vector pointing at where we *couldn't* go
                         val delta = triedMovement.subtract(this.deltaMovement)
@@ -2024,7 +2002,7 @@ open class PokemonEntity(
     override fun checkFallDamage(y: Double, onGround: Boolean, state: BlockState, pos: BlockPos) {
         super.checkFallDamage(y, onGround, state, pos)
         if (isFlying() && this.passengers.isEmpty() && y < 0.0 && !onGround) {
-            fallDistance = 0F // Prevent fall damage after flying without a rider
+            fallDistance = 0.0 // Prevent fall damage after flying without a rider
         }
     }
 
@@ -2075,7 +2053,7 @@ open class PokemonEntity(
      */
     override fun setCustomName(name: Component?) {
         // We do this as a compromise to keep as much compatibility as possible with other mods expecting this entity to act like a vanilla one
-        this.pokemon.nickname = Component.literal(name?.string)
+        this.pokemon.nickname = Component.literal(name?.string ?: "")
     }
 
     /**

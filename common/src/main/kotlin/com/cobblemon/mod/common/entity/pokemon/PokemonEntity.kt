@@ -2172,7 +2172,7 @@ open class PokemonEntity(
                 "pink" -> Items.PINK_WOOL
                 else -> Items.WHITE_WOOL
             }
-            val itemEntity = this.spawnAtLocation(woolItem, 1) ?: return
+            val itemEntity = this.spawnAtLocation(level, ItemStack(woolItem)) ?: return
             jitterDropItem(itemEntity)
         }
     }

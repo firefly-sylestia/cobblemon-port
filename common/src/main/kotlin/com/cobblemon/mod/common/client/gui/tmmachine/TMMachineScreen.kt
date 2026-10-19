@@ -806,7 +806,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             val posX = mouseX + 10
             val posY = mouseY - 49
 
-            matrices.pushPose()
+            matrices.pushMatrix()
             matrices.translate(0.0F, 0.0F, 1000.0F)
             blitk(
                 context = context,
@@ -913,7 +913,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 scale = HALF_SCALE
             )
 
-            matrices.pushPose()
+            matrices.pushMatrix()
             matrices.scale(HALF_SCALE, HALF_SCALE, 1F)
             MultiLineLabelK.create(
                 component = moveTemplate.description,
@@ -927,7 +927,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 colour = ColourLibrary.WHITE,
                 shadow = true
             )
-            matrices.popPose()
+            matrices.popMatrix()
 
             drawScaledText(
                 context = context,
@@ -939,7 +939,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             )
             MoveCategoryIcon(x = posX + 78, y = posY + 86, category = moveTemplate.damageCategory).render(context)
 
-            matrices.popPose()
+            matrices.popMatrix()
         }
     }
 
@@ -948,7 +948,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         // Screen saver
         if (ticksElapsed > SCREEN_SAVER_TIMEOUT_TICKS) {
             val opacity = Math.max(0.0, Math.min(1.0, (ticksElapsed - SCREEN_SAVER_TIMEOUT_TICKS) * 0.2))
-            poseStack.pushPose()
+            poseStack.pushMatrix()
             poseStack.translate(0.0, 0.0, 100.0)
             blitk(
                 context = context,
@@ -1014,7 +1014,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 alpha = 0.5 * opacity
             )
 
-            poseStack.popPose()
+            poseStack.popMatrix()
         }
     }
 

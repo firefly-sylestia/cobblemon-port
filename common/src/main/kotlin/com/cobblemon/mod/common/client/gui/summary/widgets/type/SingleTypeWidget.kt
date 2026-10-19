@@ -22,13 +22,13 @@ class SingleTypeWidget(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.translate(0.35, 0.0, 0.0)
         renderType(type, context)
-        matrices.popPose()
+        matrices.popMatrix()
         // Render Type Name
         if (this.renderText) {
-            matrices.pushPose()
+            matrices.pushMatrix()
             drawScaledText(
                 context = context,
                 text = type.displayName,

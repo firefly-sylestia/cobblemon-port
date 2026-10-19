@@ -333,7 +333,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
                     pY + portraitStartY + POKEMON_PORTRAIT_HEIGHT
                 )
 
-                matrices.pushPose()
+                matrices.pushMatrix()
                 matrices.translate(
                     pX.toDouble() + (POKEMON_PORTRAIT_WIDTH.toDouble() + 2) / 2,
                     pY.toDouble() + portraitStartY - 12,
@@ -353,7 +353,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
                     profileTransformType = ProfileTransformType.POKEDEX,
                 )
 
-                matrices.popPose()
+                matrices.popMatrix()
                 context.disableScissor()
             } else {
                 // Render question mark
@@ -368,7 +368,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
             }
 
             // Ensure elements are not hidden behind Pokémon render
-            matrices.pushPose()
+            matrices.pushMatrix()
             matrices.translate(0.0, 0.0, 2000.0)
 
             if (isSelectedPokemonOwned()) {
@@ -485,7 +485,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
                 }
             }
 
-            matrices.popPose()
+            matrices.popMatrix()
         }
     }
 

@@ -79,7 +79,7 @@ abstract class PokemonSlotWidget {
                     y + SCROLL_SLOT_SIZE - 2,
                 )
 
-                matrices.pushPose()
+                matrices.pushMatrix()
                 matrices.translate(x + SCROLL_SLOT_SIZE / 2.0, y + 1.0, 0.0)
                 matrices.scale(2.5F, 2.5F, 1F)
 
@@ -95,7 +95,7 @@ abstract class PokemonSlotWidget {
                     scale = 4.5F
                 )
 
-                matrices.popPose()
+                matrices.popMatrix()
                 context.disableScissor()
             } else {
                 blitk(
@@ -121,7 +121,7 @@ abstract class PokemonSlotWidget {
             }
 
             // Ensure elements are not hidden behind Pokémon render
-            matrices.pushPose()
+            matrices.pushMatrix()
             matrices.translate(0.0, 0.0, 100.0)
 
             drawScaledText(
@@ -145,7 +145,7 @@ abstract class PokemonSlotWidget {
                 )
             }
 
-            matrices.popPose()
+            matrices.popMatrix()
         }
     }
 }

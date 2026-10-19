@@ -65,7 +65,7 @@ fun renderTooltip(
     val tooltipWidth = textWidth + tooltipPadding
     val tooltipTop = posY + offsetY
 
-    poseStack.pushPose()
+    poseStack.pushMatrix()
     poseStack.translate(0.0, 0.0, 1000.0)
 
     Minecraft.getInstance().let {
@@ -99,7 +99,7 @@ fun renderTooltip(
         )
     }
 
-    poseStack.popPose()
+    poseStack.popMatrix()
 }
 
 private fun wrapTooltipLine(line: MutableComponent, maxWidth: Int): List<MutableComponent> {

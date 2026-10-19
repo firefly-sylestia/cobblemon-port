@@ -283,7 +283,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         descriptionWidget.renderWidget(context, mouseX, mouseY, delta)
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.translate(0.0, 0.0, 500.0) // Translate on top of other elements
         blitk(
             texture = scrollBorderTop,
@@ -293,7 +293,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             width = HALF_OVERLAY_WIDTH - SCROLL_BAR_WIDTH,
             height = 3
         )
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {

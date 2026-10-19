@@ -93,7 +93,7 @@ class MarksWidget(
                 selectedMark!!
             ).render(context, mouseX, mouseY)
 
-            matrices.pushPose()
+            matrices.pushMatrix()
             matrices.scale(SCALE, SCALE, 1F)
             MultiLineLabelK.create(
                 component = selectedMark!!.getDescription(),
@@ -107,7 +107,7 @@ class MarksWidget(
                 colour = ColourLibrary.WHITE,
                 shadow = true
             )
-            matrices.popPose()
+            matrices.popMatrix()
         }
 
         // Title

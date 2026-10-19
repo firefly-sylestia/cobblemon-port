@@ -44,7 +44,7 @@ class NPCRenderWidget(
             x + WIDTH,
             y + HEIGHT
         )
-        context.pose().pushPose()
+        context.pose().pushMatrix()
         // Decrease on Z-axis to prevent model from rendering above other components like tooltips
         context.pose().translate(x + (WIDTH / 2F), y + HEIGHT + (HEIGHT / 4F), -500F)
 
@@ -56,7 +56,7 @@ class NPCRenderWidget(
             state = state
         )
 
-        context.pose().popPose()
+        context.pose().popMatrix()
         context.disableScissor()
     }
 }

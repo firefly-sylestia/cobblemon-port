@@ -296,7 +296,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             (portraitStartX + portraitDiameter).toInt(),
             (y + portraitDiameter + portraitOffsetY).toInt(),
         )
-        matrixStack.pushPose()
+        matrixStack.pushMatrix()
         matrixStack.translate(
             portraitStartX + portraitDiameter / 2.0,
             y.toDouble() + portraitOffsetY - if (isCompact) 15.0 else 5.0,
@@ -326,7 +326,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
                 partialTicks = if (Cobblemon.config.animateBattleTiles) partialTicks else 0F
             )
         }
-        matrixStack.popPose()
+        matrixStack.popMatrix()
         context.disableScissor()
 
         // Third render the tile
@@ -504,7 +504,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
 
         matrixStack.scale(scale, scale, -scale)
         matrixStack.translate(0.0, 5.5, -4.0)
-        matrixStack.pushPose()
+        matrixStack.pushMatrix()
 
         matrixStack.scale(scale * state.scale, scale * state.scale, 0.1F)
 
@@ -523,7 +523,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
 
         immediate.endBatch()
 
-        matrixStack.popPose()
+        matrixStack.popMatrix()
 
         Lighting.setupFor3DItems()
     }

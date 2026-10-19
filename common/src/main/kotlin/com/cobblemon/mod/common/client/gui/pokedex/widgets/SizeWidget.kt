@@ -78,7 +78,7 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         val modelScale = 7.5F
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.translate(
             pX.toDouble() + 50,
             pY.toDouble() + (POKEMON_DESCRIPTION_HEIGHT / 2) + 18.5,
@@ -97,11 +97,11 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             g = 0F,
             b = 0F
         )
-        matrices.popPose()
+        matrices.popMatrix()
         context.disableScissor()
 
         // Ensure elements are not hidden behind Pokémon render
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.translate(0.0, 0.0, 100.0)
 
         blitk(
@@ -146,6 +146,6 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             scale = SCALE
         )
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 }

@@ -123,7 +123,7 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
         ) {
             val matrices = context.pose()
 
-            matrices.pushPose()
+            matrices.pushMatrix()
             MultiLineLabelK.create(
                 component = text.text(),
                 width = (139 - SCROLL_SLIDE_WIDTH - (POKEMON_DESCRIPTION_PADDING * 2)) / SCALE,
@@ -138,7 +138,7 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
                 scale = SCALE,
                 shadow = false
             )
-            matrices.popPose()
+            matrices.popMatrix()
         }
 
         override fun getNarration(): Component {

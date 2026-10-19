@@ -182,7 +182,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                     y + PORTRAIT_DIAMETER
                 )
 
-                matrices.pushPose()
+                matrices.pushMatrix()
                 matrices.translate(
                     panelX + portraitFrameOffsetX + selectedOffsetX + PORTRAIT_DIAMETER / 2.0 - 1.0,
                     y.toDouble() - 12,
@@ -204,7 +204,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                     state = getPokemonState(index = index, pokemonUUID = pokemon.uuid).also { it.currentAspects = pokemon.aspects }
                 )
 
-                matrices.popPose()
+                matrices.popMatrix()
                 context.disableScissor()
             }
 

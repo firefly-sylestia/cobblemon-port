@@ -104,7 +104,7 @@ class TMPartySlotWidget(
             )
 
             // Render Pokémon
-            matrices.pushPose()
+            matrices.pushMatrix()
             matrices.translate(x + (PORTRAIT_DIAMETER / 2.0) - 2, y - 1.0, 0.0)
             matrices.scale(2.5F, 2.5F, 1F)
             drawProfilePokemon(
@@ -115,7 +115,7 @@ class TMPartySlotWidget(
                 scale = 4.5F,
                 partialTicks = delta
             )
-            matrices.popPose()
+            matrices.popMatrix()
 
             drawScaledTextJustifiedRight(
                 context = context,

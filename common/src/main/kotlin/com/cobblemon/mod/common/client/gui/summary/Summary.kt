@@ -655,7 +655,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             scale = SCALE
         )
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         // Prevent widgets from being overlapped by other components
         matrices.translate(0.0, 0.0, 1000.0)
 
@@ -667,7 +667,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
             if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, displayedItem, mouseX, mouseY)
         }
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
     /**

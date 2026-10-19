@@ -310,7 +310,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
 
         val textEntry = currentPokemon?.form?.pokedex?.first()?.asTranslated() ?: lang("ui.starter.random_description")
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.scale(smallTextScale, smallTextScale, 1F)
         MultiLineLabelK.create(
             component = textEntry,
@@ -324,7 +324,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             colour = ColourLibrary.WHITE,
             shadow = true
         )
-        matrices.popPose()
+        matrices.popMatrix()
 
         super.extractRenderState(context, mouseX, mouseY, delta)
     }

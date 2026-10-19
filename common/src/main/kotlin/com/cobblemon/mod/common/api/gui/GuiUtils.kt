@@ -202,7 +202,7 @@ fun drawPosablePortrait(
     a: Float = 1F
 ) {
     RenderSystem.applyModelViewMatrix()
-    matrixStack.pushPose()
+    matrixStack.pushMatrix()
     matrixStack.translate(0.0, PORTRAIT_DIAMETER.toDouble() + 2.0, 0.0)
     matrixStack.scale(scale, scale, -scale)
     matrixStack.translate(0.0, -PORTRAIT_DIAMETER / 18.0, 0.0)
@@ -265,7 +265,7 @@ fun drawPosablePortrait(
         renderSprite(matrixStack, sprite)
     }
 
-    matrixStack.popPose()
+    matrixStack.popMatrix()
 }
 
 fun drawProfile(

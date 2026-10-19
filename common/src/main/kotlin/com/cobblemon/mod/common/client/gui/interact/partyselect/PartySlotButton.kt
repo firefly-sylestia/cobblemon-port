@@ -100,7 +100,7 @@ class PartySlotButton(
             textureHeight = height * 3
         )
 
-        context.pose().pushPose()
+        context.pose().pushMatrix()
         context.pose().translate(x.toDouble() + 13, y.toDouble() - 2, 0.0)
 
         drawProfilePokemon(
@@ -111,7 +111,7 @@ class PartySlotButton(
             scale = 10F,
             partialTicks = if (!isHovered) 0F else pPartialTicks
         )
-        context.pose().popPose()
+        context.pose().popMatrix()
 
         val ballIcon = pokemon.pokeball!!.asIdentifierDefaultingNamespace().toAssetPath("textures/gui/ball/", ".png")
         val ballHeight = 22
@@ -127,7 +127,7 @@ class PartySlotButton(
         )
 
         // Ensure elements are not hidden behind Pokémon render
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.translate(0.0, 0.0, 100.0)
         drawScaledText(
             context = context,
@@ -208,7 +208,7 @@ class PartySlotButton(
             this.parent.setTooltipForNextRenderPass(Lists.transform<Component, FormattedCharSequence>(hoverText) { it.visualOrderText })
         }
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
     override fun playDownSound(soundManager: SoundManager) {}

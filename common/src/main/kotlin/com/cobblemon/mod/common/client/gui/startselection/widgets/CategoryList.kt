@@ -185,7 +185,7 @@ class CategoryList(
                         scale = 0.04f
                     )
                 } else {
-                    matrices.pushPose()
+                    matrices.pushMatrix()
                     matrices.translate(startX + (CONTAINER_BUTTON_SIZE / 2.0), startY.toDouble() - 6, 0.0)
                     matrices.scale(3.5F, 3.5F, 1F)
 
@@ -199,7 +199,7 @@ class CategoryList(
                         scale = 4.5F,
                         partialTicks = 0F
                     )
-                    matrices.popPose()
+                    matrices.popMatrix()
                 }
             }
         }

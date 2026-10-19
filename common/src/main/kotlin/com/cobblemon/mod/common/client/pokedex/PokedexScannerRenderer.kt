@@ -248,13 +248,13 @@ class PokedexScannerRenderer {
     fun renderScanRings(graphics: GuiGraphicsExtractor, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
         val rotation = usageContext.usageIntervals % 360
 
-        poseStack.pushPose()
+        poseStack.pushMatrix()
         poseStack.translate(centerX.toFloat(), centerY.toFloat(), 0.0f)
 
-        poseStack.pushPose()
+        poseStack.pushMatrix()
         poseStack.mulPose(Quaternionf().rotateZ(Math.toRadians((-rotation) * 0.5).toFloat()))
         blitk(context = graphics, texture = SCAN_RING_OUTER, x = -(SCAN_RING_OUTER_DIAMETER / 2), y = -(SCAN_RING_OUTER_DIAMETER / 2), width = SCAN_RING_OUTER_DIAMETER, height = SCAN_RING_OUTER_DIAMETER, alpha = opacity)
-        poseStack.popPose()
+        poseStack.popMatrix()
 
         var progressOpacity = opacity
         var segments = 40
@@ -269,18 +269,18 @@ class PokedexScannerRenderer {
 
         for (i in 0 until segments) {
             val rotationQuaternion = Quaternionf().rotateZ(Math.toRadians((i * 4.5) + (rotation * 0.5)).toFloat())
-            poseStack.pushPose()
+            poseStack.pushMatrix()
             poseStack.mulPose(rotationQuaternion)
             blitk(context = graphics, texture = SCAN_RING_MIDDLE, x = -(SCAN_RING_MIDDLE_WIDTH / 2), y = -(SCAN_RING_MIDDLE_HEIGHT.toFloat() / 2F), width = SCAN_RING_MIDDLE_WIDTH, height = SCAN_RING_MIDDLE_HEIGHT, alpha = progressOpacity)
-            poseStack.popPose()
+            poseStack.popMatrix()
         }
 
-        poseStack.pushPose()
+        poseStack.pushMatrix()
         poseStack.mulPose(Quaternionf().rotateZ(Math.toRadians(-usageContext.innerRingRotation.toDouble()).toFloat()))
         blitk(context = graphics, texture = SCAN_RING_INNER, x = -(SCAN_RING_INNER_DIAMETER / 2), y = -(SCAN_RING_INNER_DIAMETER / 2), width = SCAN_RING_INNER_DIAMETER, height = SCAN_RING_INNER_DIAMETER, alpha = opacity)
-        poseStack.popPose()
+        poseStack.popMatrix()
 
-        poseStack.popPose()
+        poseStack.popMatrix()
     }
 
     fun getRegisterText(info: PokedexLearnedInformation): MutableComponent {
@@ -396,10 +396,10 @@ class PokedexScannerRenderer {
                     alpha = max(0F, min(opacity, centerOpacity))
                 )
 
-                matrices.pushPose()
+                matrices.pushMatrix()
                 matrices.translate(centerX.toFloat(), centerY.toFloat(), 0.0f)
 
-                matrices.pushPose()
+                matrices.pushMatrix()
                 matrices.mulPose(Quaternionf().rotateZ(Math.toRadians(usageContext.innerRingRotation * 0.5).toFloat()))
                 blitk(
                     context = graphics,
@@ -423,8 +423,8 @@ class PokedexScannerRenderer {
                     uOffset = POINTER_WIDTH,
                     alpha = max(0F, min(opacity, centerOpacity))
                 )
-                matrices.popPose()
-                matrices.popPose()
+                matrices.popMatrix()
+                matrices.popMatrix()
             } else if (usageContext.viewInfoTicks > 0) {
                 val pointerOpacity = usageContext.viewInfoTicks * 0.1F
 

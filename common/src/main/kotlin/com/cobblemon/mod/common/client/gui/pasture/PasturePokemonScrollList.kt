@@ -88,7 +88,7 @@ class PasturePokemonScrollList(
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         correctSize()
 
-        context.pose().pushPose()
+        context.pose().pushMatrix()
 
         context.enableScissor(
             x,
@@ -98,7 +98,7 @@ class PasturePokemonScrollList(
         )
 
 
-        context.pose().popPose()
+        context.pose().popMatrix()
         super.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
 
         context.disableScissor()
@@ -224,7 +224,7 @@ class PasturePokemonScrollList(
             )
 
             // Render Pokémon
-            matrixStack.pushPose()
+            matrixStack.pushMatrix()
             matrixStack.translate(x + 11 + (StorageSlot.SIZE / 2.0), y - 1.0, 0.0)
             matrixStack.scale(2.5F, 2.5F, 1F)
             state.currentAspects = pokemon.aspects
@@ -236,7 +236,7 @@ class PasturePokemonScrollList(
                 partialTicks = partialTicks,
                 scale = 4.5F
             )
-            matrixStack.popPose()
+            matrixStack.popMatrix()
 
             val heldItem = pokemon.heldItem
             if (!heldItem.isEmpty) {

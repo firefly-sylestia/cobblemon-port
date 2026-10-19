@@ -31,7 +31,7 @@ class ModelWidget(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.translate(x + width * 0.5, y.toDouble() + offsetY, 0.0)
         matrices.scale(baseScale, baseScale, baseScale)
 
@@ -43,6 +43,6 @@ class ModelWidget(
             partialTicks = delta
         )
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 }

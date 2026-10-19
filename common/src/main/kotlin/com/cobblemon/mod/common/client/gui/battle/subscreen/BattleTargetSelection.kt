@@ -193,7 +193,7 @@ class BattleTargetSelection(
             // Target name
             if (battlePokemon.hpValue > 0) {
                 // Render Pokémon
-                matrices.pushPose()
+                matrices.pushMatrix()
                 matrices.translate(x + TARGET_WIDTH - (25 / 2.0) - 2, y + 5.0, 0.0)
                 matrices.scale(2.5F, 2.5F, 1F)
                 // Grab aspects for right variant
@@ -206,7 +206,7 @@ class BattleTargetSelection(
                     scale = 4.5F,
                     partialTicks = delta
                 )
-                matrices.popPose()
+                matrices.popMatrix()
 
                 // Battle Role Upper
                 val stage = floor((passedSeconds / BattleOverlay.ROLE_CYCLE_SECONDS % 1) * 5)

@@ -70,7 +70,7 @@ class ModelWidget(
 
     private fun renderPKM(context: GuiGraphicsExtractor, partialTicks: Float, mouseX: Int, mouseY: Int) {
         val matrices = context.pose()
-        matrices.pushPose()
+        matrices.pushMatrix()
 
         context.enableScissor(
             x,
@@ -81,7 +81,7 @@ class ModelWidget(
 
         matrices.translate(x + width * 0.5, y.toDouble() + offsetY, 0.0)
         matrices.scale(baseScale, baseScale, baseScale)
-        matrices.pushPose()
+        matrices.pushMatrix()
 
         if (isHovered) {
             lookStartTime = System.currentTimeMillis()
@@ -131,10 +131,10 @@ class ModelWidget(
             true
         )
 
-        matrices.popPose()
+        matrices.popMatrix()
         context.disableScissor()
 
-        matrices.popPose()
+        matrices.popMatrix()
     }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {

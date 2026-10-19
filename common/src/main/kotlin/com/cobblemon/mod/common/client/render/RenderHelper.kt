@@ -176,8 +176,8 @@ fun drawScaledText(
     val extraScale = if (textWidth < maxCharacterWidth) 1F else (maxCharacterWidth / textWidth.toFloat())
     val fontHeight = if (font == null) 5F else 6F
     val matrices = context.pose()
-    matrices.pushPose()
-    matrices.scale(scale * extraScale, scale * extraScale, 1F)
+    matrices.pushMatrix()
+    matrices.scale(scale * extraScale, scale * extraScale)
     val isHovered = drawText(
         context = context,
         font = font,
@@ -190,7 +190,7 @@ fun drawScaledText(
         pMouseX = pMouseX?.toFloat()?.div((scale * extraScale)),
         pMouseY = pMouseY?.toFloat()?.div(scale * extraScale)?.plus((1F - extraScale) * fontHeight * scale)
     )
-    matrices.popPose()
+    matrices.popMatrix()
     // Draw tooltip that was created with onHover and is attached to the MutableComponent
     if (isHovered) {
         context.renderComponentHoverEffect(Minecraft.getInstance().font, text.style, pMouseX!!, pMouseY!!)

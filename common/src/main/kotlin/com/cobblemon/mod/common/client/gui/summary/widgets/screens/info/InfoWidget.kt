@@ -147,7 +147,7 @@ class InfoWidget(
         )
         abilityWidget.render(context, pMouseX, pMouseY, pPartialTicks)
 
-        matrices.pushPose()
+        matrices.pushMatrix()
         matrices.scale(HALF_SCALE, HALF_SCALE, 1F)
         MultiLineLabelK.create(
             component = pokemon.ability.description.asTranslated(),
@@ -161,7 +161,7 @@ class InfoWidget(
             colour = ColourLibrary.WHITE,
             shadow = true
         )
-        matrices.popPose()
+        matrices.popMatrix()
 
         drawScaledText(
             context = context,

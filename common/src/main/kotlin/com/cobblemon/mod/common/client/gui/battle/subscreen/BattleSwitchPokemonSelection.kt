@@ -248,7 +248,7 @@ class BattleSwitchPokemonSelection(
                 )
 
                 // Render Pokémon
-                matrixStack.pushPose()
+                matrixStack.pushMatrix()
                 matrixStack.translate(x + SELECT_WIDTH - (25 / 2.0) - 4, y - 1.0, 0.0)
                 matrixStack.scale(2.5F, 2.5F, 1F)
                 drawProfilePokemon(
@@ -260,10 +260,10 @@ class BattleSwitchPokemonSelection(
                     scale = 4.5F,
                     partialTicks = deltaTicks
                 )
-                matrixStack.popPose()
+                matrixStack.popMatrix()
 
                 // Ensure elements are not hidden behind Pokémon render
-                matrixStack.pushPose()
+                matrixStack.pushMatrix()
                 matrixStack.translate(0.0, 0.0, 100.0)
                 // Held Item
                 val heldItem = pokemon.heldItemNoCopy()
@@ -356,7 +356,7 @@ class BattleSwitchPokemonSelection(
                     scale = SCALE,
                     centered = true
                 )
-                matrixStack.popPose()
+                matrixStack.popMatrix()
             } catch (exception: Exception) {
                 throw exception
             }

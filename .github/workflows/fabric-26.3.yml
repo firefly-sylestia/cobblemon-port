@@ -69,6 +69,23 @@ jobs:
           # repository write access.
           cat "$report" >> "$GITHUB_STEP_SUMMARY"
           if [[ -f "$log" ]]; then
+            # Annotations are readable without repository write access.
+            annotation_count=0
+            while IFS= read -r line && [[ "$annotation_count" -lt 30 ]]; do
+              line=${line//'%'/'%25'}
+              line=${line//$'\r'/}
+              echo "::error::$line"
+              annotation_count=$((annotation_count + 1))
+            done < <(grep -E '^e: |^FAILURE|^What went wrong|^Caused by|Invalid|widener|Exception|error:' "$log" | head -n 30 || true)
+            if [[ "$annotation_count" -eq 0 ]]; then
+              while IFS= read -r line && [[ "$annotation_count" -lt 20 ]]; do
+                line=${line//'%'/'%25'}
+                line=${line//$'\r'/}
+                echo "::error::$line"
+                annotation_count=$((annotation_count + 1))
+              done < <(head -n 20 "$log")
+            fi
+
             {
               echo
               echo '## Build log excerpt'

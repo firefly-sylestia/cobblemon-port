@@ -93,7 +93,7 @@ class SimpleNPCTextInputWidget(
         return clickedState
     }
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if (texture != null) {
             blitk(
                 matrixStack = context.pose(),
@@ -144,7 +144,7 @@ class SimpleNPCTextInputWidget(
                 )
             }
         } else {
-            super.renderWidget(context, mouseX, mouseY, delta)
+            super.extractWidgetRenderState(context, mouseX, mouseY, delta)
         }
     }
 }

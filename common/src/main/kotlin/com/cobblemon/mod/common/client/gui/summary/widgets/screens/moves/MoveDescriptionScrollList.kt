@@ -38,7 +38,7 @@ class MoveDescriptionScrollList(
         return x + width - 3
     }
 
-    override fun renderWidget(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, f: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, f: Float) {
         isHovered = pMouseX >= x && pMouseY >= y && pMouseX < x + width && pMouseY < y + height
         context.enableScissor(
             x,
@@ -46,7 +46,7 @@ class MoveDescriptionScrollList(
             x + width,
             y + height
         )
-        super.renderWidget(context, pMouseX, pMouseY, f)
+        super.extractWidgetRenderState(context, pMouseX, pMouseY, f)
         context.disableScissor()
     }
 

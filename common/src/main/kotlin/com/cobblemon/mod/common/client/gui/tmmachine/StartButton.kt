@@ -44,7 +44,7 @@ class StartButton(
     override fun mouseDragged(d: Double, e: Double, i: Int, f: Double, g: Double) = false
     override fun defaultButtonNarrationText(builder: NarrationElementOutput) {}
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         val resource = if (disabled) baseDisabled
             else (if (processing) baseStop else base)
 

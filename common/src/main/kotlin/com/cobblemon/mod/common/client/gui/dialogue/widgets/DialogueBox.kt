@@ -144,7 +144,7 @@ class DialogueBox(
             textureWidth = frameWidth + DialoguePortraitWidget.DIALOGUE_ARROW_WIDTH + SCROLL_BAR_WIDTH + SCROLL_TRACK_WIDTH
         )
         TextClipping.doWithMaxCharacters(if (gibber?.graduallyShowText == true && !dialogueScreen.gibberDone) dialogueScreen.gibberIndex else -1) {
-            super.renderWidget(context, mouseX, mouseY, partialTicks)
+            super.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
         }
     }
 
@@ -197,7 +197,7 @@ class DialogueBox(
             tickDelta: Float
         ) {}
 
-        override fun render(
+        override fun extractRenderState(
             context: GuiGraphicsExtractor,
             index: Int,
             rowTop: Int,

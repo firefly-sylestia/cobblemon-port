@@ -37,7 +37,7 @@ class FilterWidget(
         private val labelFilter = Component.translatable("cobblemon.ui.pc.filter")
     }
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
             matrixStack = context.pose(),
             x = (x - 9) / SCALE,

@@ -108,7 +108,7 @@ class BehaviourOptionsList(
         override fun setFocused(focused: Boolean) {}
         override fun isFocused() = false
 
-        override fun render(
+        override fun extractRenderState(
             guiGraphics: GuiGraphicsExtractor,
             index: Int,
             top: Int,

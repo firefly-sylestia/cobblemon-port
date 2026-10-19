@@ -346,7 +346,7 @@ class HabitatEditGUI(
         return true
     }
 
-    override fun render(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.fill(0, 0, width, height, Color(0, 0, 0, 100).rgb)
         guiGraphics.fill(0, 0, width, headerHeight, Color(0, 0, 0, 150).rgb)
         guiGraphics.fill(0, getFooterTop(), width, height, Color(0, 0, 0, 150).rgb)
@@ -359,7 +359,7 @@ class HabitatEditGUI(
         val optionsBottom = getOptionsBottom()
         labels.forEach { (label, pos) ->
             if (pos.second >= getOptionsTop() && pos.second + font.lineHeight <= optionsBottom) {
-                guiGraphics.drawString(font, label, pos.first, pos.second, 0xFFFFFF)
+                guiGraphics.text(font, label, pos.first, pos.second, 0xFFFFFF)
             }
         }
         guiGraphics.disableScissor()
@@ -369,7 +369,7 @@ class HabitatEditGUI(
         }
 
         validationErrors.values.firstOrNull()?.let { errorKey ->
-            guiGraphics.drawString(font, lang(errorKey), 10, validationMessageY, invalidTextColor)
+            guiGraphics.text(font, lang(errorKey), 10, validationMessageY, invalidTextColor)
         }
     }
 

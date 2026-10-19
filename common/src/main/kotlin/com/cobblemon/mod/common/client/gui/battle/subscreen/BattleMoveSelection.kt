@@ -184,7 +184,7 @@ class BattleMoveSelection(
         }
     }
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         moveTiles.forEach {
             it.render(context, mouseX, mouseY, delta)
         }

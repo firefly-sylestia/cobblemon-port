@@ -55,7 +55,7 @@ class CobblemonToast(
         return font.split(this.description, maxWidth)
     }
 
-    override fun render(context: GuiGraphicsExtractor, manager: ToastComponent, startTime: Long): Toast.Visibility {
+    override fun extractRenderState(context: GuiGraphicsExtractor, manager: ToastComponent, startTime: Long): Toast.Visibility {
         if (this.startTime == -1L) this.startTime = startTime
 
         val elapsedTime = startTime - this.startTime
@@ -72,7 +72,7 @@ class CobblemonToast(
 
         context.blitSprite(this.frameTexture, 0, 0, this.width(), this.height() + (getLines(textRenderer, maxWidth).size - 1) * 10)
 
-        context.drawString(textRenderer, this.title, 30, 7, this.title.style.color?.value ?: -1, false)
+        context.text(textRenderer, this.title, 30, 7, this.title.style.color?.value ?: -1, false)
         context.drawWordWrap(textRenderer, this.description, 30, 18, maxWidth, this.description.style.color?.value ?: -1)
 
         val iconIndex = if (localDuration != null && localDuration > 0) {

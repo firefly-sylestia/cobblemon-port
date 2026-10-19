@@ -31,7 +31,7 @@ class DialogueOptionWidget(
     height: Int,
     val texture: Identifier
 ) : ParentWidget(x, y, width, height, text) {
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if (!dialogueScreen.renderInput()) {
             return
         }

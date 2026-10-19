@@ -32,7 +32,7 @@ class InfoOneLineWidget(
     }
 
 
-    override fun renderWidget(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
 
         // Label
         val label = InfoBlockWidget(

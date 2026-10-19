@@ -29,7 +29,7 @@ class BoxNameWidget(
     private val storageWidget: StorageWidget
 ): TextWidget(pX, pY, text = text, update = {}) {
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val label = getBox().name?: defaultBoxLabel()
         val input = applyTextCursor(value, label).bold()
         val textWidth = Minecraft.getInstance().font.width((if (isFocused) value.text() else label).bold().font(CobblemonResources.DEFAULT_LARGE))

@@ -85,7 +85,7 @@ class PasturePokemonScrollList(
     public override fun removeEntry(entry: PastureSlot) = super.removeEntry(entry)
     override fun renderSelection(context: GuiGraphicsExtractor, y: Int, entryWidth: Int, entryHeight: Int, borderColor: Int, fillColor: Int) {}
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         correctSize()
 
         context.pose().pushPose()
@@ -99,7 +99,7 @@ class PasturePokemonScrollList(
 
 
         context.pose().popPose()
-        super.renderWidget(context, mouseX, mouseY, partialTicks)
+        super.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
 
         context.disableScissor()
 
@@ -196,7 +196,7 @@ class PasturePokemonScrollList(
 
         override fun getNarration() = pokemon.displayName
 
-        override fun render(
+        override fun extractRenderState(
             context: GuiGraphicsExtractor,
             index: Int,
             rowTop: Int,

@@ -92,7 +92,7 @@ class NicknameEntryWidget(
         }
     }
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val showCursor = isFocused && ((Util.getMillis() - this.focusedTime) / 300L % 2L == 0L)
         val name = "${value}${if ((cursorPosition == value.length) && showCursor) "_" else ""}".text().bold()
         drawScaledText(

@@ -49,7 +49,7 @@ class ScaledButton(
     override fun defaultButtonNarrationText(builder: NarrationElementOutput) {
     }
 
-    override fun renderWidget(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()
         if (isVisible && resource != null) {
             blitk(

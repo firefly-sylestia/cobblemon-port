@@ -87,7 +87,7 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<
             width = 120,
             height = 19
         )
-        super.renderWidget(context, mouseX, mouseY, delta)
+        super.extractWidgetRenderState(context, mouseX, mouseY, delta)
     }
 
     override fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
@@ -115,7 +115,7 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<
         var highlighted = false
         var disabled = false
 
-        override fun render(context: GuiGraphicsExtractor, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
+        override fun extractRenderState(context: GuiGraphicsExtractor, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
             posX = x
             posY = y
             val moveTemplate = tm.moveName

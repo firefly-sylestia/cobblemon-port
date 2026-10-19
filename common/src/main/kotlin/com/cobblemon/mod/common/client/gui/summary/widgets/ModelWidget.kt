@@ -60,7 +60,7 @@ class ModelWidget(
 
     var shouldRender = true
 
-    override fun renderWidget(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, partialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, partialTicks: Float) {
         if (!shouldRender) {
             return
         }

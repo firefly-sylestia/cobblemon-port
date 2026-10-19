@@ -155,7 +155,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         ))
     }
 
-    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
@@ -326,7 +326,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         )
         matrices.popPose()
 
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
     }
 
     fun getPlatformResource(type: ElementalType): Identifier? {

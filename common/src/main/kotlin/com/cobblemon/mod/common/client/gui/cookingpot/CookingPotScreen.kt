@@ -130,7 +130,7 @@ class CookingPotScreen(
     }
 
     override fun renderLabels(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
-        guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false)
+        guiGraphics.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false)
     }
 
     override fun renderBg(
@@ -158,7 +158,7 @@ class CookingPotScreen(
         )
     }
 
-    override fun render(
+    override fun extractRenderState(
         context: GuiGraphicsExtractor,
         mouseX: Int,
         mouseY: Int,
@@ -172,7 +172,7 @@ class CookingPotScreen(
             this.renderBackground(context, mouseX, mouseY, partialTicks)
             this.recipeBookComponent.render(context, mouseX, mouseY, partialTicks)
         } else {
-            super.render(context, mouseX, mouseY, partialTicks)
+            super.extractRenderState(context, mouseX, mouseY, partialTicks)
             this.recipeBookComponent.render(context, mouseX, mouseY, partialTicks)
             this.recipeBookComponent.renderGhostRecipe(context, this.leftPos, this.topPos, true, partialTicks)
         }

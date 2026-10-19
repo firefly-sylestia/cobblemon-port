@@ -113,7 +113,7 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
         )
     }
 
-    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val (x, y) = getBasePosition()
         blitk(
             matrixStack = context.pose(),
@@ -123,7 +123,7 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
             width = SIZE,
             height = SIZE
         )
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
     }
 
     private fun getBasePosition(): Pair<Int, Int> {

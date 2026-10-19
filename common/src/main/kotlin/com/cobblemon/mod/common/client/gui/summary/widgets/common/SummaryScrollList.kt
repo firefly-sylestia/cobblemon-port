@@ -58,7 +58,7 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
 
     override fun renderListBackground(context: GuiGraphicsExtractor) {}
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         val matrices = context.pose()
         correctSize()
 
@@ -76,7 +76,7 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
             x + width,
             y + height
         )
-        super.renderWidget(context, mouseX, mouseY, partialTicks)
+        super.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
         context.disableScissor()
 
         // Scroll Overlay

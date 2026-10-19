@@ -149,7 +149,7 @@ fun renderScrollingString(
     val easedProgress = sin((Math.PI / 2) * cos(2 * Math.PI * time / period)) / 2.0 + 0.5
     val offset = Mth.lerp(easedProgress, 0.0, overflow.toDouble())
     context.enableScissor(minX, minY, maxX, maxY)
-    context.drawString(font, text, minX - offset.toInt(), centerY, colour)
+    context.text(font, text, minX - offset.toInt(), centerY, colour)
     context.disableScissor()
 }
 

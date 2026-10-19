@@ -124,7 +124,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
     /**
      * Rendering the background texture
      */
-    override fun render(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         renderBackground(context, pMouseX, pMouseY, pPartialTicks)
 
         // Rendering UI Background
@@ -135,7 +135,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
             width = backgroundWidth, height = backgroundHeight
         )
 
-        super.render(context, pMouseX, pMouseY, pPartialTicks)
+        super.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
         /**
          * Rendering Selection

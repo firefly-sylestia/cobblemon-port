@@ -30,7 +30,7 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
 
     fun scrollbarVisible(): Boolean = parent.getMaxScroll() > 0
 
-    override fun renderWidget(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractWidgetRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         if (scrollbarVisible()) {
             val scrollPosition = (parent.scrollAmount / parent.getMaxScroll()) * (height - SCROLLER_HEIGHT)
 

@@ -29,7 +29,7 @@ class ModelWidget(
     var state = FloatingState()
     private var rotVec = Vector3f(13F, rotationY, 0F)
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
         matrices.pushPose()
         matrices.translate(x + width * 0.5, y.toDouble() + offsetY, 0.0)

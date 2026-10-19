@@ -111,7 +111,7 @@ fun drawCenteredText(
 ) {
     val comp = (text as MutableComponent).let { if (font != null) it.font(font) else it }
     val textRenderer = Minecraft.getInstance().font
-    context.drawString(textRenderer, comp, x.toInt() - textRenderer.width(comp) / 2, y.toInt(), colour, shadow)
+    context.text(textRenderer, comp, x.toInt() - textRenderer.width(comp) / 2, y.toInt(), colour, shadow)
 }
 
 @JvmOverloads
@@ -134,7 +134,7 @@ fun drawText(
     if (centered) {
         x = x.toDouble() - width / 2
     }
-    context.drawString(textRenderer, comp, x.toInt(), y.toInt(), colour, shadow)
+    context.text(textRenderer, comp, x.toInt(), y.toInt(), colour, shadow)
     var isHovered = false
     if (pMouseY != null && pMouseX != null) {
         if (pMouseX.toInt() >= x.toInt() && pMouseX.toInt() <= x.toInt() + width &&
@@ -158,7 +158,7 @@ fun drawTextJustifiedRight(
 ) {
     val comp = text.let { if (font != null) it.font(font) else it }
     val font = Minecraft.getInstance().font
-    context.drawString(font, comp, x.toInt() - font.width(comp), y.toInt(), colour, shadow)
+    context.text(font, comp, x.toInt() - font.width(comp), y.toInt(), colour, shadow)
 }
 
 @JvmOverloads
@@ -177,7 +177,7 @@ fun drawText(
         val width = textRenderer.width(text)
         tweakedX = tweakedX.toDouble() - width / 2
     }
-    context.drawString(textRenderer, text, tweakedX.toInt(), y.toInt(), colour, shadow)
+    context.text(textRenderer, text, tweakedX.toInt(), y.toInt(), colour, shadow)
 }
 
 @JvmOverloads
@@ -196,7 +196,7 @@ fun drawString(
         }
     }
     val textRenderer = Minecraft.getInstance().font
-    context.drawString(textRenderer, comp, x.toInt(), y.toInt(), colour, shadow)
+    context.text(textRenderer, comp, x.toInt(), y.toInt(), colour, shadow)
 }
 
 @JvmOverloads

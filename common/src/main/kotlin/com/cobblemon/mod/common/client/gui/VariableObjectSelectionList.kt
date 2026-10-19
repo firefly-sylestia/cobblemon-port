@@ -67,7 +67,7 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
         listHeight += entry.height
     }
 
-    override fun renderWidget(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractWidgetRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         var stackHeight = -scrollAmount.toInt()
         guiGraphics.enableScissor(x, y, x + width, y + height)
         children.forEachIndexed { index, entry ->

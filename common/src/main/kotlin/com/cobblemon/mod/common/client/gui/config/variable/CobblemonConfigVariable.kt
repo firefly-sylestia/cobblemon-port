@@ -77,7 +77,7 @@ abstract class CobblemonConfigVariable(
         return normalizedLabel.contains(text, ignoreCase = true)
     }
 
-    override fun render(
+    override fun extractRenderState(
         context: GuiGraphicsExtractor,
         index: Int,
         top: Int,

@@ -25,7 +25,7 @@ class PlayerRecallBallRenderer<T : Player>(
     renderLayerParent: RenderLayerParent<T, PlayerModel<T>>
 ) : RenderLayer<T, PlayerModel<T>>(renderLayerParent) {
 
-    override fun render(
+    override fun extractRenderState(
         matrixStack: PoseStack,
         buffer: MultiBufferSource,
         packedLight: Int,

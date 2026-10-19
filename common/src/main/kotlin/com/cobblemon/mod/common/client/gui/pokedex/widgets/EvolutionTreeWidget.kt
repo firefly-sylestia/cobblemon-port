@@ -112,7 +112,7 @@ class EvolutionTreeWidget(
         updatePositioning()
     }
 
-    override fun renderWidget(
+    override fun extractWidgetRenderState(
         guiGraphics: GuiGraphicsExtractor,
         mouseX: Int,
         mouseY: Int,

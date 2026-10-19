@@ -37,7 +37,7 @@ class MoveSearchWidget(
         private val labelFilter = lang("ui.pokedex.search")
     }
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
             matrixStack = context.pose(),
             x = (x - 10.5) / SCALE,

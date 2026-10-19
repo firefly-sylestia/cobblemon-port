@@ -71,15 +71,15 @@ class RideSettingsEditorGUI(val parentScreen: Screen, val vehicle: PokemonEntity
 
     }
 
-    override fun render(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         // Make the background blank and transparent?
         guiGraphics.fill(0, 0, width, height, Color(0, 0, 0, 100).rgb)
 
-        super.render(guiGraphics, mouseX, mouseY, partialTick)
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
 
         for ((name, editBox) in settingWidgets) {
             // Position the text next to the EditBox
-            guiGraphics.drawString(font, name, editBox.x - 105, editBox.y + 5, 0xFFFFFF)
+            guiGraphics.text(font, name, editBox.x - 105, editBox.y + 5, 0xFFFFFF)
         }
     }
 

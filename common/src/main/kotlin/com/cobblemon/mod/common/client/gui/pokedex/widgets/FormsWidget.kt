@@ -52,7 +52,7 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
             private val scrollSlotResource = cobblemonResource("textures/gui/pokedex/scroll_slot_base.png")// Render Scroll Slot Background
         }
 
-        override fun render(
+        override fun extractRenderState(
             context: GuiGraphicsExtractor,
             index: Int,
             y: Int,

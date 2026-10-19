@@ -78,7 +78,7 @@ class WallpapersScrollingWidget(
         )
 
         context.enableScissor(x, y, x + width, y + height)
-        super.renderWidget(context, mouseX, mouseY, delta)
+        super.extractWidgetRenderState(context, mouseX, mouseY, delta)
         context.disableScissor()
     }
 
@@ -103,7 +103,7 @@ class WallpapersScrollingWidget(
     }
 
     inner class WallpaperEntry(val wallpaper: Identifier, var altWallpaper: Identifier?, var isNew: Boolean) : Slot<WallpaperEntry>() {
-        override fun render(
+        override fun extractRenderState(
             guiGraphics: GuiGraphicsExtractor,
             index: Int,
             top: Int,

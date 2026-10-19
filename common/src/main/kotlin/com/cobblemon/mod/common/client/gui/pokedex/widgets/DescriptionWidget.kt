@@ -43,7 +43,7 @@ class DescriptionWidget(descX: Int, descY: Int): InfoTextScrollWidget(pX = descX
                 shadow = true
             )
 
-            super.renderWidget(context, mouseX, mouseY, delta)
+            super.extractWidgetRenderState(context, mouseX, mouseY, delta)
         }
     }
 }

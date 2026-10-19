@@ -490,7 +490,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
 
     override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
 
-    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         schedulingTracker.update(delta / 20F)
 
         val x = (width - BASE_WIDTH) / 2
@@ -660,7 +660,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         matrices.translate(0.0, 0.0, 1000.0)
 
         // Render all added Widgets
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
 
         // Render Item Tooltip
         if (!displayedItem.isEmpty) {

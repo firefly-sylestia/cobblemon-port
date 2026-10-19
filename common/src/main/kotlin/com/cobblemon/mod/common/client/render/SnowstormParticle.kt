@@ -129,7 +129,7 @@ class SnowstormParticle(
         storm.effect.particle.creationEvents.forEach { it.trigger(storm, this) }
     }
 
-    override fun render(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
+    override fun extractRenderState(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
         if (invisible) {
             return
         }

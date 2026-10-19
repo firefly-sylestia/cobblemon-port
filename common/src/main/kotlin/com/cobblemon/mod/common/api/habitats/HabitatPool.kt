@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.api.habitats
 
+import com.cobblemon.mod.common.util.readList
+
+import com.cobblemon.mod.common.util.writeCollection
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition

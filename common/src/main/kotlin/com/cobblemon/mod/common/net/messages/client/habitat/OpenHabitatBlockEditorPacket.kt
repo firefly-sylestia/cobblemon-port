@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.net.messages.client.habitat
 
+import com.cobblemon.mod.common.util.readList
+
+import com.cobblemon.mod.common.util.writeCollection
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.habitats.HabitatPool
 import com.cobblemon.mod.common.api.habitats.HabitatPools

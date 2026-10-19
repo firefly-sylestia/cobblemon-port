@@ -217,7 +217,7 @@ object CobblemonFabric : CobblemonImplementation {
         }
 
         LootTableEvents.MODIFY.register { id, tableBuilder, source ->
-            LootInjector.attemptInjection(id.location(), tableBuilder::withPool)
+            LootInjector.attemptInjection(id.identifier(), tableBuilder::withPool)
         }
 
         CommandRegistrationCallback.EVENT.register(CobblemonCommands::register)

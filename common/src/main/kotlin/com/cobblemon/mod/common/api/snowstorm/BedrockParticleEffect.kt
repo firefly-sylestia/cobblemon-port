@@ -8,6 +8,12 @@
 
 package com.cobblemon.mod.common.api.snowstorm
 
+import com.cobblemon.mod.common.util.readList
+
+import com.cobblemon.mod.common.util.writeCollection
+import com.cobblemon.mod.common.util.writeMap
+import com.cobblemon.mod.common.util.readMap
+
 import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeIdentifier

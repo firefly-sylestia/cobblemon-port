@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.storage.player.client
 
+import com.cobblemon.mod.common.util.writeCollection
+
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.net.messages.client.SetClientPlayerDataPacket

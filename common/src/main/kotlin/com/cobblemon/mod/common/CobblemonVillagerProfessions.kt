@@ -16,8 +16,10 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.ai.village.poi.PoiType
 import net.minecraft.world.entity.npc.villager.VillagerProfession
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps
 
 object CobblemonVillagerProfessions: PlatformRegistry<Registry<VillagerProfession>, ResourceKey<Registry<VillagerProfession>>, VillagerProfession>() {
     override val registry: Registry<VillagerProfession> = BuiltInRegistries.VILLAGER_PROFESSION
@@ -38,10 +40,10 @@ object CobblemonVillagerProfessions: PlatformRegistry<Registry<VillagerProfessio
     }
 
     private fun profession(resourceKey: ResourceKey<PoiType>, soundEvent: SoundEvent?): VillagerProfession =
-        create(resourceKey.location().path, VillagerProfession(
-            resourceKey.location().toString(),
+        create(resourceKey.identifier().path, VillagerProfession(
+            Component.literal(resourceKey.identifier().toString()),
             { holder: Holder<PoiType> -> holder.`is`(resourceKey) },
             { holder: Holder<PoiType> -> holder.`is`(resourceKey) },
-            ImmutableSet.of(), ImmutableSet.of(), soundEvent
+            ImmutableSet.of(), ImmutableSet.of(), soundEvent, Int2ObjectMaps.emptyMap()
         ))
 }

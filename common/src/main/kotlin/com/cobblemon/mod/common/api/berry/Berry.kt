@@ -8,6 +8,12 @@
 
 package com.cobblemon.mod.common.api.berry
 
+import com.cobblemon.mod.common.util.readList
+
+import com.cobblemon.mod.common.util.writeCollection
+import com.cobblemon.mod.common.util.writeMap
+import com.cobblemon.mod.common.util.readMap
+
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.berry.spawncondition.BerrySpawnCondition

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.net.messages.client.data
 
+import com.cobblemon.mod.common.util.writeCollection
+
 import com.cobblemon.mod.common.api.pokedex.entry.CobblemonBiomeDexEvolutionRequirementDisplay
 import com.cobblemon.mod.common.api.pokedex.entry.CobblemonDexEvolutionRequirementDisplay
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntries

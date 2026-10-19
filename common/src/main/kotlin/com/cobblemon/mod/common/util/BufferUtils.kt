@@ -81,7 +81,7 @@ fun <T> ByteBuf.writeNullable(obj: T?, writer: (ByteBuf, T) -> Unit) {
     }
 }
 
-fun <T> ByteBuf.writeNullable(obj: T?, writer: StreamEncoder<ByteBuf, T>) {
+fun <T : Any> ByteBuf.writeNullable(obj: T?, writer: StreamEncoder<ByteBuf, T>) {
     writeNullable(obj) { buf, otherObj ->
         writer.encode(buf, otherObj)
     }
@@ -92,7 +92,13 @@ fun ByteBuf.writeString(string: String): ByteBuf {
     return this
 }
 
-fun <T> RegistryFriendlyByteBuf.readList(reader: (FriendlyByteBuf) -> T): List<T> = readCollection(Lists::newArrayListWithCapacity, reader)
+fun <T> RegistryFriendlyByteBuf.readList(reader: (FriendlyByteBuf) -> T): List<T> {
+    val size = readInt()
+    require(size in 0..1_000_000) { "Invalid collection size: $size" }
+    return ArrayList<T>(size).also { result ->
+        repeat(size) { result.add(reader(this)) }
+    }
+}
 
 fun ByteBuf.readString(): String {
     return Utf8String.read(this, 32767)

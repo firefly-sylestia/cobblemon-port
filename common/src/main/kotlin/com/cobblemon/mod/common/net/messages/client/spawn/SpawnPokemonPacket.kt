@@ -8,6 +8,12 @@
 
 package com.cobblemon.mod.common.net.messages.client.spawn
 
+import com.cobblemon.mod.common.util.readList
+
+import com.cobblemon.mod.common.util.writeCollection
+import com.cobblemon.mod.common.util.writeMap
+import com.cobblemon.mod.common.util.readMap
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.pokeball.PokeBalls

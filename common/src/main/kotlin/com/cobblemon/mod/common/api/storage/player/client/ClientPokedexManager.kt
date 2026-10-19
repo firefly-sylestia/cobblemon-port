@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.api.storage.player.client
 
+import com.cobblemon.mod.common.util.writeMap
+import com.cobblemon.mod.common.util.readMap
+
 import com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager
 import com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreType

@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.net.messages.client.spawn
 
+import com.cobblemon.mod.common.util.readList
+
+import com.cobblemon.mod.common.util.writeCollection
+
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.npc.NPCEntity

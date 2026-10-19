@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.net.messages.client.dialogue.dto
 
+import com.cobblemon.mod.common.util.readList
+
+import com.cobblemon.mod.common.util.writeCollection
+
 import com.cobblemon.mod.common.api.dialogue.DialogueGibber
 import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.writeIdentifier

@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.api.riding.sound
 
+import com.cobblemon.mod.common.util.readList
+
+import com.cobblemon.mod.common.util.writeCollection
+
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.net.Encodable
 import com.cobblemon.mod.common.util.asExpression

@@ -35,8 +35,8 @@ object CobblemonStructures {
     val taigaHousesPoolLocation = Identifier.fromNamespaceAndPath("minecraft", "village/taiga/houses")
 
     fun registerJigsaws(server: MinecraftServer) {
-        val templatePoolRegistry = server.registryAccess().registryOrThrow(Registries.TEMPLATE_POOL)
-        val processorListRegistry = server.registryAccess().registryOrThrow(Registries.PROCESSOR_LIST)
+        val templatePoolRegistry = server.registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL)
+        val processorListRegistry = server.registryAccess().lookupOrThrow(Registries.PROCESSOR_LIST)
 
         addPokecenters(templatePoolRegistry, processorListRegistry)
         //addLongPaths(templatePoolRegistry, processorListRegistry);

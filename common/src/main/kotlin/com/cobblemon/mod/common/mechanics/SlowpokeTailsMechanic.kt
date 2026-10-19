@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.mechanics
 
+import com.cobblemon.mod.common.util.writeMap
+import com.cobblemon.mod.common.util.readMap
+
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 /**

@@ -209,7 +209,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
             }.isViewBlocking { _: BlockState?, _: BlockGetter?, _: BlockPos?, _ ->
                 false
             }.ignitedByLava().pushReaction(PushReaction.POPPED)
-            .isRedstoneConductor { _: BlockState?, _: BlockGetter?, _: BlockPos?, _ ->
+            .isRedstoneConductor { _: BlockState?, _: BlockGetter?, _: BlockPos? ->
                 false
             }))
     @JvmField

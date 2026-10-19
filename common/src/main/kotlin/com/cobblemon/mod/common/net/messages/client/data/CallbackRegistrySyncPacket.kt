@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.net.messages.client.data
 
+import com.cobblemon.mod.common.util.readList
+
+import com.cobblemon.mod.common.util.writeCollection
+
 import com.cobblemon.mod.common.CobblemonCallbacks
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.util.asExpressionLike

@@ -647,7 +647,7 @@ open class PokemonEntity(
         super.tick()
 
         isPokemonFlying = flyDist - flyDistO > 0.005F
-        isPokemonWalking = walkDist - walkDistO > 0.005F
+        isPokemonWalking = walkAnimation.speed() > 0.005F
 
         if (passengers.isNotEmpty() && level().isClientSide) {
             rideSoundManager.tick()
@@ -701,7 +701,7 @@ open class PokemonEntity(
         ticksLived++
 
         if (ticksLived <= 20) {
-            clearRestriction()
+            restrictTo(BlockPos.ZERO, -1)
             val spawnDirection = entityData.get(SPAWN_DIRECTION).takeIf { it.isFinite() } ?: 0F
             yBodyRot = (spawnDirection * 1000F).toInt() / 1000F
         }
@@ -745,11 +745,12 @@ open class PokemonEntity(
             if (state.block == CobblemonBlocks.PASTURE) {
                 val direction = state.getValue(HorizontalDirectionalBlock.FACING)
                 val width = this.boundingBox.xsize
-                val tpPos = pastureBlockPos.offset(direction.normal.multiply(ceil(width).toInt() + 1)).center
+                val tpPos = Vec3.atCenterOf(pastureBlockPos.offset(direction.stepX * (ceil(width).toInt() + 1), 0, direction.stepZ * (ceil(width).toInt() + 1)))
                 val heightAllowance = 4.0 // Allow spawning up to x blocks above the pastureBlock y level
 
                 // Attempt tp and recall if it fails
-                if (!this.randomTeleport(tpPos.x, tpPos.y + heightAllowance, tpPos.z, false)) {
+                val serverLevel = this.level() as? ServerLevel
+                if (serverLevel == null || !this.randomTeleport(serverLevel, tpPos.x, tpPos.y + heightAllowance, tpPos.z, false)) {
                     // If the teleport was not successful then recall the mon
                     this.tethering = null
                     this.pokemon.recall()
@@ -765,10 +766,10 @@ open class PokemonEntity(
         }
     }
 
-    override fun customServerAiStep() {
-        this.getBrain().tick(level() as ServerLevel, this)
+    override fun customServerAiStep(level: ServerLevel) {
+        this.getBrain().tick(level, this)
 //        PokemonBrain.updateActivities(this)
-        super.customServerAiStep()
+        super.customServerAiStep(level)
     }
 
     fun getRideVelocity(): Vec3 {
@@ -776,7 +777,7 @@ open class PokemonEntity(
         //return this.position().subtract(prevPosition)
     }
 
-    fun setMoveControl(moveControl: MoveControl) {
+    fun setMoveControl(moveControl: MoveControl<PokemonEntity>) {
         this.moveControl = moveControl
     }
 
@@ -2155,22 +2156,10 @@ open class PokemonEntity(
         for (j in 0..i) {
             val color = this.pokemon.getFeature<StringSpeciesFeature>(DataKeys.CAN_BE_COLORED)?.value ?: "white"
             val woolItem = when (color) {
-                "black" -> Items.BLACK_WOOL
-                "blue" -> Items.BLUE_WOOL
-                "brown" -> Items.BROWN_WOOL
-                "cyan" -> Items.CYAN_WOOL
-                "gray" -> Items.GRAY_WOOL
-                "green" -> Items.GREEN_WOOL
-                "light_blue" -> Items.LIGHT_BLUE_WOOL
-                "light_gray" -> Items.LIGHT_GRAY_WOOL
-                "lime" -> Items.LIME_WOOL
-                "magenta" -> Items.MAGENTA_WOOL
-                "orange" -> Items.ORANGE_WOOL
-                "purple" -> Items.PURPLE_WOOL
-                "red" -> Items.RED_WOOL
-                "yellow" -> Items.YELLOW_WOOL
-                "pink" -> Items.PINK_WOOL
-                else -> Items.WHITE_WOOL
+                "black", "blue", "brown", "cyan", "gray", "green", "light_blue", "light_gray",
+                "lime", "magenta", "orange", "purple", "red", "yellow", "pink" ->
+                    BuiltInRegistries.ITEM.getValue(Identifier.withDefaultNamespace("${color}_wool"))
+                else -> BuiltInRegistries.ITEM.getValue(Identifier.withDefaultNamespace("white_wool"))
             }
             val itemEntity = this.spawnAtLocation(level, ItemStack(woolItem)) ?: return
             jitterDropItem(itemEntity)
@@ -2215,7 +2204,7 @@ open class PokemonEntity(
     override fun setLeashedTo(entity: Entity, bl: Boolean) {
         super.setLeashedTo(entity, bl)
         if (this.ownerUUID != null && this.ownerUUID != entity.uuid) {
-            dropLeash(true, true)
+            dropLeash()
         }
     }
 

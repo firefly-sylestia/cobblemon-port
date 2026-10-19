@@ -9,10 +9,12 @@ version = "1.8.3+26.3-port"
 val sourceRoot = rootDir.parentFile
 
 loom {
-    // The shared Cobblemon access widener is required at compile time as well as at runtime;
-    // without this the Minecraft jar is not widened and every private-field access fails.
-    accessWidenerPath.set(sourceRoot.resolve("common/src/main/resources/cobblemon-common.accesswidener"))
+    // The shared access widener still targets 1.21.1, so the 26.3 target keeps its own copy with
+    // entries validated against the 26.3 Minecraft jar. Without this the Minecraft jar is not
+    // widened and every private-field access fails.
+    accessWidenerPath.set(layout.projectDirectory.file("src/main/resources/cobblemon-26.3.accesswidener"))
 }
+
 
 repositories {
     maven(sourceRoot.resolve("deps"))

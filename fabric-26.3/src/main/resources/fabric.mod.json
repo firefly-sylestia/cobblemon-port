@@ -20,7 +20,7 @@
     "modmenu": ["com.cobblemon.mod.fabric.client.integration.modmenu.CobblemonModMenu"]
   },
   "mixins": ["mixins.cobblemon-common.json", "mixins.cobblemon-fabric.json"],
-  "accessWidener": "cobblemon-common.accesswidener",
+  "accessWidener": "cobblemon-26.3.accesswidener",
   "depends": {
     "fabricloader": ">=0.19.5",
     "fabric-api": ">=0.163.0+26.3",

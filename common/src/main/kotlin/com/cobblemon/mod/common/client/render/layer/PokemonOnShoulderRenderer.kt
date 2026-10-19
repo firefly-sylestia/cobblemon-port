@@ -7,6 +7,7 @@
  */
 
 package com.cobblemon.mod.common.client.render.layer
+import com.cobblemon.mod.common.util.getUUID
 
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon

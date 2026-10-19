@@ -7,6 +7,8 @@
  */
 
 package com.cobblemon.mod.common.pokemon.activestate
+import com.cobblemon.mod.common.util.putUUID
+import com.cobblemon.mod.common.util.getUUID
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity

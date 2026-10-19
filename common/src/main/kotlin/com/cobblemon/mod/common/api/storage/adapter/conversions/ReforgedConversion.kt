@@ -7,6 +7,7 @@
  */
 
 package com.cobblemon.mod.common.api.storage.adapter.conversions
+import com.cobblemon.mod.common.util.getUUID
 
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.moves.Moves

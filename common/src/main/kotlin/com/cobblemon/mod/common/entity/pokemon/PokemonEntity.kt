@@ -7,6 +7,9 @@
  */
 
 package com.cobblemon.mod.common.entity.pokemon
+import com.cobblemon.mod.common.util.hasUUID
+import com.cobblemon.mod.common.util.putUUID
+import com.cobblemon.mod.common.util.getUUID
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.VariableStruct

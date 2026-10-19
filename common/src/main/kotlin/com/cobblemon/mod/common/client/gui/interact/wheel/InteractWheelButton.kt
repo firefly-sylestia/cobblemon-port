@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.interact.wheel
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -161,8 +162,11 @@ class InteractWheelButton(
         return canHover(mouseX.toDouble(), mouseY.toDouble()) && mouseX in xMin..xMax && mouseY in yMin..yMax
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        return if (isHovered(mouseX.toFloat(), mouseY.toFloat())) super.mouseClicked(mouseX, mouseY, button) else false
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        return if (isHovered(mouseX.toFloat(), mouseY.toFloat())) super.mouseClicked(event, doubleClick) else false
     }
 
     override fun getTooltip(): Tooltip? {

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.battle
 
+import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.CharacterEvent
 import com.cobblemon.mod.common.battles.PassActionResponse
 import com.cobblemon.mod.common.battles.ShowdownActionResponse
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -175,19 +177,28 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
         CobblemonClient.battle?.minimised = true
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (this::messagePane.isInitialized) messagePane.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val deltaX = dx
+        val deltaY = dy
+        if (this::messagePane.isInitialized) messagePane.mouseDragged(event,  deltaX,  deltaY)
+        return super.mouseDragged(event,  deltaX,  deltaY)
     }
 
-    override fun charTyped(chr: Char, modifiers: Int): Boolean {
+    override fun charTyped(event: CharacterEvent): Boolean {
+        val chr = event.codepoint().toChar()
         if (chr.toString().equals(PartySendBinding.boundKey().displayName.string, ignoreCase = true) && CobblemonClient.battleOverlay.opacity == BattleOverlay.MAX_OPACITY && PartySendBinding.canAction()) {
             return minimizeBattle()
         }
-        return super.charTyped(chr, modifiers)
+        return super.charTyped(event)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         if (button == PartySendBinding.boundKey().value && CobblemonClient.battleOverlay.opacity == BattleOverlay.MAX_OPACITY && PartySendBinding.canAction()) {
             return minimizeBattle()
         }
@@ -197,7 +208,7 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
             RemoveSpectatorPacket(battle.battleId).sendToServer()
             CobblemonClient.endBattle()
         }
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(event, doubleClick)
     }
 
     private fun minimizeBattle(): Boolean {

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.battle.widgets
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.battle.ClientBattleMessageQueue
@@ -158,7 +159,10 @@ class BattleMessagePane(
         context.disableScissor()
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         val toggleOffsetY = if (expanded) 92 else 46
         if (mouseX > (this.x + 160) && mouseX < (this.x + 160 + EXPAND_TOGGLE_SIZE) && mouseY > (appropriateY + toggleOffsetY) && mouseY < (appropriateY + toggleOffsetY + EXPAND_TOGGLE_SIZE)) {
             expanded = !expanded
@@ -170,10 +174,15 @@ class BattleMessagePane(
             isDragging = true
         }
 
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(event, doubleClick)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val deltaX = dx
+        val deltaY = dy
         if (scrolling) {
             if (mouseY < this.y) {
                 setScrollAmount(0.0)
@@ -183,7 +192,7 @@ class BattleMessagePane(
                 setScrollAmount(scrollAmount() + deltaY)
             }
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        return super.mouseDragged(event,  deltaX,  deltaY)
     }
 
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {

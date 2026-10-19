@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.npc.widgets
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
@@ -62,8 +63,11 @@ class SimpleNPCTextInputWidget(
         super.setFocused(focused)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val clickedState = super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val clickedState = super.mouseClicked(event, doubleClick)
 
         if (wrap) {
             val splitLines = Minecraft.getInstance().font.splitter.splitLines(value, width - 8, Style.EMPTY)

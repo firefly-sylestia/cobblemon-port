@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.tmmachine
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.reactive.SettableObservable
@@ -206,13 +207,16 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<
             }
         }
 
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
             // Prevent clicking through scroll bar
             if (!disabled && (mouseX < posX + (108))) {
                 setTM(tm, true)
                 Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
             }
-            return super.mouseClicked(mouseX, mouseY, button)
+            return super.mouseClicked(event, doubleClick)
         }
 
         override fun getNarration(): Component {

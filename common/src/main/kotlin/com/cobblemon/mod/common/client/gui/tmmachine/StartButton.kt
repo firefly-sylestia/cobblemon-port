@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.tmmachine
 
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
@@ -41,7 +43,7 @@ class StartButton(
     var processing = false
     var shouldRepeat = false
 
-    override fun mouseDragged(d: Double, e: Double, i: Int, f: Double, g: Double) = false
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double) = false
     override fun defaultButtonNarrationText(builder: NarrationElementOutput) {}
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -69,16 +71,22 @@ class StartButton(
         )
     }
 
-    /*override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    /*override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         if (active && visible && !disabled && isMouseOver(mouseX, mouseY)) {
-            super.mouseClicked(mouseX, mouseY, button)
+            super.mouseClicked(event, doubleClick)
         }
         return false
     }*/
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         if (!active || !visible || disabled) return false
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(event, doubleClick)
     }
 
     override fun playDownSound(soundManager: SoundManager) {

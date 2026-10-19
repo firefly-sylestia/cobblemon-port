@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pokenav
 
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -83,8 +85,10 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
      * Changed by Licious April 29th 2022
      * Cleaned up the original code see [moveSelected] for how the selection moves around.
      */
-    override fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
-        if (isInventoryKeyPressed(minecraft, pKeyCode, pScanCode)) {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val pKeyCode = event.key()
+        val pModifiers = event.modifiers()
+        if (isInventoryKeyPressed(minecraft, event)) {
             Minecraft.getInstance().gui.setScreen(null)
             return true
         }
@@ -107,14 +111,16 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
             else -> 0 to 0
         }
         this.moveSelected(movement.first, movement.second)
-        return super.keyPressed(pKeyCode, pScanCode, pModifiers)
+        return super.keyPressed(event)
     }
 
-    override fun keyReleased(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
+    override fun keyReleased(event: KeyEvent): Boolean {
+        val pKeyCode = event.key()
+        val pModifiers = event.modifiers()
         if ((pKeyCode == PokeNavigatorBinding.boundKey().value || pKeyCode == InputConstants.KEY_LSHIFT || pKeyCode == InputConstants.KEY_RSHIFT) && aboutToClose) {
             Minecraft.getInstance().gui.setScreen(null) // So we only close if the Key was released
         }
-        return super.keyReleased(pKeyCode, pScanCode, pModifiers)
+        return super.keyReleased(event)
     }
 
     /**

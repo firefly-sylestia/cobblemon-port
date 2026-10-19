@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.common
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
@@ -103,16 +104,24 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
 
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         updateScrollingState(mouseX, mouseY)
         if (scrolling) {
             focused = getEntryAtPosition(mouseX, mouseY)
             isDragging = true
         }
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(event, doubleClick)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val deltaX = dx
+        val deltaY = dy
         if (scrolling) {
             if (mouseY < listY) {
                 setScrollAmount(0.0)
@@ -122,7 +131,7 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
                 setScrollAmount(scrollAmount() + deltaY)
             }
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        return super.mouseDragged(event,  deltaX,  deltaY)
     }
 
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {

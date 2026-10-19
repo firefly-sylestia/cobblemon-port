@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.npc.widgets
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable.MoLangVariableType
@@ -76,16 +77,24 @@ class ConfigVariableList(
         super.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         updateScrollingState(mouseX, mouseY)
         if (scrolling) {
             focused = getEntryAtPosition(mouseX, mouseY)
             isDragging = true
         }
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(event, doubleClick)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val deltaX = dx
+        val deltaY = dy
         if (scrolling) {
             if (mouseY < this.listY) {
                 setScrollAmount(0.0)
@@ -95,7 +104,7 @@ class ConfigVariableList(
                 setScrollAmount(scrollAmount() + deltaY)
             }
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        return super.mouseDragged(event,  deltaX,  deltaY)
     }
 
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {

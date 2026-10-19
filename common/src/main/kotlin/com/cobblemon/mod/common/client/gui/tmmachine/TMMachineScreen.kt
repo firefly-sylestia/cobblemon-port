@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.tmmachine
 
+import net.minecraft.client.input.MouseButtonEvent
+
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
@@ -1111,10 +1115,13 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         super.mouseMoved(mouseX, mouseY)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         ticksElapsed = 0
         if (resetScreenSaver()) return false
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(event, doubleClick)
     }
 
     override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, type: ClickType) {
@@ -1129,12 +1136,14 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val keyCode = event.key()
+        val modifiers = event.modifiers()
         ticksElapsed = 0
         if (resetScreenSaver()) return false
         val searchFocused = this::moveSearchWidget.isInitialized && moveSearchWidget.isFocused
 
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode)) {
+        if (isInventoryKeyPressed(minecraft, event)) {
             if (searchFocused) { return true }
             else {
                 onClose()
@@ -1153,7 +1162,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             }
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     override fun renderBackground(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {}

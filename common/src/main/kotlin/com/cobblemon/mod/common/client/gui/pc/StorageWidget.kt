@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.pc
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
@@ -339,16 +340,19 @@ class StorageWidget(
         matrices.popMatrix()
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val pMouseX = event.x()
+        val pMouseY = event.y()
+        val pButton = event.button()
         if (displayConfirmRelease) {
-            if (releaseYesButton.isHovered(pMouseX, pMouseY)) releaseYesButton.mouseClicked(pMouseX, pMouseY, pButton)
-            if (releaseNoButton.isHovered(pMouseX, pMouseY)) releaseNoButton.mouseClicked(pMouseX, pMouseY, pButton)
+            if (releaseYesButton.isHovered(pMouseX, pMouseY)) releaseYesButton.mouseClicked(event, doubleClick)
+            if (releaseNoButton.isHovered(pMouseX, pMouseY)) releaseNoButton.mouseClicked(event, doubleClick)
         } else {
-            if (releaseButton.isHovered(pMouseX, pMouseY)) releaseButton.mouseClicked(pMouseX, pMouseY, pButton)
+            if (releaseButton.isHovered(pMouseX, pMouseY)) releaseButton.mouseClicked(event, doubleClick)
         }
 
-        pastureWidget?.mouseClicked(pMouseX, pMouseY, pButton)
-        return super.mouseClicked(pMouseX, pMouseY, pButton)
+        pastureWidget?.mouseClicked(event, doubleClick)
+        return super.mouseClicked(event, doubleClick)
     }
 
     private fun resetStorageSlots() {

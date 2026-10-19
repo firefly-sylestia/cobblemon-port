@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.summary
 
+import net.minecraft.client.input.MouseButtonEvent
+
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
@@ -679,13 +683,20 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         return children().any { it.mouseScrolled(mouseX, mouseY, amount, verticalAmount) }
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
-        if (mainScreenIndex == MOVES) mainScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val deltaX = dx
+        val deltaY = dy
+        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(event,  deltaX,  deltaY)
+        if (mainScreenIndex == MOVES) mainScreen.mouseDragged(event,  deltaX,  deltaY)
+        return super.mouseDragged(event,  deltaX,  deltaY)
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val keyCode = event.key()
+        val modifiers = event.modifiers()
         val nicknameSelected = this::nicknameEntryWidget.isInitialized && nicknameEntryWidget.isFocused
 
         if (keyCode == InputConstants.KEY_ESCAPE) {
@@ -694,7 +705,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         }
 
 
-        if ( !nicknameSelected && (isInventoryKeyPressed(minecraft, keyCode, scanCode) || SummaryBinding.matches(keyCode, scanCode)) ){
+        if ( !nicknameSelected && (isInventoryKeyPressed(minecraft, event) || SummaryBinding.matches(event)) ){
             saveActiveMark()
             saveMarkings()
             Minecraft.getInstance().gui.setScreen(null)
@@ -710,7 +721,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
 
         handleProfileDebugKeys(keyCode, selectedPokemon.species.resourceIdentifier, modelWidget.state)
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     fun playSound(soundEvent: SoundEvent) {

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.pc
 
+import net.minecraft.client.input.KeyEvent
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
@@ -55,10 +56,12 @@ class BoxNameWidget(
         }
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val keyCode = event.key()
+        val modifiers = event.modifiers()
         // Reset box name
         if (isFocused && keyCode == InputConstants.KEY_ESCAPE) value = getBox().name?.string ?: ""
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     override fun unfocused() {

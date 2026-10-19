@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.pc
 
+import net.minecraft.client.input.MouseButtonEvent
+
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokemon.PokemonSortMode
@@ -711,10 +715,13 @@ class PCGUI(
         }
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         // Trigger child component function as they will need to check the entire screen click area
-        if (::boxNameWidget.isInitialized) boxNameWidget.mouseClicked(mouseX, mouseY, button)
-        return super.mouseClicked(mouseX, mouseY, button)
+        if (::boxNameWidget.isInitialized) boxNameWidget.mouseClicked(event, doubleClick)
+        return super.mouseClicked(event, doubleClick)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double, verticalAmount: Double): Boolean {
@@ -736,18 +743,25 @@ class PCGUI(
         return super.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val deltaX = dx
+        val deltaY = dy
         storageWidget.pastureWidget?.let { pasture ->
-            if (pasture.pastureScrollList.isHovered) pasture.pastureScrollList.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+            if (pasture.pastureScrollList.isHovered) pasture.pastureScrollList.mouseDragged(event,  deltaX,  deltaY)
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        return super.mouseDragged(event,  deltaX,  deltaY)
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val keyCode = event.key()
+        val modifiers = event.modifiers()
         val boxNameFocused = this::boxNameWidget.isInitialized && boxNameWidget.isFocused
         val filterFocused = this::filterWidget.isInitialized && filterWidget.isFocused
 
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && !boxNameFocused && !filterFocused) {
+        if (isInventoryKeyPressed(minecraft, event) && !boxNameFocused && !filterFocused) {
             saveMarkings(isPreviewInParty ?: false)
             if (!silent) playSound(CobblemonSounds.PC_OFF)
             UnlinkPlayerFromPCPacket().sendToServer()
@@ -778,12 +792,12 @@ class PCGUI(
             }
         } else if (keyCode == InputConstants.KEY_ESCAPE) {
             // Escape from text box
-            if (::boxNameWidget.isInitialized) boxNameWidget.keyPressed(keyCode, scanCode, modifiers)
+            if (::boxNameWidget.isInitialized) boxNameWidget.keyPressed(event)
             this.focused = null
             return true
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     /**

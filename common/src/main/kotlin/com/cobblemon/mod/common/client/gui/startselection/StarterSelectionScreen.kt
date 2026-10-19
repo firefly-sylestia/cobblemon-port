@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.startselection
 
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
@@ -359,13 +361,15 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         if (currentBallBackgroundFrame == 16) currentBallBackgroundFrame = 0
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (minecraft?.options?.keyInventory?.matches(keyCode, scanCode) == true || SummaryBinding.matches(keyCode, scanCode)) {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val keyCode = event.key()
+        val modifiers = event.modifiers()
+        if (minecraft?.options?.keyInventory?.matches(event) == true || SummaryBinding.matches(event)) {
             Minecraft.getInstance().gui.setScreen(null)
             return true
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     override fun isPauseScreen() = true

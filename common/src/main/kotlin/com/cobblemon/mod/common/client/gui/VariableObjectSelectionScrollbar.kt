@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -60,7 +61,10 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
         return parent.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         if (mouseX.toInt() in x..(x + width) && mouseY.toInt() in y..(y + height)) {
             if (button == 0) {
                 var scrollPosition = (parent.scrollAmount() / parent.maxScrollAmount()) * (height - SCROLLER_HEIGHT)
@@ -78,7 +82,12 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
         return false
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, dragX: Double, dragY: Double): Boolean {
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val dragX = dx
+        val dragY = dy
         if (button == 0 && scrolling) {
             val scrollRatio = ((mouseY - y - scrollHoldOffset) / (height - SCROLLER_HEIGHT)).coerceIn(0.0,1.0)
             parent.setScroll(scrollRatio * parent.maxScrollAmount())
@@ -87,7 +96,10 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
         return false
     }
 
-    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseReleased(event: MouseButtonEvent): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         if (button == 0 && scrolling) {
             scrolling = false
             return true

@@ -21,6 +21,7 @@ import kotlin.math.floor
 import kotlin.math.min
 import kotlin.random.Random
 import net.minecraft.client.Minecraft
+import net.minecraft.client.input.KeyEvent
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.core.BlockPos
@@ -150,8 +151,8 @@ val PosableState.isInWater: Boolean
 val PosableState.isInWaterOrRain: Boolean
     get() = getEntity()?.isInWaterOrRain == true
 
-fun Screen.isInventoryKeyPressed(client: Minecraft?, keyCode: Int, scanCode: Int): Boolean {
-    return client?.options?.keyInventory?.matches(keyCode, scanCode) == true
+fun Screen.isInventoryKeyPressed(client: Minecraft?, event): Boolean {
+    return client?.options?.keyInventory?.matches(event) == true
 }
 
 fun InteractionHand.toEquipmentSlot(): EquipmentSlot {

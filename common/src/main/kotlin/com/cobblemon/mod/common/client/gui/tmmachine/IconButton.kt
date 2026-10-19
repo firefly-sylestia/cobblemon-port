@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.tmmachine
 
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
@@ -30,7 +32,7 @@ class IconButton(
     val silent: Boolean = false,
     val clickAction: OnPress
 ): Button(buttonX.toInt(), buttonY.toInt(), buttonWidth.toInt(), buttonHeight.toInt(), "".text(), clickAction, DEFAULT_NARRATION), CobblemonRenderable {
-    override fun mouseDragged(d: Double, e: Double, i: Int, f: Double, g: Double) = false
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double) = false
     override fun defaultButtonNarrationText(builder: NarrationElementOutput) {}
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
@@ -49,7 +51,10 @@ class IconButton(
         }
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         if (active && visible && button == 0 && isMouseOver(mouseX, mouseY)) {
             playDownSound(Minecraft.getInstance().soundManager)
             onClick(mouseX, mouseY)

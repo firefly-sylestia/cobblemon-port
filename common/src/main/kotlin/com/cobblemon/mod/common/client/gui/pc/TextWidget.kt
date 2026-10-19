@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pc
 
+import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.KeyEvent
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
@@ -73,10 +75,13 @@ abstract class TextWidget(
         super.setFocused(focused)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         if (isFocused && !isMouseOver(mouseX, mouseY)) unfocused()
 
-        val result = super.mouseClicked(mouseX, mouseY, button)
+        val result = super.mouseClicked(event, doubleClick)
 
         if (mouseX > startPosX + Minecraft.getInstance().font.width(value.text().bold().font(CobblemonResources.DEFAULT_LARGE))) {
             moveCursorToEnd(false)
@@ -92,8 +97,10 @@ abstract class TextWidget(
         return result
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val keyCode = event.key()
+        val modifiers = event.modifiers()
         if (isFocused && (keyCode == InputConstants.KEY_RETURN || keyCode == InputConstants.KEY_NUMPADENTER)) unfocused()
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 }

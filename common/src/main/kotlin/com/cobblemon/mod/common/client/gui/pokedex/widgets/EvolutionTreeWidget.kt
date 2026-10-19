@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
@@ -619,17 +620,16 @@ class EvolutionTreeWidget(
         return mouseX >= startX && mouseX <= endX && mouseY >= startY && mouseY <= endY
     }
 
-    override fun mouseDragged(
-        mouseX: Double,
-        mouseY: Double,
-        button: Int,
-        deltaX: Double,
-        deltaY: Double
-    ): Boolean {
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val deltaX = dx
+        val deltaY = dy
         panningX += deltaX
         panningY += deltaY
 
-        val bounds = treeDrawingBounds ?: return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        val bounds = treeDrawingBounds ?: return super.mouseDragged(event,  deltaX,  deltaY)
         val treeHeight = bounds.height.coerceAtLeast(1)
         val treeWidth = bounds.width.coerceAtLeast(1)
 
@@ -646,7 +646,7 @@ class EvolutionTreeWidget(
         panningX = panningX.coerceIn(minPanningX, maxPanningX)
         panningY = panningY.coerceIn(minPanningY, maxPanningY)
 
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        return super.mouseDragged(event,  deltaX,  deltaY)
     }
 
     fun isHovered(mouseX: Double, mouseY: Double): Boolean {

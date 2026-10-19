@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionDisplay
@@ -156,7 +157,10 @@ class EvolutionSelectScreen(
             matrices.popMatrix()
         }
 
-        override fun mouseClicked(d: Double, e: Double, i: Int): Boolean {
+        override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val d = event.x()
+        val e = event.y()
+        val i = event.button()
             if (selectButton.isHovered) {
                 selectButton.onPress()
                 return true

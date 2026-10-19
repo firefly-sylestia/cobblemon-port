@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.startselection.widgets
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
@@ -204,7 +205,10 @@ class CategoryList(
             }
         }
 
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
             val entryY = getRowTop(this)
             val hoveredButton = getButtonHovered(x, entryY, mouseX, mouseY)
             if (hoveredButton != -1) {

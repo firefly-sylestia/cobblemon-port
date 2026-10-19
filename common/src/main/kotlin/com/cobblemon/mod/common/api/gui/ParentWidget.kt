@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.api.gui
 
+import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.CharacterEvent
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.events.GuiEventListener
@@ -53,44 +56,60 @@ abstract class ParentWidget(
         } || super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val pMouseX = event.x()
+        val pMouseY = event.y()
+        val pButton = event.button()
         if (!active) return false
 
         return children.any {
-            it.mouseClicked(pMouseX, pMouseY, pButton)
+            it.mouseClicked(event, doubleClick)
         }
     }
 
-    override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseReleased(event: MouseButtonEvent): Boolean {
+        val pMouseX = event.x()
+        val pMouseY = event.y()
+        val pButton = event.button()
         return children.any {
-            it.mouseReleased(pMouseX, pMouseY, pButton)
-        } || super.mouseReleased(pMouseX, pMouseY, pButton)
+            it.mouseReleased(event)
+        } || super.mouseReleased(event)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, f: Double, g: Double): Boolean {
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val f = dx
+        val g = dy
         return children.any {
-            it.mouseDragged(mouseX, mouseY, button, f, g)
+            it.mouseDragged(event,  f,  g)
         }
     }
 
-    override fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val pKeyCode = event.key()
+        val pModifiers = event.modifiers()
         return children.any {
-            it.keyPressed(pKeyCode, pScanCode, pModifiers)
-        } || super.keyPressed(pKeyCode, pScanCode, pModifiers)
+            it.keyPressed(event)
+        } || super.keyPressed(event)
     }
 
-    override fun keyReleased(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
+    override fun keyReleased(event: KeyEvent): Boolean {
+        val pKeyCode = event.key()
+        val pModifiers = event.modifiers()
         children.forEach {
-            it.keyReleased(pKeyCode, pScanCode, pModifiers)
+            it.keyReleased(event)
         }
-        return super.keyReleased(pKeyCode, pScanCode, pModifiers)
+        return super.keyReleased(event)
     }
 
-    override fun charTyped(pCodePoint: Char, pModifiers: Int): Boolean {
+    override fun charTyped(event: CharacterEvent): Boolean {
+        val pCodePoint = event.codepoint().toChar()
         children.forEach {
-            it.charTyped(pCodePoint, pModifiers)
+            it.charTyped(event)
         }
-        return super.charTyped(pCodePoint, pModifiers)
+        return super.charTyped(event)
     }
 
     override fun defaultButtonNarrationText(pNarrationElementOutput: NarrationElementOutput) {

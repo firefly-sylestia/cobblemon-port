@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.trade
 
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
@@ -447,8 +449,10 @@ class TradeGUI(
         }
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (minecraft?.options?.keyInventory?.matches(keyCode, scanCode) == true) {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val keyCode = event.key()
+        val modifiers = event.modifiers()
+        if (minecraft?.options?.keyInventory?.matches(event) == true) {
             CancelTradePacket().sendToServer()
             cancelTradeSound()
             Minecraft.getInstance().gui.setScreen(null)
@@ -461,7 +465,7 @@ class TradeGUI(
                 cancelTradeSound()
             }
         }
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     override fun tick() {

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.dialogue
 
+import net.minecraft.client.input.KeyEvent
+
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.value.DoubleValue
@@ -287,13 +289,15 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         EscapeDialoguePacket().sendToServer()
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val keyCode = event.key()
+        val modifiers = event.modifiers()
+        if (isInventoryKeyPressed(minecraft, event) && focused !is EditBox) {
             onClose()
             return true
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     fun playGibberSpeak(delta: Float, text: String, gibber: DialogueGibberDTO) {

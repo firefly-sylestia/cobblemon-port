@@ -31,5 +31,5 @@ class RodBaitComponent(val stack: ItemStack = ItemStack.EMPTY) {
     }
 
     override fun hashCode() = ItemStack.hashItemAndComponents(stack)
-    override fun equals(other: Any?) = other === this || (other is RodBaitComponent && ItemStack.matches(other.stack, stack))
+    override fun equals(other: Any?) = other === this || (other is RodBaitComponent && ItemStack.matches(event))
 }

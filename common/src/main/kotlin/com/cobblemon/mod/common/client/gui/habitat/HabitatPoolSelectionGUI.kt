@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.habitat
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.api.habitats.HabitatPool
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
@@ -142,7 +143,10 @@ class HabitatPoolSelectionGUI(
                 guiGraphics.text(Minecraft.getInstance().font, poolName.asTranslated(), rowLeft + 4, rowTop + 6, 0xFFFFFF)
             }
 
-            override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+            override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
                 if (!isMouseOver(mouseX, mouseY)) {
                     return false
                 }

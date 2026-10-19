@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.interact.wheel
 
+import net.minecraft.client.input.MouseButtonEvent
+
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -24,12 +28,14 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
         private val backgroundResource = cobblemonResource("textures/gui/interact/interact_wheel_base.png")
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode)) {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val keyCode = event.key()
+        val modifiers = event.modifiers()
+        if (isInventoryKeyPressed(minecraft, event)) {
             onClose()
             return true
         }
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     private val buttons = mutableListOf<InteractWheelButton>()
@@ -146,9 +152,12 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
 
     override fun isPauseScreen() = false
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         if (isMouseInCenter(mouseX, mouseY)) return false
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(event, doubleClick)
     }
 
     private fun isMouseInCenter(mouseX: Double, mouseY: Double): Boolean {

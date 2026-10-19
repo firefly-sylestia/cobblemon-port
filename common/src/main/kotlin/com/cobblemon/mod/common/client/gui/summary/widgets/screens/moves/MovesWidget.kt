@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Move
@@ -218,9 +219,12 @@ class MovesWidget(
         descriptionScrollList.setMoveDescription(selectedMove?.description ?: "".text())
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (descriptionScrollList.isHovered) descriptionScrollList.mouseClicked(mouseX, mouseY, button)
-        return super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        if (descriptionScrollList.isHovered) descriptionScrollList.mouseClicked(event, doubleClick)
+        return super.mouseClicked(event, doubleClick)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
@@ -228,8 +232,13 @@ class MovesWidget(
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (descriptionScrollList.isHovered) descriptionScrollList.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val deltaX = dx
+        val deltaY = dy
+        if (descriptionScrollList.isHovered) descriptionScrollList.mouseDragged(event,  deltaX,  deltaY)
+        return super.mouseDragged(event,  deltaX,  deltaY)
     }
 }

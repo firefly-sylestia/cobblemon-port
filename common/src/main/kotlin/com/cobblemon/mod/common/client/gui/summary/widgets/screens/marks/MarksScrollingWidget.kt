@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.mark.Mark
 import com.cobblemon.mod.common.api.text.text
@@ -87,9 +88,14 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
         if (!anyHovered) setHoveredMark(null)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, dragX: Double, dragY: Double): Boolean {
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val dragX = dx
+        val dragY = dy
         // Prevent scrollbar drag if all rows are already visible
-        return if (children().size > 5) super.mouseDragged(mouseX, mouseY, button, dragX, dragY) else true
+        return if (children().size > 5) super.mouseDragged(event,  dragX,  dragY) else true
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
@@ -155,7 +161,10 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
             tickDelta: Float
         ) {}
 
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
             setSelectedMark.invoke()
             return true
         }

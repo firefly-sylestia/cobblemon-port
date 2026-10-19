@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.startselection.widgets.preview
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -79,11 +80,14 @@ class StarterRoundabout(
         matrices.popMatrix()
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val pMouseX = event.x()
+        val pMouseY = event.y()
+        val pButton = event.button()
         if (this.clicked(pMouseX, pMouseY) && this.isValidClickButton(pButton)) {
             this.onClick(pMouseX, pMouseY)
         }
-        return super.mouseClicked(pMouseX, pMouseY, pButton)
+        return super.mouseClicked(event, doubleClick)
     }
 
     override fun clicked(mouseX: Double, mouseY: Double): Boolean {

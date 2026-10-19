@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.pasture
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
@@ -72,9 +73,12 @@ class PastureWidget(
         recallButton.render(context, mouseX, mouseY, delta)
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
-        if (recallButton.isHovered(pMouseX, pMouseY)) recallButton.mouseClicked(pMouseX, pMouseY, pButton)
-        if (pastureScrollList.isHovered(pMouseX, pMouseY)) pastureScrollList.mouseClicked(pMouseX, pMouseY, pButton)
-        return super.mouseClicked(pMouseX, pMouseY, pButton)
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val pMouseX = event.x()
+        val pMouseY = event.y()
+        val pButton = event.button()
+        if (recallButton.isHovered(pMouseX, pMouseY)) recallButton.mouseClicked(event, doubleClick)
+        if (pastureScrollList.isHovered(pMouseX, pMouseY)) pastureScrollList.mouseClicked(event, doubleClick)
+        return super.mouseClicked(event, doubleClick)
     }
 }

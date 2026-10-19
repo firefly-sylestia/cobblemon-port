@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.summary
 
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
@@ -48,7 +50,7 @@ class SummaryButton(
 
     var buttonActive = false
 
-    override fun mouseDragged(d: Double, e: Double, i: Int, f: Double, g: Double) = false
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double) = false
 
     override fun defaultButtonNarrationText(builder: NarrationElementOutput) {
     }
@@ -85,9 +87,12 @@ class SummaryButton(
         )
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         if (this.clickRequirement.invoke(this) && isButtonHovered(mouseX, mouseY)) {
-            super.mouseClicked(mouseX, mouseY, button)
+            super.mouseClicked(event, doubleClick)
         }
         return false
     }

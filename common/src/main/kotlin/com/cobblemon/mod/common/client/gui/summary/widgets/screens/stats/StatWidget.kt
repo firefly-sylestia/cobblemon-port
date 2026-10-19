@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
@@ -490,7 +491,10 @@ class StatWidget(
         )
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val pMouseX = event.x()
+        val pMouseY = event.y()
+        val pButton = event.button()
         val index = getTabIndexFromPos(pMouseX, pMouseY)
         // Only play sound here as the rest of the widget is meant to be silent
         if (index in 0 until statOptions.size && statTabIndex != index) {
@@ -503,7 +507,7 @@ class StatWidget(
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
         }
 
-        return super.mouseClicked(pMouseX, pMouseY, pButton)
+        return super.mouseClicked(event, doubleClick)
     }
 
     private fun statValuesAsText(stats: List<Stat>, asPercent: Boolean): List<MutableComponent> {

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pc
 
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
@@ -70,13 +72,16 @@ class FilterWidget(
         }
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         if (iconHovered(mouseX.toInt(), mouseY.toInt())) {
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.PC_CLICK, 1.0F, 0.25F))
             // Simulate clicking on text area if icon is clicked
-            if (!isFocused) return super.mouseClicked(x + (width / 2.0), y + (height / 2.0), button)
+            if (!isFocused) return super.mouseClicked(MouseButtonEvent(x + (width / 2.0), y + (height / 2.0), event.buttonInfo()), doubleClick)
         }
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(event, doubleClick)
     }
 
     fun iconHovered(mouseX: Int, mouseY: Int): Boolean = mouseX >= (x - 9) && mouseY >= (y + 3)

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.cookingpot
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.api.gui.blitk
@@ -215,7 +216,10 @@ class CookingPotScreen(
 
     override fun getRecipeBookComponent(): RecipeBookComponent = this.recipeBookComponent
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         val progressX = leftPos + 96
         val progressY = topPos + 39
         if (Cobblemon.implementation.isModInstalled("jei") &&
@@ -228,7 +232,7 @@ class CookingPotScreen(
             return true
         }
 
-        if (this.recipeBookComponent.mouseClicked(mouseX, mouseY, button)) {
+        if (this.recipeBookComponent.mouseClicked(event, doubleClick)) {
             this.focused = this.recipeBookComponent
 
             if (this.recipeBookComponent.isVisible) {
@@ -240,11 +244,7 @@ class CookingPotScreen(
 
             return true
         } else {
-            return if (this.widthTooNarrow && this.recipeBookComponent.isVisible) true else super.mouseClicked(
-                mouseX,
-                mouseY,
-                button
-            )
+            return if (this.widthTooNarrow && this.recipeBookComponent.isVisible) true else super.mouseClicked(event, doubleClick)
         }
     }
 

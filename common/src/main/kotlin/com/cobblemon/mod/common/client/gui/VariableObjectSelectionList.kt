@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui
 
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.api.gui.blitk
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
@@ -106,18 +107,24 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
         return true
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val pMouseX = event.x()
+        val pMouseY = event.y()
+        val pButton = event.button()
         val entry = getEntryAtPosition(pMouseX.toInt(), pMouseY.toInt())
         if (entry != null) {
-            return entry.mouseClicked(pMouseX, pMouseY, pButton)
+            return entry.mouseClicked(event, doubleClick)
         }
         return false
     }
 
-    override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseReleased(event: MouseButtonEvent): Boolean {
+        val pMouseX = event.x()
+        val pMouseY = event.y()
+        val pButton = event.button()
         return children.any {
-            it.mouseReleased(pMouseX, pMouseY, pButton)
-        } || super.mouseReleased(pMouseX, pMouseY, pButton)
+            it.mouseReleased(event)
+        } || super.mouseReleased(event)
     }
 
     fun getRowTop(entry: Entry): Int {

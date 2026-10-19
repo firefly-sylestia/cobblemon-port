@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.pokedex
 
+import net.minecraft.client.input.MouseButtonEvent
+
+import net.minecraft.client.input.KeyEvent
+
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
@@ -473,7 +477,10 @@ class PokedexGUI private constructor(
         super.onClose()
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
         val canDisplayEntry = true //selectedForm?.unlockForms
 
         if (::pokemonInfoWidget.isInitialized
@@ -494,29 +501,37 @@ class PokedexGUI private constructor(
             activeDragableElement = tabInfoElement
         }
         return try {
-            super.mouseClicked(mouseX, mouseY, button)
+            super.mouseClicked(event, doubleClick)
         } catch(_: ConcurrentModificationException) {
             false
         }
     }
 
-    override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseReleased(event: MouseButtonEvent): Boolean {
+        val pMouseX = event.x()
+        val pMouseY = event.y()
+        val pButton = event.button()
         if (canDragRender) canDragRender = false
         if (isDragging) isDragging = false
         activeDragableElement = null
-        return super.mouseReleased(pMouseX, pMouseY, pButton)
+        return super.mouseReleased(event)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+    override fun mouseDragged(event: MouseButtonEvent, dx: Double, dy: Double): Boolean {
+        val mouseX = event.x()
+        val mouseY = event.y()
+        val button = event.button()
+        val deltaX = dx
+        val deltaY = dy
         if (isDragging && canDragRender && activeDragableElement == pokemonInfoWidget) {
             val dragOffsetY = (oldDragPosX - mouseX).toFloat()
             pokemonInfoWidget.rotationY = (((pokemonInfoWidget.rotationY + dragOffsetY) % 360 + 360) % 360)
         } else if (activeDragableElement == tabInfoElement) {
-            tabInfoElement.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+            tabInfoElement.mouseDragged(event,  deltaX,  deltaY)
         }
 
         oldDragPosX = mouseX
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        return super.mouseDragged(event,  deltaX,  deltaY)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
@@ -815,8 +830,10 @@ class PokedexGUI private constructor(
 
     override fun isPauseScreen(): Boolean = false
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        val keyCode = event.key()
+        val modifiers = event.modifiers()
+        if (isInventoryKeyPressed(minecraft, event) && focused !is EditBox) {
             onClose()
             return true
         }
@@ -827,7 +844,7 @@ class PokedexGUI private constructor(
             }
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     fun playSound(soundEvent: SoundEvent) {

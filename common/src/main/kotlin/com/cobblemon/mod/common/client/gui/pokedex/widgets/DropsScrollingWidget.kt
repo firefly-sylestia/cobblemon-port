@@ -65,15 +65,15 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
     }
 
     override fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
-        val xLeft = this.scrollbarPosition
+        val xLeft = this.scrollBarX()
         val xRight = xLeft + 3
         val yStart = y + 1
 
         val barHeight = this.bottom - yStart
 
-        var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+        var yBottom = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
         yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
-        var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + yStart
+        var yTop = scrollAmount().toInt() * (barHeight - yBottom) / this.maxScrollAmount() + yStart
         if (yTop < yStart) yTop = yStart
 
         context.fill(xLeft + 1, yStart, xRight - 1, this.bottom, ARGB.color(255, 126, 231, 229)) // track

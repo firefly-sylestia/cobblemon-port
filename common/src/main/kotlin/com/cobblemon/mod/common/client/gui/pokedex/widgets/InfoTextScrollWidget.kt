@@ -68,19 +68,19 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
                 .map { it.string }
                 .forEach { addEntry(TextSlot(it)) }
         }
-        scrollAmount = 0.0
+        setScrollAmount(0.0)
     }
 
     override fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
-        val xLeft = this.scrollbarPosition
+        val xLeft = this.scrollBarX()
         val yMargin = 1
         val yStart = y + yMargin
 
         val barHeight = this.bottom - yMargin - yStart
 
-        var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+        var yBottom = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
         yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
-        var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + yStart
+        var yTop = scrollAmount().toInt() * (barHeight - yBottom) / this.maxScrollAmount() + yStart
         if (yTop < yStart) yTop = yStart
 
         // Scroll Track

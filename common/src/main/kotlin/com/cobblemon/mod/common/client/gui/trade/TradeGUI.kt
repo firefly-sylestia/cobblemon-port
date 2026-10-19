@@ -173,7 +173,7 @@ class TradeGUI(
             ExitButton(pX = x + 265, pY = y + 6) {
                 playSound(CobblemonSounds.GUI_CLICK)
                 onClose()
-                Minecraft.getInstance().setScreen(null)
+                Minecraft.getInstance().gui.setScreen(null)
             }
         )
 
@@ -451,7 +451,7 @@ class TradeGUI(
         if (minecraft?.options?.keyInventory?.matches(keyCode, scanCode) == true) {
             CancelTradePacket().sendToServer()
             cancelTradeSound()
-            Minecraft.getInstance().setScreen(null)
+            Minecraft.getInstance().gui.setScreen(null)
             return true
         }
 

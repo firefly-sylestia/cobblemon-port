@@ -110,7 +110,7 @@ class HabitatPoolEditorGUI(
             if (editable) {
                 addOptionWidget(
                     Button.builder("E".text()) {
-                        Minecraft.getInstance().setScreen(HabitatSpawnEditorGUI(spawn, maxPokemonLevel, buckets, spawnablePositionTypes, this))
+                        Minecraft.getInstance().gui.setScreen(HabitatSpawnEditorGUI(spawn, maxPokemonLevel, buckets, spawnablePositionTypes, this))
                     }.bounds(getScaledWidth() - 55, rowY, 20, 20).build()
                 )
 
@@ -149,7 +149,7 @@ class HabitatPoolEditorGUI(
 
         addFooterWidget(
             Button.builder(lang("ui.edit.habitat.pool.back")) {
-                Minecraft.getInstance().setScreen(parentScreen)
+                Minecraft.getInstance().gui.setScreen(parentScreen)
             }.bounds(10, getScaledHeight() - (actionButtonHeight + actionButtonBottomMargin), buttonWidth, actionButtonHeight).build()
         )
         updateOptionWidgetInteractivity()

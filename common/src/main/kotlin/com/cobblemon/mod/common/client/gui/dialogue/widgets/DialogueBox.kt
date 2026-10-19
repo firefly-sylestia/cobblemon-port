@@ -68,18 +68,18 @@ class DialogueBox(
             .forEach { addEntry(DialogueLine(it, lineColor)) }
 
         // Add empty line for bottom padding if text area height is larger than box height
-        if (maxPosition > (height - 2)) addEntry(DialogueLine(FormattedCharSequence.EMPTY, lineColor))
+        if (contentHeight() > (height - 2)) addEntry(DialogueLine(FormattedCharSequence.EMPTY, lineColor))
     }
 
     override fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
-        val xLeft = this.scrollbarPosition
+        val xLeft = this.scrollBarX()
         val yStart = y + 2
 
         val barHeight = this.bottom - yStart
 
-        var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+        var yBottom = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
         yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
-        var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + yStart
+        var yTop = scrollAmount().toInt() * (barHeight - yBottom) / this.maxScrollAmount() + yStart
         if (yTop < yStart) yTop = yStart
 
         // Scroll Track
@@ -161,7 +161,7 @@ class DialogueBox(
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         // TODO change this coordinate check to just be "anywhere the scroll bar isn't"
         if (!dialogueScreen.waitingForServerUpdate &&
-            mouseX > this.x && mouseX < this.scrollbarPosition &&
+            mouseX > this.x && mouseX < this.scrollBarX() &&
             mouseY > this.y && mouseY < this.bottom
         ) {
             if (dialogue.dialogueInput.allowSkip && dialogue.dialogueInput.inputType in listOf(DialogueInputDTO.InputType.NONE, DialogueInputDTO.InputType.AUTO_CONTINUE)) {

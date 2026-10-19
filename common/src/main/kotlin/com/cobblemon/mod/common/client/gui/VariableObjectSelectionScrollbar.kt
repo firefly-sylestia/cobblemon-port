@@ -28,11 +28,11 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
     private var scrolling = false
     private var scrollHoldOffset = 0.0
 
-    fun scrollbarVisible(): Boolean = parent.getMaxScroll() > 0
+    fun scrollbarVisible(): Boolean = parent.maxScrollAmount() > 0
 
     override fun extractWidgetRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         if (scrollbarVisible()) {
-            val scrollPosition = (parent.scrollAmount / parent.getMaxScroll()) * (height - SCROLLER_HEIGHT)
+            val scrollPosition = (parent.scrollAmount() / parent.maxScrollAmount()) * (height - SCROLLER_HEIGHT)
 
             blitk(
                 matrixStack = guiGraphics.pose(),
@@ -63,12 +63,12 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (mouseX.toInt() in x..(x + width) && mouseY.toInt() in y..(y + height)) {
             if (button == 0) {
-                var scrollPosition = (parent.scrollAmount / parent.getMaxScroll()) * (height - SCROLLER_HEIGHT)
+                var scrollPosition = (parent.scrollAmount() / parent.maxScrollAmount()) * (height - SCROLLER_HEIGHT)
                 if (mouseY !in (y + scrollPosition)..(y + scrollPosition + SCROLLER_HEIGHT)) {
                     val scrollRatio =
                         ((mouseY - y - SCROLLER_HEIGHT / 2) / (height - SCROLLER_HEIGHT)).coerceIn(0.0, 1.0)
-                    parent.setScroll(scrollRatio * parent.getMaxScroll())
-                    scrollPosition = (parent.scrollAmount / parent.getMaxScroll()) * (height - SCROLLER_HEIGHT)
+                    parent.setScroll(scrollRatio * parent.maxScrollAmount())
+                    scrollPosition = (parent.scrollAmount() / parent.maxScrollAmount()) * (height - SCROLLER_HEIGHT)
                 }
                 scrollHoldOffset = mouseY - y - scrollPosition
                 scrolling = true
@@ -81,7 +81,7 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, dragX: Double, dragY: Double): Boolean {
         if (button == 0 && scrolling) {
             val scrollRatio = ((mouseY - y - scrollHoldOffset) / (height - SCROLLER_HEIGHT)).coerceIn(0.0,1.0)
-            parent.setScroll(scrollRatio * parent.getMaxScroll())
+            parent.setScroll(scrollRatio * parent.maxScrollAmount())
             return true
         }
         return false

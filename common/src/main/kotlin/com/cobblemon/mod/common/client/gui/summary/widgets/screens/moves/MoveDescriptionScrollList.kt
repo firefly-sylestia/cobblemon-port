@@ -60,11 +60,11 @@ class MoveDescriptionScrollList(
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
         if (scrolling) {
             if (mouseY < y) {
-                scrollAmount = 0.0
+                setScrollAmount(0.0)
             } else if (mouseY > bottom) {
-                scrollAmount = maxScroll.toDouble()
+                setScrollAmount(maxScrollAmount().toDouble())
             } else {
-                scrollAmount += deltaY
+                setScrollAmount(scrollAmount() + deltaY)
             }
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)

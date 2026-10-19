@@ -451,7 +451,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         if (::typesScrollList.isInitialized) {
             typesScrollList.apply {
                 visible = isVisible
-                scrollAmount = 0.0
+                setScrollAmount(0.0)
                 // Resize widget to toggle input detection as screen only detects first widget added for overlapping children
                 if (isVisible) { setSize(TypesScrollingWidget.WIDTH, TypesScrollingWidget.HEIGHT) }
                 else { setSize(0, 0) }
@@ -465,7 +465,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         if (::movesScrollingList.isInitialized) {
             movesScrollingList.apply {
                 visible = isVisible
-                scrollAmount = 0.0
+                setScrollAmount(0.0)
                 if (isVisible) { setSize(MovesScrollingWidget.WIDTH, MovesScrollingWidget.HEIGHT) }
                 else { setSize(0, 0) }
             }
@@ -1041,7 +1041,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                     // Scroll to move if moves list contains held TM move
                     if (tmList.get().contains(heldStackTm)) {
                         val moveListIndex = tmList.get().indexOf(heldStackTm)
-                        movesScrollingList.scrollAmount = movesScrollingList.maxScroll * when (moveListIndex) {
+                        movesScrollingList.setScrollAmount(movesScrollingList.maxScrollAmount() * when (moveListIndex) {)
                             tmList.get().lastIndex -> 1.0
                             else -> (moveListIndex / tmList.get().size.toDouble())
                         }
@@ -1301,17 +1301,17 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                     .map { it.string }
                     .forEach { addEntry(TextSlot(it)) }
             }
-            scrollAmount = 0.0
+            setScrollAmount(0.0)
         }
 
         override fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
-            val xLeft = this.scrollbarPosition
+            val xLeft = this.scrollBarX()
 
             val barHeight = this.bottom - y
 
-            var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+            var yBottom = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
             yBottom = Mth.clamp(yBottom, 16, barHeight - 6)
-            var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + y
+            var yTop = scrollAmount().toInt() * (barHeight - yBottom) / this.maxScrollAmount() + y
             if (yTop < y) yTop = y
 
             // Scroll Track

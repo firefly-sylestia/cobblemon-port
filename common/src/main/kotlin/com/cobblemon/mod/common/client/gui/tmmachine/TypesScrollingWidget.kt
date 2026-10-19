@@ -47,13 +47,13 @@ class TypesScrollingWidget(val pX: Int, val pY: Int, val setType: (ElementalType
     override fun getScrollbarPosition(): Int = rowLeft + width - 3
 
     override fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
-        val xLeft = this.scrollbarPosition
+        val xLeft = this.scrollBarX()
         val xRight = xLeft + 3
         val barHeight = this.bottom - this.y
 
-        var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+        var yBottom = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
         yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
-        var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + this.y
+        var yTop = scrollAmount().toInt() * (barHeight - yBottom) / this.maxScrollAmount() + this.y
         if (yTop < this.y) {
             yTop = this.y
         }

@@ -117,17 +117,17 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
             if (mouseY < listY) {
                 setScrollAmount(0.0)
             } else if (mouseY > bottom) {
-                setScrollAmount(maxScroll.toDouble())
+                setScrollAmount(maxScrollAmount().toDouble())
             } else {
-                setScrollAmount(scrollAmount + deltaY)
+                setScrollAmount(scrollAmount() + deltaY)
             }
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }
 
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {
-        scrolling = mouseX >= this.scrollbarPosition.toDouble()
-                && mouseX < (this.scrollbarPosition + 3).toDouble()
+        scrolling = mouseX >= this.scrollBarX().toDouble()
+                && mouseX < (this.scrollBarX() + 3).toDouble()
                 && mouseY >= listY
                 && mouseY < bottom
     }

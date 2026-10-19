@@ -132,7 +132,7 @@ class PokedexGUI private constructor(
             }
             val mc = Minecraft.getInstance()
             val screen = PokedexGUI(type, species, blockPos)
-            mc.setScreen(screen)
+            mc.gui.setScreen(screen)
         }
     }
 
@@ -584,7 +584,7 @@ class PokedexGUI private constructor(
                     entry = entries.first()
                 }
                 setSelectedEntry(entry)
-                scrollScreen.scrollAmount = (entries.indexOf(entry).toDouble() / entries.size.toDouble()) * scrollScreen.maxScroll
+                scrollScreen.setScrollAmount((entries.indexOf(entry).toDouble() / entries.size.toDouble()) * scrollScreen.maxScrollAmount())
             } else {
                 setSelectedEntry(entries.first())
             }
@@ -717,7 +717,7 @@ class PokedexGUI private constructor(
                     (tabInfoElement as AbilitiesWidget).abilitiesList = form.abilities.sortedBy { it is HiddenAbility }.map { ability -> ability.template }
                     (tabInfoElement as AbilitiesWidget).selectedAbilitiesIndex = 0
                     (tabInfoElement as AbilitiesWidget).setAbility()
-                    (tabInfoElement as AbilitiesWidget).scrollAmount = 0.0
+                    (tabInfoElement as AbilitiesWidget).setScrollAmount(0.0)
 
                     if ((tabInfoElement as AbilitiesWidget).abilitiesList.size > 1) {
                         addRenderableWidget((tabInfoElement as AbilitiesWidget).leftButton)
@@ -773,7 +773,7 @@ class PokedexGUI private constructor(
         when (tabInfoIndex) {
             TAB_DESCRIPTION -> {
                 (tabInfoElement as DescriptionWidget).setText(textToShowInDescription)
-                (tabInfoElement as DescriptionWidget).scrollAmount = 0.0
+                (tabInfoElement as DescriptionWidget).setScrollAmount(0.0)
             }
         }
     }

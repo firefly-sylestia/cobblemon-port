@@ -361,7 +361,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         if (minecraft?.options?.keyInventory?.matches(keyCode, scanCode) == true || SummaryBinding.matches(keyCode, scanCode)) {
-            Minecraft.getInstance().setScreen(null)
+            Minecraft.getInstance().gui.setScreen(null)
             return true
         }
 

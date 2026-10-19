@@ -67,7 +67,7 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
                 this.left,
                 this.y,
                 right.toFloat(),
-                (this.bottom + scrollAmount.toInt()).toFloat(),
+                (this.bottom + scrollAmount().toInt()).toFloat(),
                 this.right - this.left,
                 this.bottom - this.y, 32, 32
             )
@@ -75,7 +75,7 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
         }
 
         val l1 = this.rowLeft
-        val l = this.y + 4 - scrollAmount.toInt()
+        val l = this.y + 4 - scrollAmount().toInt()
 
         this.enableScissor(context)
         if (asAccessor.renderHeader) {
@@ -90,8 +90,8 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
             this.renderHorizontalShadows(context, mouseX, mouseY, delta)
         }
 
-        val maxScroll = this.maxScroll
-        if (maxScroll > 0) {
+        val maxScrollAmount() = this.maxScrollAmount()
+        if (maxScrollAmount() > 0) {
             renderScrollbar(context, mouseX, mouseY, delta)
         }
 
@@ -100,14 +100,14 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
     }
 
     open fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float){
-        val xLeft = this.scrollbarPosition
+        val xLeft = this.scrollBarX()
         val xRight = xLeft + scrollBarWidth
 
         val barHeight = this.bottom - this.y
 
-        var j2 = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+        var j2 = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
         j2 = Mth.clamp(j2, 32, barHeight - 8)
-        var k1 = scrollAmount.toInt() * (barHeight - j2) / this.maxScroll + this.y
+        var k1 = scrollAmount().toInt() * (barHeight - j2) / this.maxScrollAmount() + this.y
         if (k1 < this.y) {
             k1 = this.y
         }
@@ -196,7 +196,7 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
     }
 
     override fun getRowTop(index: Int): Int {
-        return this.y - scrollAmount.toInt() + (index * this.itemHeight)
+        return this.y - scrollAmount().toInt() + (index * this.itemHeight)
     }
 
     override fun getRowBottom(index: Int): Int {

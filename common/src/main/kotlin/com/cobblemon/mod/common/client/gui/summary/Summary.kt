@@ -110,7 +110,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         fun open(party: Collection<Pokemon?>, editable: Boolean = true, selection: Int = 0) {
             val mc = Minecraft.getInstance()
             val screen = Summary(party, editable, selection)
-            mc.setScreen(screen)
+            mc.gui.setScreen(screen)
         }
     }
 
@@ -259,7 +259,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 } else {
                     saveActiveMark()
                     saveMarkings()
-                    Minecraft.getInstance().setScreen(null)
+                    Minecraft.getInstance().gui.setScreen(null)
                 }
             }
         )
@@ -368,7 +368,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     /**
      * Returns if this Screen is open or not
      */
-    private fun isOpen() = Minecraft.getInstance().screen == this
+    private fun isOpen() = Minecraft.getInstance().gui.screen() == this
 
     /**
      * Switch center screen
@@ -697,7 +697,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         if ( !nicknameSelected && (isInventoryKeyPressed(minecraft, keyCode, scanCode) || SummaryBinding.matches(keyCode, scanCode)) ){
             saveActiveMark()
             saveMarkings()
-            Minecraft.getInstance().setScreen(null)
+            Minecraft.getInstance().gui.setScreen(null)
             return true
         }
 

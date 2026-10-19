@@ -133,7 +133,7 @@ class CobblemonConfigVariableList(
             }
         }
 
-        scrollAmount = min(maxScroll.toDouble(), scrollAmount)
+        setScrollAmount(min(maxScrollAmount().toDouble(), scrollAmount()))
     }
 
     abstract class CobblemonConfigVariableListEntry(

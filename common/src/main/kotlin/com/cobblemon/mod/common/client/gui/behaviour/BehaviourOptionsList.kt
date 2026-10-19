@@ -60,7 +60,7 @@ class BehaviourOptionsList(
     fun removeEntry(entry: Identifier) {
         children().find { it.resourceLocation == entry }?.let { removeEntry(it) }
         // Resize scrollbar to avoid visual issues upon removal
-        setScrollAmount(if (children().size < 7) 0.0 else getScrollAmount())
+        setScrollAmount(if (children().size < 7) 0.0 else scrollAmount())
     }
 
     fun addEntry(entry: Identifier, alignButtonRight: Boolean) {

@@ -135,21 +135,21 @@ class PasturePokemonScrollList(
     }
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (scrolling && scrollbarVisible() && mouseX >= scrollbarPosition) {
+        if (scrolling && scrollbarVisible() && mouseX >= scrollBarX()) {
             if (mouseY < this.listY) {
-                scrollAmount = 0.0
+                setScrollAmount(0.0)
             } else if (mouseY > bottom) {
-                scrollAmount = maxScroll.toDouble()
+                setScrollAmount(maxScrollAmount().toDouble())
             } else {
-                scrollAmount += deltaY
+                setScrollAmount(scrollAmount() + deltaY)
             }
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }
 
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {
-        scrolling = mouseX >= this.scrollbarPosition.toDouble()
-                && mouseX < (this.scrollbarPosition + 3).toDouble()
+        scrolling = mouseX >= this.scrollBarX().toDouble()
+                && mouseX < (this.scrollBarX() + 3).toDouble()
                 && mouseY >= listY
                 && mouseY < bottom
     }

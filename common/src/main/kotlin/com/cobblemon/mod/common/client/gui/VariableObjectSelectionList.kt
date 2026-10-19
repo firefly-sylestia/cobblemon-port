@@ -27,12 +27,12 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
         setScroll(scrollAmount + offset)
     }
 
-    fun getMaxScroll(): Int {
+    fun maxScrollAmount(): Int {
         return (listHeight - height).coerceAtLeast(0)
     }
 
     fun setScroll(scroll: Double) {
-        scrollAmount = scroll.coerceIn(0.0, getMaxScroll().toDouble())
+        scrollAmount = scroll.coerceIn(0.0, maxScrollAmount().toDouble())
     }
 
     fun removeEntry(index: Int) {

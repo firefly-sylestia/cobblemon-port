@@ -55,7 +55,7 @@ class CobblemonToast(
         return font.split(this.description, maxWidth)
     }
 
-    override fun render(context: GuiGraphicsExtractor, manager: ToastComponent, startTime: Long): Toast.Visibility {
+    override fun extractRenderState(context: GuiGraphicsExtractor, manager: ToastComponent, startTime: Long): Toast.Visibility {
         if (this.startTime == -1L) this.startTime = startTime
 
         val elapsedTime = startTime - this.startTime

@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import net.minecraft.util.Util
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.EditBox
@@ -62,12 +63,12 @@ class SimpleNPCTextInputWidget(
         super.setFocused(focused)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        val clickedState = super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val clickedState = super.mouseClicked(event, doubleClick)
 
         if (wrap) {
             val splitLines = Minecraft.getInstance().font.splitter.splitLines(value, width - 8, Style.EMPTY)
-            val clickedLineIndex = floor((mouseY - y)/11).toInt()
+            val clickedLineIndex = floor((event.y() - y)/11).toInt()
 
             if (clickedLineIndex >= 0 && splitLines.size > clickedLineIndex) {
                 val lineAtIndex = splitLines.get(clickedLineIndex)
@@ -75,7 +76,7 @@ class SimpleNPCTextInputWidget(
                 for (char in lineAtIndex.string) {
                     lineSubstring += char
                     val startToLineWidth = Minecraft.getInstance().font.width(lineSubstring.text())
-                    if ((mouseX - x) <= startToLineWidth) break
+                    if ((event.x() - x) <= startToLineWidth) break
                 }
                 var unwrappedLine = ""
                 splitLines.forEachIndexed { index, line ->
@@ -93,7 +94,7 @@ class SimpleNPCTextInputWidget(
         return clickedState
     }
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if (texture != null) {
             blitk(
                 matrixStack = context.pose(),
@@ -144,7 +145,7 @@ class SimpleNPCTextInputWidget(
                 )
             }
         } else {
-            super.renderWidget(context, mouseX, mouseY, delta)
+            super.extractWidgetRenderState(context, mouseX, mouseY, delta)
         }
     }
 }

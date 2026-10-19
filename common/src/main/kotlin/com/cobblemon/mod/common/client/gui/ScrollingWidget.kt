@@ -32,9 +32,7 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
     top, // Top
     slotHeight // Slot Height
 ), CobblemonRenderable {
-    override fun renderListBackground(guiGraphics: GuiGraphicsExtractor) {}
-    override fun renderSelection(context: GuiGraphicsExtractor, y: Int, entryWidth: Int, entryHeight: Int, borderColor: Int, fillColor: Int) {}
-    override fun renderDecorations(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
+    override fun extractListBackground(guiGraphics: GuiGraphicsExtractor) {}
 
 
     init {
@@ -53,61 +51,25 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
         this.x = left
     }
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
-        val asAccessor = this as EntryListWidgetAccessor
-        this.focused = if (this.isMouseOver(mouseX.toDouble(), mouseY.toDouble())) this.getEntryAtPosition(
-            mouseX.toDouble(),
-            mouseY.toDouble()
-        ) else null
-        val renderBackground = false
-        if (renderBackground) {
-            context.setColor(0.125f, 0.125f, 0.125f, 1.0f)
-            context.blit(
-                Screen.MENU_BACKGROUND,
-                this.left,
-                this.y,
-                right.toFloat(),
-                (this.bottom + scrollAmount.toInt()).toFloat(),
-                this.right - this.left,
-                this.bottom - this.y, 32, 32
-            )
-            context.setColor(1.0f, 1.0f, 1.0f, 1.0f)
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+        super.extractWidgetRenderState(context, mouseX, mouseY, delta)
+    }
+
+    override fun extractScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
+        if (maxScrollAmount() > 0) {
+            renderScrollbar(context, mouseX, mouseY, 0F)
         }
-
-        val l1 = this.rowLeft
-        val l = this.y + 4 - scrollAmount.toInt()
-
-        this.enableScissor(context)
-        if (asAccessor.renderHeader) {
-            this.renderHeader(context, l1, l)
-        }
-
-        this.renderListItems(context, mouseX, mouseY, delta)
-        context.disableScissor()
-
-        val renderHorizontalShadows = false
-        if (renderHorizontalShadows) {
-            this.renderHorizontalShadows(context, mouseX, mouseY, delta)
-        }
-
-        val maxScroll = this.maxScroll
-        if (maxScroll > 0) {
-            renderScrollbar(context, mouseX, mouseY, delta)
-        }
-
-        this.renderDecorations(context, mouseX, mouseY)
-        RenderSystem.disableBlend()
     }
 
     open fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float){
-        val xLeft = this.scrollbarPosition
+        val xLeft = this.scrollBarX()
         val xRight = xLeft + scrollBarWidth
 
         val barHeight = this.bottom - this.y
 
-        var j2 = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+        var j2 = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
         j2 = Mth.clamp(j2, 32, barHeight - 8)
-        var k1 = scrollAmount.toInt() * (barHeight - j2) / this.maxScroll + this.y
+        var k1 = scrollAmount.toInt() * (barHeight - j2) / this.maxScrollAmount() + this.y
         if (k1 < this.y) {
             k1 = this.y
         }
@@ -150,39 +112,6 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
         )
     }
 
-    override fun renderListItems(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
-        val i = this.rowLeft
-        val j = this.rowWidth
-        val k = this.itemHeight
-        val l = this.itemCount
-
-        for (m in 0 until l) {
-            val n = this.getRowTop(m)
-            val o = this.getRowBottom(m)
-            if (o >= this.y && n <= this.bottom) {
-                this.renderItem(context!!, mouseX, mouseY, delta, m, i, n, j, k)
-            }
-        }
-    }
-
-    override fun renderItem(
-        context: GuiGraphicsExtractor,
-        mouseX: Int,
-        mouseY: Int,
-        delta: Float,
-        index: Int,
-        x: Int,
-        y: Int,
-        entryWidth: Int,
-        entryHeight: Int
-    ) {
-        val entry =  this.getEntry(index)
-        entry.render(
-            context, index, y, x, entryWidth, entryHeight, mouseX, mouseY,
-            focused == entry, delta
-        )
-    }
-
     override fun getRowLeft(): Int {
         return this.left
     }
@@ -203,7 +132,7 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
         return this.getRowTop(index) + this.itemHeight
     }
 
-    override fun getScrollbarPosition(): Int = this.left + this.width - this.scrollBarWidth
+    override fun scrollBarX(): Int = this.left + this.width - this.scrollBarWidth
 
     abstract class Slot<T : Slot<T>>(): Entry<T>() {
         // Override render to show each individual element

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pokedex
 
+import net.minecraft.client.input.KeyEvent
+
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
@@ -61,6 +63,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isInventoryKeyPressed
 import com.cobblemon.mod.common.util.lang
 import com.mojang.blaze3d.platform.InputConstants
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.EditBox
@@ -132,7 +135,7 @@ class PokedexGUI private constructor(
             }
             val mc = Minecraft.getInstance()
             val screen = PokedexGUI(type, species, blockPos)
-            mc.setScreen(screen)
+            mc.gui.setScreen(screen)
         }
     }
 
@@ -186,8 +189,8 @@ class PokedexGUI private constructor(
             }
         }
 
-    override fun renderBlurredBackground(delta: Float) {}
-    override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
+    override fun extractBlurredBackground(delta: Float) {}
+    override fun extractMenuBackground(context: GuiGraphicsExtractor) {}
 
     public override fun init() {
         super.init()
@@ -304,9 +307,9 @@ class PokedexGUI private constructor(
         CobblemonClient.clientPokedexData.getCaughtForms(selectedEntry)
     }
 
-    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
-        renderBackground(context, mouseX, mouseY, delta)
+        extractBackground(context, mouseX, mouseY, delta)
 
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
@@ -446,7 +449,7 @@ class PokedexGUI private constructor(
             )
         }
 
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
 
         // Search type tooltip
         if (searchByTypeButton.isButtonHovered(mouseX, mouseY)) {
@@ -473,50 +476,50 @@ class PokedexGUI private constructor(
         super.onClose()
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
         val canDisplayEntry = true //selectedForm?.unlockForms
 
         if (::pokemonInfoWidget.isInitialized
             && pokemonInfoWidget.active
             && !pokemonInfoWidget.suppressViewport
-            && pokemonInfoWidget.isWithinPortraitSpace(mouseX, mouseY)
+            && pokemonInfoWidget.isWithinPortraitSpace(event.x(), event.y())
             && canDisplayEntry == true
         ) {
             canDragRender = true
             isDragging = true
-            oldDragPosX = mouseX
+            oldDragPosX = event.x()
             playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
             activeDragableElement = pokemonInfoWidget
         } else if (tabInfoIndex == TAB_EVOLUTION_TREE &&
             ::tabInfoElement.isInitialized &&
-            (tabInfoElement as EvolutionTreeWidget).isHovered(mouseX, mouseY)
+            (tabInfoElement as EvolutionTreeWidget).isHovered(event.x(), event.y())
         ) {
             activeDragableElement = tabInfoElement
         }
         return try {
-            super.mouseClicked(mouseX, mouseY, button)
+            super.mouseClicked(event, doubleClick)
         } catch(_: ConcurrentModificationException) {
             false
         }
     }
 
-    override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseReleased(event: MouseButtonEvent): Boolean {
         if (canDragRender) canDragRender = false
         if (isDragging) isDragging = false
         activeDragableElement = null
-        return super.mouseReleased(pMouseX, pMouseY, pButton)
+        return super.mouseReleased(event)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+    override fun mouseDragged(event: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
         if (isDragging && canDragRender && activeDragableElement == pokemonInfoWidget) {
-            val dragOffsetY = (oldDragPosX - mouseX).toFloat()
+            val dragOffsetY = (oldDragPosX - event.x()).toFloat()
             pokemonInfoWidget.rotationY = (((pokemonInfoWidget.rotationY + dragOffsetY) % 360 + 360) % 360)
         } else if (activeDragableElement == tabInfoElement) {
-            tabInfoElement.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+            tabInfoElement.mouseDragged(event, deltaX, deltaY)
         }
 
-        oldDragPosX = mouseX
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        oldDragPosX = event.x()
+        return super.mouseDragged(event, deltaX, deltaY)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
@@ -584,7 +587,7 @@ class PokedexGUI private constructor(
                     entry = entries.first()
                 }
                 setSelectedEntry(entry)
-                scrollScreen.scrollAmount = (entries.indexOf(entry).toDouble() / entries.size.toDouble()) * scrollScreen.maxScroll
+                scrollScreen.scrollAmount = (entries.indexOf(entry).toDouble() / entries.size.toDouble()) * scrollScreen.maxScrollAmount()
             } else {
                 setSelectedEntry(entries.first())
             }
@@ -815,19 +818,19 @@ class PokedexGUI private constructor(
 
     override fun isPauseScreen(): Boolean = false
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        if (isInventoryKeyPressed(minecraft, event.key(), event.scancode()) && focused !is EditBox) {
             onClose()
             return true
         }
 
         if (!searchWidget.isFocused) {
             selectedEntry?.speciesId?.let { speciesId ->
-                handleProfileDebugKeys(keyCode, speciesId, pokemonInfoWidget.state)
+                handleProfileDebugKeys(event.key(), speciesId, pokemonInfoWidget.state)
             }
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     fun playSound(soundEvent: SoundEvent) {

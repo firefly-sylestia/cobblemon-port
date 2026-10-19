@@ -172,7 +172,7 @@ data class BedrockAnimation(
         return run(
             model.context,
             model.relevantPartsByName,
-            model.rootPart,
+            model.rootPart as Bone,
             state,
             animationSeconds,
             limbSwing,

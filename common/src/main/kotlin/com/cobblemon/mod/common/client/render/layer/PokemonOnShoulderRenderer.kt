@@ -58,7 +58,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
     var rightState = FloatingState()
     var lastRenderedRight: ShoulderData? = null
 
-    override fun render(
+    override fun extractRenderState(
         matrixStack: PoseStack,
         buffer: MultiBufferSource,
         packedLight: Int,

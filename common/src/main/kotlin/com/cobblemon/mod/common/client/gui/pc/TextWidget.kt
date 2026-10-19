@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pc
 
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
@@ -15,6 +17,7 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.util.Util
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.EditBox
@@ -73,27 +76,27 @@ abstract class TextWidget(
         super.setFocused(focused)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (isFocused && !isMouseOver(mouseX, mouseY)) unfocused()
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        if (isFocused && !isMouseOver(event.x(), event.y())) unfocused()
 
-        val result = super.mouseClicked(mouseX, mouseY, button)
+        val result = super.mouseClicked(event, doubleClick)
 
-        if (mouseX > startPosX + Minecraft.getInstance().font.width(value.text().bold().font(CobblemonResources.DEFAULT_LARGE))) {
+        if (event.x() > startPosX + Minecraft.getInstance().font.width(value.text().bold().font(CobblemonResources.DEFAULT_LARGE))) {
             moveCursorToEnd(false)
         } else {
             var lineSubstring = ""
             for (char in value) {
                 lineSubstring += char
                 val startToLineWidth = Minecraft.getInstance().font.width(lineSubstring.text().bold().font(CobblemonResources.DEFAULT_LARGE))
-                if ((mouseX - startPosX) <= startToLineWidth) break
+                if ((event.x() - startPosX) <= startToLineWidth) break
             }
             moveCursorTo(maxOf(0, lineSubstring.length - 1), Screen.hasShiftDown())
         }
         return result
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (isFocused && (keyCode == InputConstants.KEY_RETURN || keyCode == InputConstants.KEY_NUMPADENTER)) unfocused()
-        return super.keyPressed(keyCode, scanCode, modifiers)
+    override fun keyPressed(event: KeyEvent): Boolean {
+        if (isFocused && (event.key() == InputConstants.KEY_RETURN || event.key() == InputConstants.KEY_NUMPADENTER)) unfocused()
+        return super.keyPressed(event)
     }
 }

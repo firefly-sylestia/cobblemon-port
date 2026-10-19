@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
@@ -30,29 +31,10 @@ class IconButton(
     val silent: Boolean = false,
     val clickAction: OnPress
 ): Button(buttonX.toInt(), buttonY.toInt(), buttonWidth.toInt(), buttonHeight.toInt(), "".text(), clickAction, DEFAULT_NARRATION), CobblemonRenderable {
-    override fun mouseDragged(d: Double, e: Double, i: Int, f: Double, g: Double) = false
-    override fun defaultButtonNarrationText(builder: NarrationElementOutput) {}
-
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
-        resource?.let {
-            blitk(
-                matrixStack = context.pose(),
-                texture = it,
-                x = buttonX / scale,
-                y = buttonY / scale,
-                width = buttonWidth,
-                height = buttonHeight,
-                vOffset = if (isMouseOver(mouseX.toDouble(), mouseY.toDouble()) && active) buttonHeight else 0,
-                textureHeight = buttonHeight.toFloat() * 2,
-                scale = scale
-            )
-        }
-    }
-
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (active && visible && button == 0 && isMouseOver(mouseX, mouseY)) {
+    override fun mouseDragged(event: MouseButtonEvent, f: Double, g: Double): Boolean {
+        if (active && visible && event.button() == 0 && isMouseOver(event.x(), event.y())) {
             playDownSound(Minecraft.getInstance().soundManager)
-            onClick(mouseX, mouseY)
+            onClick(event.x(), event.y())
             return true
         }
         return false

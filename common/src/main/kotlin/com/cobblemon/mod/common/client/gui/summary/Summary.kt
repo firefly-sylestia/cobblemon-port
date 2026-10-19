@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.summary
 
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
@@ -40,6 +42,7 @@ import com.cobblemon.mod.common.util.isInventoryKeyPressed
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.toAssetPath
 import com.mojang.blaze3d.platform.InputConstants
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
@@ -110,7 +113,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         fun open(party: Collection<Pokemon?>, editable: Boolean = true, selection: Int = 0) {
             val mc = Minecraft.getInstance()
             val screen = Summary(party, editable, selection)
-            mc.setScreen(screen)
+            mc.gui.setScreen(screen)
         }
     }
 
@@ -129,7 +132,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     private var mainScreenIndex = INFO
     var sideScreenIndex = PARTY
 
-    override fun renderBlurredBackground(delta: Float) { }
+    override fun extractBlurredBackground(delta: Float) { }
 
     /**
      * Initializes the Summary Screen
@@ -259,7 +262,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 } else {
                     saveActiveMark()
                     saveMarkings()
-                    Minecraft.getInstance().setScreen(null)
+                    Minecraft.getInstance().gui.setScreen(null)
                 }
             }
         )
@@ -488,9 +491,9 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         }
     }
 
-    override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
+    override fun extractMenuBackground(context: GuiGraphicsExtractor) {}
 
-    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         schedulingTracker.update(delta / 20F)
 
         val x = (width - BASE_WIDTH) / 2
@@ -625,7 +628,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         val itemX = x + 3
         val itemY = y + 104
         if (!displayedItem.isEmpty) {
-            context.renderItem(displayedItem, itemX, itemY)
+            context.extractItem(displayedItem, itemX, itemY)
             context.renderItemDecorations(Minecraft.getInstance().font, displayedItem, itemX, itemY)
         }
 
@@ -660,12 +663,12 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         matrices.translate(0.0, 0.0, 1000.0)
 
         // Render all added Widgets
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
 
         // Render Item Tooltip
         if (!displayedItem.isEmpty) {
             val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, displayedItem, mouseX, mouseY)
+            if (itemHovered) context.setTooltipForNextFrame(Minecraft.getInstance().font, displayedItem, mouseX, mouseY)
         }
         matrices.popPose()
     }
@@ -679,38 +682,38 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         return children().any { it.mouseScrolled(mouseX, mouseY, amount, verticalAmount) }
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
-        if (mainScreenIndex == MOVES) mainScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    override fun mouseDragged(event: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
+        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(event, deltaX, deltaY)
+        if (mainScreenIndex == MOVES) mainScreen.mouseDragged(event, deltaX, deltaY)
+        return super.mouseDragged(event, deltaX, deltaY)
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(event: KeyEvent): Boolean {
         val nicknameSelected = this::nicknameEntryWidget.isInitialized && nicknameEntryWidget.isFocused
 
-        if (keyCode == InputConstants.KEY_ESCAPE) {
+        if (event.key() == InputConstants.KEY_ESCAPE) {
             saveActiveMark()
             saveMarkings()
         }
 
 
-        if ( !nicknameSelected && (isInventoryKeyPressed(minecraft, keyCode, scanCode) || SummaryBinding.matches(keyCode, scanCode)) ){
+        if ( !nicknameSelected && (isInventoryKeyPressed(minecraft, event.key(), event.scancode()) || SummaryBinding.matches(event.key(), event.scancode())) ){
             saveActiveMark()
             saveMarkings()
-            Minecraft.getInstance().setScreen(null)
+            Minecraft.getInstance().gui.setScreen(null)
             return true
         }
 
-        if ((keyCode == InputConstants.KEY_RETURN || keyCode == InputConstants.KEY_NUMPADENTER)
+        if ((event.key() == InputConstants.KEY_RETURN || event.key() == InputConstants.KEY_NUMPADENTER)
             && this::nicknameEntryWidget.isInitialized
             && this.nicknameEntryWidget.isFocused
         ) {
             this.focused = null
         }
 
-        handleProfileDebugKeys(keyCode, selectedPokemon.species.resourceIdentifier, modelWidget.state)
+        handleProfileDebugKeys(event.key(), selectedPokemon.species.resourceIdentifier, modelWidget.state)
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     fun playSound(soundEvent: SoundEvent) {

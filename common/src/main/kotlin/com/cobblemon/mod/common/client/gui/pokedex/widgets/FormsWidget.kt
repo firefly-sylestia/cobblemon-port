@@ -40,11 +40,11 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
         }
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return left + width - scrollBarWidth
     }
 
-    override fun getMaxScroll() = max(this.height.toDouble(), (this.maxPosition - (this.bottom - this.y - 4)).toDouble()).toInt()
+    override fun maxScrollAmount() = max(this.height.toDouble(), (this.contentHeight() - (this.bottom - this.y - 4)).toDouble()).toInt()
 
     class FormSlot(val form : String, val setFormData: (String) -> Unit) : Slot<FormSlot>() {
 
@@ -52,18 +52,17 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
             private val scrollSlotResource = cobblemonResource("textures/gui/pokedex/scroll_slot_base.png")// Render Scroll Slot Background
         }
 
-        override fun render(
+        override fun extractContent(
             context: GuiGraphicsExtractor,
-            index: Int,
-            y: Int,
-            x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
             mouseX: Int,
             mouseY: Int,
             hovered: Boolean,
             tickDelta: Float
         ) {
+            val x = this.x
+            val y = this.y
+            val entryWidth = this.width
+            val entryHeight = this.height
 
             val textScale = 1F
             blitk(
@@ -84,14 +83,4 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
                 centered = true
             )
         }
-
-        override fun getNarration(): Component {
-            return Component.literal(form)
-        }
-
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-            setFormData.invoke(form)
-            return true
-        }
-    }
 }

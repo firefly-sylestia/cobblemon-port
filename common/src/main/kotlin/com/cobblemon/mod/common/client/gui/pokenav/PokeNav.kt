@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pokenav
 
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -83,13 +85,13 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
      * Changed by Licious April 29th 2022
      * Cleaned up the original code see [moveSelected] for how the selection moves around.
      */
-    override fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
-        if (isInventoryKeyPressed(minecraft, pKeyCode, pScanCode)) {
-            Minecraft.getInstance().setScreen(null)
+    override fun keyPressed(event: KeyEvent): Boolean {
+        if (isInventoryKeyPressed(minecraft, event.key(), event.scancode())) {
+            Minecraft.getInstance().gui.setScreen(null)
             return true
         }
 
-        val movement: Pair<Int, Int> = when (pKeyCode) {
+        val movement: Pair<Int, Int> = when (event.key()) {
             InputConstants.KEY_RIGHT, InputConstants.KEY_D -> 1 to 0
             InputConstants.KEY_LEFT, InputConstants.KEY_A -> -1 to 0
             InputConstants.KEY_UP, InputConstants.KEY_W -> 0 to -1
@@ -107,14 +109,14 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
             else -> 0 to 0
         }
         this.moveSelected(movement.first, movement.second)
-        return super.keyPressed(pKeyCode, pScanCode, pModifiers)
+        return super.keyPressed(event)
     }
 
-    override fun keyReleased(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
-        if ((pKeyCode == PokeNavigatorBinding.boundKey().value || pKeyCode == InputConstants.KEY_LSHIFT || pKeyCode == InputConstants.KEY_RSHIFT) && aboutToClose) {
-            Minecraft.getInstance().setScreen(null) // So we only close if the Key was released
+    override fun keyReleased(event: KeyEvent): Boolean {
+        if ((event.key() == PokeNavigatorBinding.boundKey().value || event.key() == InputConstants.KEY_LSHIFT || event.key() == InputConstants.KEY_RSHIFT) && aboutToClose) {
+            Minecraft.getInstance().gui.setScreen(null) // So we only close if the Key was released
         }
-        return super.keyReleased(pKeyCode, pScanCode, pModifiers)
+        return super.keyReleased(event)
     }
 
     /**
@@ -124,8 +126,8 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
     /**
      * Rendering the background texture
      */
-    override fun render(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        renderBackground(context, pMouseX, pMouseY, pPartialTicks)
+    override fun extractRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+        extractBackground(context, pMouseX, pMouseY, pPartialTicks)
 
         // Rendering UI Background
         blitk(
@@ -135,7 +137,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
             width = backgroundWidth, height = backgroundHeight
         )
 
-        super.render(context, pMouseX, pMouseY, pPartialTicks)
+        super.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
         /**
          * Rendering Selection
@@ -338,13 +340,13 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
         try {
             Summary.open(CobblemonClient.storage.party.slots, true, CobblemonClient.storage.selectedSlot)
         } catch (e: Exception) {
-            Minecraft.getInstance().setScreen(null)
+            Minecraft.getInstance().gui.setScreen(null)
             Cobblemon.LOGGER.debug("Failed to open the summary from the PokeNav screen", e)
         }
     }
 
     private fun onPressExit(button: Button) {
-        Minecraft.getInstance().setScreen(null)
+        Minecraft.getInstance().gui.setScreen(null)
     }
 
 }

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui
 
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.narration.NarrationElementOutput
@@ -30,7 +31,7 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
 
     fun scrollbarVisible(): Boolean = parent.getMaxScroll() > 0
 
-    override fun renderWidget(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractWidgetRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         if (scrollbarVisible()) {
             val scrollPosition = (parent.scrollAmount / parent.getMaxScroll()) * (height - SCROLLER_HEIGHT)
 
@@ -60,17 +61,17 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
         return parent.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (mouseX.toInt() in x..(x + width) && mouseY.toInt() in y..(y + height)) {
-            if (button == 0) {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        if (event.x().toInt() in x..(x + width) && event.y().toInt() in y..(y + height)) {
+            if (event.button() == 0) {
                 var scrollPosition = (parent.scrollAmount / parent.getMaxScroll()) * (height - SCROLLER_HEIGHT)
-                if (mouseY !in (y + scrollPosition)..(y + scrollPosition + SCROLLER_HEIGHT)) {
+                if (event.y() !in (y + scrollPosition)..(y + scrollPosition + SCROLLER_HEIGHT)) {
                     val scrollRatio =
-                        ((mouseY - y - SCROLLER_HEIGHT / 2) / (height - SCROLLER_HEIGHT)).coerceIn(0.0, 1.0)
+                        ((event.y() - y - SCROLLER_HEIGHT / 2) / (height - SCROLLER_HEIGHT)).coerceIn(0.0, 1.0)
                     parent.setScroll(scrollRatio * parent.getMaxScroll())
                     scrollPosition = (parent.scrollAmount / parent.getMaxScroll()) * (height - SCROLLER_HEIGHT)
                 }
-                scrollHoldOffset = mouseY - y - scrollPosition
+                scrollHoldOffset = event.y() - y - scrollPosition
                 scrolling = true
                 return true
             }
@@ -78,17 +79,17 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
         return false
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, dragX: Double, dragY: Double): Boolean {
-        if (button == 0 && scrolling) {
-            val scrollRatio = ((mouseY - y - scrollHoldOffset) / (height - SCROLLER_HEIGHT)).coerceIn(0.0,1.0)
+    override fun mouseDragged(event: MouseButtonEvent, dragX: Double, dragY: Double): Boolean {
+        if (event.button() == 0 && scrolling) {
+            val scrollRatio = ((event.y() - y - scrollHoldOffset) / (height - SCROLLER_HEIGHT)).coerceIn(0.0,1.0)
             parent.setScroll(scrollRatio * parent.getMaxScroll())
             return true
         }
         return false
     }
 
-    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (button == 0 && scrolling) {
+    override fun mouseReleased(event: MouseButtonEvent): Boolean {
+        if (event.button() == 0 && scrolling) {
             scrolling = false
             return true
         }

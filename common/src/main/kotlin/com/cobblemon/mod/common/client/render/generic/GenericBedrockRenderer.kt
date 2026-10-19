@@ -52,6 +52,6 @@ class GenericBedrockRenderer(context: EntityRendererProvider.Context) : EntityRe
         model.resetLayerContext()
 
         poseStack.popPose()
-        super.render(entity, yaw, partialTicks, poseStack, buffer, packedLight)
+        super.extractRenderState(entity, yaw, partialTicks, poseStack, buffer, packedLight)
     }
 }

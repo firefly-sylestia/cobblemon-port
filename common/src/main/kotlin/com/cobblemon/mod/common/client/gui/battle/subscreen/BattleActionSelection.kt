@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.battle.subscreen
 
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.api.gui.ParentWidget
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
@@ -26,11 +28,11 @@ abstract class BattleActionSelection(
     val opacity: Float
         get() = battleGUI.opacity
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
-        if(pButton == InputConstants.MOUSE_BUTTON_LEFT){
-            return mousePrimaryClicked(pMouseX, pMouseY)
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        if(event.button() == InputConstants.MOUSE_BUTTON_LEFT){
+            return mousePrimaryClicked(event.x(), event.y())
         }
-        return super.mouseClicked(pMouseX, pMouseY, pButton)
+        return super.mouseClicked(event, doubleClick)
     }
 
     abstract fun mousePrimaryClicked(pMouseX: Double, pMouseY: Double): Boolean

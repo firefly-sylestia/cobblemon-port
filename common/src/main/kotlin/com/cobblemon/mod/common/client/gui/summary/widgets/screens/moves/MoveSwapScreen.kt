@@ -56,18 +56,16 @@ class MoveSwapScreen(
     class MoveSlot(val pane: MoveSwapScreen, val move: MoveTemplate?, val ppRaisedStages: Int, pokemon: Pokemon) : Entry<MoveSlot>() {
         override fun getNarration() = move?.displayName ?: lang("ui.moves.forget")
         val elementalType = move?.getEffectiveElementalType(pokemon) ?: ElementalTypes.NORMAL
-        override fun render(
+        override fun extractContent(
             context: GuiGraphicsExtractor,
-            index: Int,
-            rowTop: Int,
-            rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
             mouseX: Int,
             mouseY: Int,
             isHovered: Boolean,
             partialTicks: Float
         ) {
+            val rowTop = this.y
+            val rowLeft = this.x
+            val rowWidth = this.width
             val matrices = context.pose()
             val tweakedRowTop = rowTop - (SLOT_SPACING / 2) + 1
             if (move != null) {
@@ -212,24 +210,4 @@ class MoveSwapScreen(
             }
 
         }
-
-        override fun mouseClicked(d: Double, e: Double, i: Int): Boolean {
-            if (isMouseOver(d, e)) {
-                val pokemon = pane.movesWidget.summary.selectedPokemon
-                val isParty = pokemon in CobblemonClient.storage.party
-                CobblemonNetwork.sendToServer(
-                    BenchMovePacket(
-                        isParty = isParty,
-                        uuid = pokemon.uuid,
-                        oldMove = pane.replacedMove?.template,
-                        newMove = move
-                    )
-                )
-                pane.movesWidget.summary.playSound(CobblemonSounds.GUI_CLICK)
-                pane.movesWidget.summary.displaySideScreen(Summary.PARTY)
-                return true
-            }
-            return false
-        }
-    }
 }

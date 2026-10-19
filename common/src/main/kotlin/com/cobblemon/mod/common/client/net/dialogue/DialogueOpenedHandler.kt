@@ -19,7 +19,7 @@ object DialogueOpenedHandler: ClientNetworkPacketHandler<DialogueOpenedPacket> {
         if (currentScreen != null && currentScreen.dialogueId == packet.dialogueDTO.dialogueId) {
             currentScreen.update(packet.dialogueDTO)
         } else {
-            client.setScreen(DialogueScreen(packet.dialogueDTO))
+            client.gui.setScreen(DialogueScreen(packet.dialogueDTO))
         }
     }
 }

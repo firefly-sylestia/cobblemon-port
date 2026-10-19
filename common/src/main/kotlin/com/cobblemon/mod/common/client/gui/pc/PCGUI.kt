@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pc
 
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokemon.PokemonSortMode
@@ -42,6 +44,7 @@ import com.cobblemon.mod.common.util.isInventoryKeyPressed
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.toAssetPath
 import com.mojang.blaze3d.platform.InputConstants
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
@@ -129,9 +132,9 @@ class PCGUI(
     var selectPointerOffsetIncrement = false
     var displayOptions = false
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun extractBlurredBackground(delta: Float) {}
 
-    override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
+    override fun extractMenuBackground(context: GuiGraphicsExtractor) {}
 
     override fun init() {
         val x = (width - BASE_WIDTH) / 2
@@ -315,9 +318,9 @@ class PCGUI(
         super.init()
     }
 
-    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
-        renderBackground(context, mouseX, mouseY, delta)
+        extractBackground(context, mouseX, mouseY, delta)
 
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
@@ -334,7 +337,7 @@ class PCGUI(
 
         // Render Model Portrait
         if (search.passes(previewPokemon)) {
-            modelWidget?.render(context, mouseX, mouseY, delta)
+            modelWidget?.extractRenderState(context, mouseX, mouseY, delta)
         }
 
         // Render Base Resource
@@ -504,7 +507,7 @@ class PCGUI(
             val itemX = x + 3
             val itemY = y + 98
             if (!displayedItem.isEmpty) {
-                context.renderItem(displayedItem, itemX, itemY)
+                context.extractItem(displayedItem, itemX, itemY)
                 context.renderItemDecorations(Minecraft.getInstance().font, displayedItem, itemX, itemY)
             }
 
@@ -689,7 +692,7 @@ class PCGUI(
             for (button in optionButtons) button.showAlt = hasShiftDown()
         }
 
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
 
         // Item Tooltip
         if (pokemon != null) {
@@ -698,23 +701,23 @@ class PCGUI(
             val itemY = y + 98
             if (!displayedItem.isEmpty) {
                 val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-                if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, displayedItem, mouseX, mouseY)
+                if (itemHovered) context.setTooltipForNextFrame(Minecraft.getInstance().font, displayedItem, mouseX, mouseY)
             }
         }
     }
 
     fun closeNormally(unlink: Boolean = true) {
         if (!silent) playSound(CobblemonSounds.PC_OFF)
-        Minecraft.getInstance().setScreen(null)
+        Minecraft.getInstance().gui.setScreen(null)
         if (unlink) {
             UnlinkPlayerFromPCPacket().sendToServer()
         }
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
         // Trigger child component function as they will need to check the entire screen click area
-        if (::boxNameWidget.isInitialized) boxNameWidget.mouseClicked(mouseX, mouseY, button)
-        return super.mouseClicked(mouseX, mouseY, button)
+        if (::boxNameWidget.isInitialized) boxNameWidget.mouseClicked(event, doubleClick)
+        return super.mouseClicked(event, doubleClick)
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double, verticalAmount: Double): Boolean {
@@ -736,29 +739,29 @@ class PCGUI(
         return super.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+    override fun mouseDragged(event: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
         storageWidget.pastureWidget?.let { pasture ->
-            if (pasture.pastureScrollList.isHovered) pasture.pastureScrollList.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+            if (pasture.pastureScrollList.isHovered) pasture.pastureScrollList.mouseDragged(event, deltaX, deltaY)
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        return super.mouseDragged(event, deltaX, deltaY)
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(event: KeyEvent): Boolean {
         val boxNameFocused = this::boxNameWidget.isInitialized && boxNameWidget.isFocused
         val filterFocused = this::filterWidget.isInitialized && filterWidget.isFocused
 
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && !boxNameFocused && !filterFocused) {
+        if (isInventoryKeyPressed(minecraft, event.key(), event.scancode()) && !boxNameFocused && !filterFocused) {
             saveMarkings(isPreviewInParty ?: false)
             if (!silent) playSound(CobblemonSounds.PC_OFF)
             UnlinkPlayerFromPCPacket().sendToServer()
-            Minecraft.getInstance().setScreen(null)
+            Minecraft.getInstance().gui.setScreen(null)
             return true
         }
 
-        if (keyCode == InputConstants.KEY_ESCAPE) saveMarkings(isPreviewInParty ?: false)
+        if (event.key() == InputConstants.KEY_ESCAPE) saveMarkings(isPreviewInParty ?: false)
 
         if (!filterFocused && !boxNameFocused) {
-            when (keyCode) {
+            when (event.key()) {
                 InputConstants.KEY_ESCAPE -> {
                     if (!silent) playSound(CobblemonSounds.PC_OFF)
                     UnlinkPlayerFromPCPacket().sendToServer()
@@ -776,14 +779,14 @@ class PCGUI(
                     return true
                 }
             }
-        } else if (keyCode == InputConstants.KEY_ESCAPE) {
+        } else if (event.key() == InputConstants.KEY_ESCAPE) {
             // Escape from text box
-            if (::boxNameWidget.isInitialized) boxNameWidget.keyPressed(keyCode, scanCode, modifiers)
+            if (::boxNameWidget.isInitialized) boxNameWidget.keyPressed(event)
             this.focused = null
             return true
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     /**

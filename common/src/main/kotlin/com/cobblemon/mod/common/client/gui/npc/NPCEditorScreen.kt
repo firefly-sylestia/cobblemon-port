@@ -81,7 +81,7 @@ class NPCEditorScreen(
                 alignRight = true
             ) {
                 SaveNPCPacket(npcId, dto).sendToServer()
-                this.minecraft!!.setScreen(null)
+                this.minecraft!!.gui.setScreen(null)
             }
         )
 
@@ -92,20 +92,20 @@ class NPCEditorScreen(
                 label = lang("ui.entity.behaviour_editor"),
             ) {
                 val entity = this.minecraft!!.level!!.getEntity(npcId) as? LivingEntity ?: return@NPCEditorButton // Unlikely
-                minecraft!!.setScreen(BehaviourEditorScreen(entity = entity, appliedBehaviours = dto.behaviours))
+                minecraft!!.gui.setScreen(BehaviourEditorScreen(entity = entity, appliedBehaviours = dto.behaviours))
             }
         )
 
         addRenderableWidget(ConfigVariableList(leftX + 134, topY + 35, this))
     }
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun extractBlurredBackground(delta: Float) {}
 
-    override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
+    override fun extractMenuBackground(context: GuiGraphicsExtractor) {}
 
     override fun isPauseScreen() = false
 
-    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
             matrixStack = context.pose(),
             texture = baseResource,
@@ -126,6 +126,6 @@ class NPCEditorScreen(
             shadow = true
         )
 
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
     }
 }

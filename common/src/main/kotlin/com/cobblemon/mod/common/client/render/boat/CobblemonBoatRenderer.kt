@@ -62,7 +62,7 @@ class CobblemonBoatRenderer(ctx: EntityRendererProvider.Context, private val has
             entityModel.waterPatch().render(matrices, vertexConsumer2, light, OverlayTexture.NO_OVERLAY)
         }
         matrices.popPose()
-        super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light)
+        super.extractRenderState(entity, yaw, tickDelta, matrices, vertexConsumers, light)
     }
 
     companion object {

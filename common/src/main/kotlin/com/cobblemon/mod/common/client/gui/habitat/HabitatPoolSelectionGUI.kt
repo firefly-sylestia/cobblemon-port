@@ -55,23 +55,23 @@ class HabitatPoolSelectionGUI(
                 selectedPoolId = selectedPoolId,
                 onSelect = { poolId ->
                     onSelect(poolId)
-                    Minecraft.getInstance().setScreen(parentScreen)
+                    Minecraft.getInstance().gui.setScreen(parentScreen)
                 }
             )
         )
 
         addRenderableWidget(
             Button.builder(lang("ui.edit.habitat.pool.back")) {
-                Minecraft.getInstance().setScreen(parentScreen)
+                Minecraft.getInstance().gui.setScreen(parentScreen)
             }.bounds(10, height - (backButtonHeight + backButtonBottomMargin), listWidth, backButtonHeight).build()
         )
     }
 
-    override fun render(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.fill(0, 0, width, height, Color(0, 0, 0, 100).rgb)
         guiGraphics.fill(0, 0, width, headerHeight, Color(0, 0, 0, 150).rgb)
         guiGraphics.fill(0, getFooterTop(), width, height, Color(0, 0, 0, 150).rgb)
-        super.render(guiGraphics, mouseX, mouseY, partialTick)
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         guiGraphics.drawCenteredString(font, title, width / 2, 8, 0xFFFFFF)
     }
 
@@ -112,13 +112,13 @@ class HabitatPoolSelectionGUI(
             setSelected(children().firstOrNull { it.poolId == selectedPoolId })
         }
 
-        override fun renderListBackground(guiGraphics: GuiGraphicsExtractor) {}
+        override fun extractListBackground(guiGraphics: GuiGraphicsExtractor) {}
 
         override fun getRowWidth(): Int {
             return listWidth - 8
         }
 
-        override fun getScrollbarPosition(): Int {
+        override fun scrollBarX(): Int {
             return left + listWidth - 6
         }
 
@@ -127,32 +127,16 @@ class HabitatPoolSelectionGUI(
             private val poolName: String,
             private val onSelect: (Identifier?) -> Unit
         ) : ObjectSelectionList.Entry<PoolEntry>() {
-            override fun render(
+            override fun extractContent(
                 guiGraphics: GuiGraphicsExtractor,
-                index: Int,
-                rowTop: Int,
-                rowLeft: Int,
-                rowWidth: Int,
-                rowHeight: Int,
                 mouseX: Int,
                 mouseY: Int,
                 hovered: Boolean,
                 partialTick: Float
             ) {
+                val rowTop = this.y
+                val rowLeft = this.x
                 guiGraphics.drawString(Minecraft.getInstance().font, poolName.asTranslated(), rowLeft + 4, rowTop + 6, 0xFFFFFF)
             }
-
-            override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-                if (!isMouseOver(mouseX, mouseY)) {
-                    return false
-                }
-                onSelect(poolId)
-                return true
-            }
-
-            override fun getNarration(): Component {
-                return poolName.text()
-            }
-        }
     }
 }

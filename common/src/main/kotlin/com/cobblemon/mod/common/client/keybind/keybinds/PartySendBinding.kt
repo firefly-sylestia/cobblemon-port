@@ -96,7 +96,7 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
     private fun toggleBattleScreen(battle: ClientBattle) {
         battle.minimised = !battle.minimised
         if (!battle.minimised && !Minecraft.getInstance().options.hideGui) {
-            Minecraft.getInstance().setScreen(BattleGUI())
+            Minecraft.getInstance().gui.setScreen(BattleGUI())
         }
     }
 

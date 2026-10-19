@@ -55,9 +55,9 @@ class WallpapersScrollingWidget(
         createEntries()
     }
 
-    override fun getScrollbarPosition(): Int = x + width - 3
+    override fun scrollBarX(): Int = x + width - 3
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
             matrixStack = context.pose(),
             texture = backgroundResource,
@@ -78,7 +78,7 @@ class WallpapersScrollingWidget(
         )
 
         context.enableScissor(x, y, x + width, y + height)
-        super.renderWidget(context, mouseX, mouseY, delta)
+        super.extractWidgetRenderState(context, mouseX, mouseY, delta)
         context.disableScissor()
     }
 
@@ -103,18 +103,17 @@ class WallpapersScrollingWidget(
     }
 
     inner class WallpaperEntry(val wallpaper: Identifier, var altWallpaper: Identifier?, var isNew: Boolean) : Slot<WallpaperEntry>() {
-        override fun render(
+        override fun extractContent(
             guiGraphics: GuiGraphicsExtractor,
-            index: Int,
-            top: Int,
-            left: Int,
-            width: Int,
-            height: Int,
             mouseX: Int,
             mouseY: Int,
             hovering: Boolean,
             partialTick: Float
         ) {
+            val top = this.y
+            val left = this.x
+            val width = this.width
+            val height = this.height
             val matrices = guiGraphics.pose()
             val resource = if (Screen.hasShiftDown() && altWallpaper !== null) altWallpaper else wallpaper
             blitk(
@@ -137,22 +136,4 @@ class WallpapersScrollingWidget(
                 textureHeight = SLOT_HEIGHT * 2
             )
         }
-
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-            if (this@WallpapersScrollingWidget.visible && isMouseOver(mouseX, mouseY)) {
-                val appliedWallpaper = if (Screen.hasShiftDown()) altWallpaper ?: wallpaper else wallpaper
-                RequestChangePCBoxWallpaperPacket(pcGui.pc.uuid, storageWidget.box, wallpaper, if (Screen.hasShiftDown()) altWallpaper else null).sendToServer()
-                pcGui.pc.boxes[storageWidget.box].wallpaper = appliedWallpaper
-                pcGui.unseenWallpapers.remove(wallpaper)
-                isNew = false
-                minecraft.soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.PC_CLICK, 1.0F))
-                return true
-            }
-            return false
-        }
-
-        override fun getNarration(): Component? {
-            return wallpaper.toString().text()
-        }
-    }
 }

@@ -274,7 +274,7 @@ class HabitatEditGUI(
             Button.builder(getPoolText()) {
                 val currentPool = habitatSettingsDTO.pool
                 val selectedPoolId = if (currentPool?.isReference == true) currentPool.id else null
-                Minecraft.getInstance().setScreen(
+                Minecraft.getInstance().gui.setScreen(
                     HabitatPoolSelectionGUI(
                         isActivated = habitatSettingsDTO.isActivatedSpawning,
                         pools = pools,
@@ -294,7 +294,7 @@ class HabitatEditGUI(
                 val buckets = if (habitatSettingsDTO.isActivatedSpawning) activatedHabitatBuckets else worldBuckets
 
                 if (!pool.isReference) {
-                    Minecraft.getInstance().setScreen(
+                    Minecraft.getInstance().gui.setScreen(
                         HabitatPoolEditorGUI(pool, habitatSettingsDTO.isActivatedSpawning, buckets, spawnablePositionTypes, maxPokemonLevel, this, editable = true)
                     )
                     return@builder
@@ -309,7 +309,7 @@ class HabitatEditGUI(
                     spawns = sourcePool.spawns.toMutableList()
                 }
 
-                Minecraft.getInstance().setScreen(
+                Minecraft.getInstance().gui.setScreen(
                     HabitatPoolEditorGUI(viewPool, habitatSettingsDTO.isActivatedSpawning, buckets, spawnablePositionTypes, maxPokemonLevel, this, editable = false)
                 )
             }.bounds(10, y, buttonWidth, 20).build()
@@ -346,7 +346,7 @@ class HabitatEditGUI(
         return true
     }
 
-    override fun render(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.fill(0, 0, width, height, Color(0, 0, 0, 100).rgb)
         guiGraphics.fill(0, 0, width, headerHeight, Color(0, 0, 0, 150).rgb)
         guiGraphics.fill(0, getFooterTop(), width, height, Color(0, 0, 0, 150).rgb)
@@ -354,7 +354,7 @@ class HabitatEditGUI(
 
         guiGraphics.enableScissor(0, getOptionsTop(), width, getOptionsBottom())
         optionWidgets.forEach { widget ->
-            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+            widget.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         }
         val optionsBottom = getOptionsBottom()
         labels.forEach { (label, pos) ->
@@ -365,7 +365,7 @@ class HabitatEditGUI(
         guiGraphics.disableScissor()
 
         footerWidgets.forEach { widget ->
-            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+            widget.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         }
 
         validationErrors.values.firstOrNull()?.let { errorKey ->
@@ -495,7 +495,7 @@ class HabitatEditGUI(
             blockPos = blockPos,
             settings = habitatSettingsDTO
         ).sendToServer()
-        Minecraft.getInstance().setScreen(null)
+        Minecraft.getInstance().gui.setScreen(null)
     }
 
     private fun updateScrollBounds(contentBottomAtZeroOffset: Int) {

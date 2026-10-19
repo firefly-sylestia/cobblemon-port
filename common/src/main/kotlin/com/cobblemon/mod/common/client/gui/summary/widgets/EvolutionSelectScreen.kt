@@ -56,12 +56,12 @@ class EvolutionSelectScreen(
         return super.addEntry(entry)
     }
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         if (!entriesCreated) {
             entriesCreated = true
             pokemon.evolutionProxy.client().map { EvolveSlot(pokemon, it) }.forEach { entry -> this.addEntry(entry) }
         }
-        super.renderWidget(context, mouseX, mouseY, partialTicks)
+        super.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
     }
 
     class EvolveSlot(private val pokemon: Pokemon, private val evolution: EvolutionDisplay) : Entry<EvolveSlot>() {
@@ -91,18 +91,16 @@ class EvolutionSelectScreen(
 
         override fun getNarration() = evolution.species.translatedName
 
-        override fun render(
+        override fun extractContent(
             context: GuiGraphicsExtractor,
-            index: Int,
-            rowTop: Int,
-            rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
             mouseX: Int,
             mouseY: Int,
             isHovered: Boolean,
             partialTicks: Float
         ) {
+            val rowTop = this.y
+            val rowLeft = this.x
+            val rowWidth = this.width
             val x = rowLeft - 3
             val y = rowTop
             val matrices = context.pose()
@@ -139,7 +137,7 @@ class EvolutionSelectScreen(
             ).render(context)
 
             selectButton.setPosFloat(x + 23F, y + 13F)
-            selectButton.render(context, mouseX, mouseY, partialTicks)
+            selectButton.extractRenderState(context, mouseX, mouseY, partialTicks)
 
             // Render Pokémon
             matrices.pushPose()
@@ -155,13 +153,4 @@ class EvolutionSelectScreen(
             )
             matrices.popPose()
         }
-
-        override fun mouseClicked(d: Double, e: Double, i: Int): Boolean {
-            if (selectButton.isHovered) {
-                selectButton.onPress()
-                return true
-            }
-            return false
-        }
-    }
 }

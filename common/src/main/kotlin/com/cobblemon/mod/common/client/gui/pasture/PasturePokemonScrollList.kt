@@ -30,6 +30,7 @@ import com.cobblemon.mod.common.net.messages.server.pasture.UnpasturePokemonPack
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.ObjectSelectionList
@@ -79,13 +80,13 @@ class PasturePokemonScrollList(
         }
     }
 
-    override fun getScrollbarPosition() = x + width - 3
+    override fun scrollBarX() = x + width - 3
 
     public override fun addEntry(entry: PastureSlot) = super.addEntry(entry)
     public override fun removeEntry(entry: PastureSlot) = super.removeEntry(entry)
-    override fun renderSelection(context: GuiGraphicsExtractor, y: Int, entryWidth: Int, entryHeight: Int, borderColor: Int, fillColor: Int) {}
+    override fun extractSelection(context: GuiGraphicsExtractor, entry: PastureSlot, outlineColor: Int) {}
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         correctSize()
 
         context.pose().pushPose()
@@ -99,7 +100,7 @@ class PasturePokemonScrollList(
 
 
         context.pose().popPose()
-        super.renderWidget(context, mouseX, mouseY, partialTicks)
+        super.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
 
         context.disableScissor()
 
@@ -125,36 +126,36 @@ class PasturePokemonScrollList(
         )
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        updateScrollingState(mouseX, mouseY)
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        updateScrollingState(event.x(), event.y())
         if (scrolling) {
-            focused = getEntryAtPosition(mouseX, mouseY)
+            focused = getEntryAtPosition(event.x(), event.y())
             isDragging = true
         }
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(event, doubleClick)
     }
 
-    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (scrolling && scrollbarVisible() && mouseX >= scrollbarPosition) {
-            if (mouseY < this.listY) {
+    override fun mouseDragged(event: MouseButtonEvent, deltaX: Double, deltaY: Double): Boolean {
+        if (scrolling && scrollbarVisible() && event.x() >= scrollBarX()) {
+            if (event.y() < this.listY) {
                 scrollAmount = 0.0
-            } else if (mouseY > bottom) {
-                scrollAmount = maxScroll.toDouble()
+            } else if (event.y() > bottom) {
+                scrollAmount = maxScrollAmount().toDouble()
             } else {
                 scrollAmount += deltaY
             }
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        return super.mouseDragged(event, deltaX, deltaY)
     }
 
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {
-        scrolling = mouseX >= this.scrollbarPosition.toDouble()
-                && mouseX < (this.scrollbarPosition + 3).toDouble()
+        scrolling = mouseX >= this.scrollBarX().toDouble()
+                && mouseX < (this.scrollBarX() + 3).toDouble()
                 && mouseY >= listY
                 && mouseY < bottom
     }
 
-    override fun renderListBackground(context: GuiGraphicsExtractor) {}
+    override fun extractListBackground(context: GuiGraphicsExtractor) {}
 
     private fun correctSize() {
         setRectangle(WIDTH, HEIGHT, listX, (listY - 4))
@@ -196,18 +197,16 @@ class PasturePokemonScrollList(
 
         override fun getNarration() = pokemon.displayName
 
-        override fun render(
+        override fun extractContent(
             context: GuiGraphicsExtractor,
-            index: Int,
-            rowTop: Int,
-            rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
             mouseX: Int,
             mouseY: Int,
             isHovered: Boolean,
             partialTicks: Float
         ) {
+            val rowTop = this.y
+            val rowLeft = this.x
+            val rowWidth = this.width
             val x = rowLeft - 4
             val y = rowTop + 2
 
@@ -281,21 +280,21 @@ class PasturePokemonScrollList(
             if (canUnpasture()) {
                 if (canDefend() == true) {
                     conflictButton.setPos(x + 44, y + 3)
-                    conflictButton.render(context, mouseX, mouseY, partialTicks)
+                    conflictButton.extractRenderState(context, mouseX, mouseY, partialTicks)
                 }
 
                 moveButton.setPos(x + 2, y + 11)
-                moveButton.render(context, mouseX, mouseY, partialTicks)
+                moveButton.extractRenderState(context, mouseX, mouseY, partialTicks)
             }
         }
 
-        override fun mouseClicked(mouseX: Double, mouseY: Double, delta: Int): Boolean {
-            if (canUnpasture()) {
-                if (canDefend() == true && conflictButton.isHovered(mouseX, mouseY)) {
+        override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+            if (event.button() == 0 && canUnpasture()) {
+                if (canDefend() == true && conflictButton.isHovered(event.x(), event.y())) {
                     conflictButton.onPress()
                     return true
                 }
-                if (moveButton.isHovered(mouseX, mouseY)) {
+                if (moveButton.isHovered(event.x(), event.y())) {
                     moveButton.onPress()
                     return true
                 }

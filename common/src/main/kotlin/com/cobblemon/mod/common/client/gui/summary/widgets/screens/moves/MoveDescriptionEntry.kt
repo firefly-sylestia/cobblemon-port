@@ -19,18 +19,15 @@ class MoveDescriptionEntry(
 ) :
     ObjectSelectionList.Entry<MoveDescriptionEntry>() {
 
-    override fun render(
+    override fun extractContent(
         context: GuiGraphicsExtractor,
-        index: Int,
-        rowTop: Int,
-        rowLeft: Int,
-        rowWidth: Int,
-        rowHeight: Int,
         mouseX: Int,
         mouseY: Int,
         isHovered: Boolean,
         partialTicks: Float
     ) {
+        val rowTop = this.y
+        val rowLeft = this.x
         drawScaledText(
             context = context,
             text = line,
@@ -40,8 +37,3 @@ class MoveDescriptionEntry(
             shadow = true
         )
     }
-
-    override fun getNarration(): Component {
-        return line
-    }
-}

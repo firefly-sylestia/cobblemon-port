@@ -155,7 +155,7 @@ class HabitatBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
 
         val dispatcher = Minecraft.getInstance().entityRenderDispatcher
         dispatcher.setRenderShadow(false)
-        dispatcher.render(pokemonEntity, 0.0, 0.0, 0.0, 0F, partialTicks, poseStack, bufferSource, entityLight)
+        dispatcher.extractRenderState(pokemonEntity, 0.0, 0.0, 0.0, 0F, partialTicks, poseStack, bufferSource, entityLight)
         dispatcher.setRenderShadow(true)
         poseStack.popPose()
 

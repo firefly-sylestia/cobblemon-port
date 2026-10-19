@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui
 
 import com.cobblemon.mod.common.api.gui.blitk
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.events.GuiEventListener
@@ -67,7 +68,7 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
         listHeight += entry.height
     }
 
-    override fun renderWidget(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractWidgetRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         var stackHeight = -scrollAmount.toInt()
         guiGraphics.enableScissor(x, y, x + width, y + height)
         children.forEachIndexed { index, entry ->
@@ -106,18 +107,18 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
         return true
     }
 
-    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
-        val entry = getEntryAtPosition(pMouseX.toInt(), pMouseY.toInt())
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        val entry = getEntryAtPosition(event.x().toInt(), event.y().toInt())
         if (entry != null) {
-            return entry.mouseClicked(pMouseX, pMouseY, pButton)
+            return entry.mouseClicked(event, doubleClick)
         }
         return false
     }
 
-    override fun mouseReleased(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+    override fun mouseReleased(event: MouseButtonEvent): Boolean {
         return children.any {
-            it.mouseReleased(pMouseX, pMouseY, pButton)
-        } || super.mouseReleased(pMouseX, pMouseY, pButton)
+            it.mouseReleased(event)
+        } || super.mouseReleased(event)
     }
 
     fun getRowTop(entry: Entry): Int {

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pc
 
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
@@ -29,7 +31,7 @@ class BoxNameWidget(
     private val storageWidget: StorageWidget
 ): TextWidget(pX, pY, text = text, update = {}) {
 
-    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val label = getBox().name?: defaultBoxLabel()
         val input = applyTextCursor(value, label).bold()
         val textWidth = Minecraft.getInstance().font.width((if (isFocused) value.text() else label).bold().font(CobblemonResources.DEFAULT_LARGE))
@@ -55,10 +57,10 @@ class BoxNameWidget(
         }
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(event: KeyEvent): Boolean {
         // Reset box name
-        if (isFocused && keyCode == InputConstants.KEY_ESCAPE) value = getBox().name?.string ?: ""
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        if (isFocused && event.key() == InputConstants.KEY_ESCAPE) value = getBox().name?.string ?: ""
+        return super.keyPressed(event)
     }
 
     override fun unfocused() {

@@ -110,7 +110,7 @@ class HabitatPoolEditorGUI(
             if (editable) {
                 addOptionWidget(
                     Button.builder("E".text()) {
-                        Minecraft.getInstance().setScreen(HabitatSpawnEditorGUI(spawn, maxPokemonLevel, buckets, spawnablePositionTypes, this))
+                        Minecraft.getInstance().gui.setScreen(HabitatSpawnEditorGUI(spawn, maxPokemonLevel, buckets, spawnablePositionTypes, this))
                     }.bounds(getScaledWidth() - 55, rowY, 20, 20).build()
                 )
 
@@ -149,7 +149,7 @@ class HabitatPoolEditorGUI(
 
         addFooterWidget(
             Button.builder(lang("ui.edit.habitat.pool.back")) {
-                Minecraft.getInstance().setScreen(parentScreen)
+                Minecraft.getInstance().gui.setScreen(parentScreen)
             }.bounds(10, getScaledHeight() - (actionButtonHeight + actionButtonBottomMargin), buttonWidth, actionButtonHeight).build()
         )
         updateOptionWidgetInteractivity()
@@ -164,7 +164,7 @@ class HabitatPoolEditorGUI(
         return true
     }
 
-    override fun render(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.fill(0, 0, width, height, Color(0, 0, 0, 100).rgb)
         guiGraphics.fill(0, 0, width, headerHeight, Color(0, 0, 0, 150).rgb)
         guiGraphics.fill(0, getFooterTop(), width, height, Color(0, 0, 0, 150).rgb)
@@ -205,13 +205,13 @@ class HabitatPoolEditorGUI(
         }
 
         optionWidgets.forEach { widget ->
-            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+            widget.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         }
 
         guiGraphics.disableScissor()
 
         footerWidgets.forEach { widget ->
-            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+            widget.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         }
     }
 

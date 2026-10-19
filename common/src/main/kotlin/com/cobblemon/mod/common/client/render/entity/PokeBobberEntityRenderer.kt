@@ -226,7 +226,7 @@ class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : Entit
         // So we mimic their fix here.
         vertexConsumer2.addVertex(0f, 0f, 0f).setColor(0, 0, 0, 255).setNormal(0f, 0f, 0f);
 
-        super.render(fishingBobberEntity, elapsedPartialTicks, tickDelta, matrixStack, vertexConsumerProvider, light)
+        super.extractRenderState(fishingBobberEntity, elapsedPartialTicks, tickDelta, matrixStack, vertexConsumerProvider, light)
     }
 
     fun adjustBerry(berryBait: ItemStack): Pair<Double, Double> {

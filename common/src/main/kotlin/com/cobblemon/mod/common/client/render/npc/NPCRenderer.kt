@@ -56,7 +56,7 @@ class NPCRenderer(context: Context) : LivingEntityRenderer<NPCEntity, PosableEnt
 
         poseMatrix.pushPose()
         poseMatrix.scale(entity.npc.modelScale, entity.npc.modelScale, entity.npc.modelScale)
-        super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+        super.extractRenderState(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
         poseMatrix.popPose()
         model.red = 1F
         model.green = 1F

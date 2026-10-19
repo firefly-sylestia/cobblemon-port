@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.narration.NarrationElementOutput
@@ -45,30 +46,9 @@ class ScaledButton(
     var isWidgetActive = false
     var isVisible = true
 
-    override fun mouseDragged(d: Double, e: Double, i: Int, f: Double, g: Double) = false
-    override fun defaultButtonNarrationText(builder: NarrationElementOutput) {
-    }
-
-    override fun renderWidget(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        val matrices = context.pose()
-        if (isVisible && resource != null) {
-            blitk(
-                matrixStack = matrices,
-                texture = resource,
-                x = buttonX / scale,
-                y = buttonY / scale,
-                width = buttonWidth,
-                height = buttonHeight,
-                vOffset = if (isButtonHovered(pMouseX, pMouseY) || isWidgetActive) buttonHeight else 0,
-                textureHeight = buttonHeight.toFloat() * 2,
-                scale = scale
-            )
-        }
-    }
-
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (isVisible && active && isButtonHovered(mouseX, mouseY)) {
-            super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseDragged(event: MouseButtonEvent, f: Double, g: Double): Boolean {
+        if (isVisible && active && isButtonHovered(event.x(), event.y())) {
+            super.mouseClicked(event, false)
         }
         return false
     }

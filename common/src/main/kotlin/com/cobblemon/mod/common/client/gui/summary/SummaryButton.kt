@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.narration.NarrationElementOutput
@@ -48,46 +49,9 @@ class SummaryButton(
 
     var buttonActive = false
 
-    override fun mouseDragged(d: Double, e: Double, i: Int, f: Double, g: Double) = false
-
-    override fun defaultButtonNarrationText(builder: NarrationElementOutput) {
-    }
-
-    public override fun renderWidget(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        if (!this.renderRequirement.invoke(this)) {
-            return
-        }
-        val matrices = context.pose()
-
-        // Render Button
-        blitk(
-            matrixStack = matrices,
-            texture = if (buttonActive && activeResource != null) activeResource else resource,
-            x = buttonX / scale,
-            y = buttonY / scale,
-            width = buttonWidth,
-            height = buttonHeight,
-            vOffset = if (hoverTexture && isButtonHovered(pMouseX, pMouseY)) buttonHeight else 0,
-            textureHeight = if (hoverTexture) (buttonHeight.toFloat() * 2) else buttonHeight,
-            scale = scale
-        )
-
-        // Render Text
-        drawScaledText(
-            context = context,
-            font = if (largeText) CobblemonResources.DEFAULT_LARGE else null,
-            text = if (boldText) text.bold() else text,
-            x = buttonX + (buttonWidth.toFloat() / 2),
-            y = buttonY + (buttonHeight.toFloat() / 2) - ((TEXT_HEIGHT / 2) * textScale),
-            scale = textScale,
-            centered = true,
-            shadow = true
-        )
-    }
-
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (this.clickRequirement.invoke(this) && isButtonHovered(mouseX, mouseY)) {
-            super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseDragged(event: MouseButtonEvent, f: Double, g: Double): Boolean {
+        if (this.clickRequirement.invoke(this) && isButtonHovered(event.x(), event.y())) {
+            super.mouseClicked(event, false)
         }
         return false
     }

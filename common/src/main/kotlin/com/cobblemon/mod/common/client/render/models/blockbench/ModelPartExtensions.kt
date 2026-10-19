@@ -21,6 +21,22 @@ fun ModelPart.getPosition(axis: Int) = when (axis) {
     Y_AXIS -> y
     else -> z
 }
+fun ModelPart.getRotation(axis: Int) = when (axis) {
+    X_AXIS -> xRot
+    Y_AXIS -> yRot
+    else -> zRot
+}
+fun ModelPart.setRotation(axis: Int, angleInRadians: Float): ModelPart {
+    when (axis) {
+        X_AXIS -> xRot = angleInRadians
+        Y_AXIS -> yRot = angleInRadians
+        else -> zRot = angleInRadians
+    }
+    return this
+}
+fun ModelPart.addRotation(axis: Int, differenceInRadians: Float) =
+    setRotation(axis, getRotation(axis) + differenceInRadians)
+
 fun Bone.getRotation(axis: Int) = if (this is ModelPart) {
     when (axis) {
         X_AXIS -> xRot

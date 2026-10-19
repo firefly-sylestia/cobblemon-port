@@ -12,10 +12,10 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.addRotation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BimanualFrame
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.Y_AXIS
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.Z_AXIS
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.util.Mth
 
 /**
@@ -30,8 +30,8 @@ class BimanualSwingAnimation(
     val swingPeriodMultiplier: Float = 0.6662F,
     /** The multiplier to apply to the swing of the entity. The larger this is, the further the arms move. */
     val amplitudeMultiplier: Float = 1F,
-    val leftArm: Bone?,
-    val rightArm: Bone?
+    val leftArm: ModelPart?,
+    val rightArm: ModelPart?
 ) : PoseAnimation() {
     constructor(
         frame: BimanualFrame,

@@ -56,6 +56,6 @@ class PokeBallRenderer(context: EntityRendererProvider.Context) : EntityRenderer
         model.resetLayerContext()
 
         poseStack.popPose()
-        super.render(entity, yaw, partialTicks, poseStack, buffer, packedLight)
+        super.extractRenderState(entity, yaw, partialTicks, poseStack, buffer, packedLight)
     }
 }

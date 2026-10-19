@@ -55,23 +55,18 @@ abstract class CobblemonConfigEditBoxVariable(
         editBox.value = getConfigValueAsString()
     }
 
-    override fun render(
+    override fun extractContent(
         context: GuiGraphicsExtractor,
-        index: Int,
-        top: Int,
-        left: Int,
-        width: Int,
-        height: Int,
         mouseX: Int,
         mouseY: Int,
         hovering: Boolean,
         partialTick: Float
     ) {
-        super.render(context, index, top, left, width, height, mouseX, mouseY, hovering, partialTick)
+        super.extractContent(context, mouseX, mouseY, hovering, partialTick)
 
         editBox.x = resetButton.x - editBox.width - PADDING
-        editBox.y = getY(top) + WIDGET_Y_OFFSET
-        editBox.render(context, mouseX, mouseY, partialTick)
+        editBox.y = getY(this.y) + WIDGET_Y_OFFSET
+        editBox.extractRenderState(context, mouseX, mouseY, partialTick)
     }
 }
 

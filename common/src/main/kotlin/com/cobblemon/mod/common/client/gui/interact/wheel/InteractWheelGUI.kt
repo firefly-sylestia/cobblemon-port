@@ -8,11 +8,14 @@
 
 package com.cobblemon.mod.common.client.gui.interact.wheel
 
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isInventoryKeyPressed
 import com.google.common.collect.Multimap
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
@@ -24,19 +27,19 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
         private val backgroundResource = cobblemonResource("textures/gui/interact/interact_wheel_base.png")
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode)) {
+    override fun keyPressed(event: KeyEvent): Boolean {
+        if (isInventoryKeyPressed(minecraft, event.key(), event.scancode())) {
             onClose()
             return true
         }
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
     private val buttons = mutableListOf<InteractWheelButton>()
     private var maxPage = 1
     private var currentPage = 0
-    override fun renderBlurredBackground(delta: Float) { }
-    override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
+    override fun extractBlurredBackground(delta: Float) { }
+    override fun extractMenuBackground(context: GuiGraphicsExtractor) {}
 
     override fun init() {
         calculateMaxPage()
@@ -113,7 +116,7 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
         )
     }
 
-    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val (x, y) = getBasePosition()
         blitk(
             matrixStack = context.pose(),
@@ -123,7 +126,7 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
             width = SIZE,
             height = SIZE
         )
-        super.render(context, mouseX, mouseY, delta)
+        super.extractRenderState(context, mouseX, mouseY, delta)
     }
 
     private fun getBasePosition(): Pair<Int, Int> {
@@ -146,9 +149,9 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
 
     override fun isPauseScreen() = false
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (isMouseInCenter(mouseX, mouseY)) return false
-        return super.mouseClicked(mouseX, mouseY, button)
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        if (isMouseInCenter(event.x(), event.y())) return false
+        return super.mouseClicked(event, doubleClick)
     }
 
     private fun isMouseInCenter(mouseX: Double, mouseY: Double): Boolean {

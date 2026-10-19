@@ -51,11 +51,11 @@ class BehaviourOptionsList(
         }
     }
 
-    override fun renderListBackground(context: GuiGraphicsExtractor) {}
+    override fun extractListBackground(context: GuiGraphicsExtractor) {}
 
-    override fun renderListSeparators(guiGraphics: GuiGraphicsExtractor) {}
+    override fun extractListSeparators(guiGraphics: GuiGraphicsExtractor) {}
 
-    override fun getScrollbarPosition() = left + width - 6
+    override fun scrollBarX() = left + width - 6
 
     fun removeEntry(entry: Identifier) {
         children().find { it.resourceLocation == entry }?.let { removeEntry(it) }
@@ -108,18 +108,17 @@ class BehaviourOptionsList(
         override fun setFocused(focused: Boolean) {}
         override fun isFocused() = false
 
-        override fun render(
+        override fun extractContent(
             guiGraphics: GuiGraphicsExtractor,
-            index: Int,
-            top: Int,
-            left: Int,
-            width: Int,
-            height: Int,
             mouseX: Int,
             mouseY: Int,
             hovering: Boolean,
             partialTick: Float
         ) {
+            val top = this.y
+            val left = this.x
+            val width = this.width
+            val height = this.height
             slotRow.x = parent.left + 5 + (if (alignButtonRight) 0 else (BUTTON_WIDTH - 1))
             slotRow.y = top + 1
             slotRow.buttonWidth = SLOT_WIDTH - (if (parent.children().size > 6) 6 else 0)
@@ -127,7 +126,7 @@ class BehaviourOptionsList(
             applyButton.x = parent.left + 5 + (if (alignButtonRight) SLOT_WIDTH - (if (parent.children().size > 6) 7 else (1)) else 0)
             applyButton.y = top + 1
 
-            applyButton.render(guiGraphics, mouseX, mouseY, partialTick)
+            applyButton.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
 
             blitk(
                 matrixStack = guiGraphics.pose(),
@@ -141,12 +140,11 @@ class BehaviourOptionsList(
                 scale = 0.5F
             )
 
-            slotRow.render(guiGraphics, mouseX, mouseY, partialTick)
+            slotRow.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
 
             if (hovering) {
                 tooltipHolder.refreshTooltipForNextRenderPass(hovering, false, ScreenRectangle(left, top, width, height))
             }
         }
-    }
 }
 

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.tmmachine
 
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
@@ -47,6 +49,7 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.toRGB
 import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -786,7 +789,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
 
                 val itemStack = stacks[index].copy().also { it.count = recipe.count }
 
-                context.renderItem(itemStack, itemX, itemY)
+                context.extractItem(itemStack, itemX, itemY)
                 context.renderItemDecorations(Minecraft.getInstance().font, itemStack, itemX, itemY)
 
                 if (
@@ -794,7 +797,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                     mouseX >= itemX && mouseX < itemX + 16 &&
                     mouseY >= itemY && mouseY < itemY + 16
                 ) {
-                    context.renderTooltip(Minecraft.getInstance().font, itemStack, mouseX, mouseY)
+                    context.setTooltipForNextFrame(Minecraft.getInstance().font, itemStack, mouseX, mouseY)
                 }
             }
         }
@@ -1041,7 +1044,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                     // Scroll to move if moves list contains held TM move
                     if (tmList.get().contains(heldStackTm)) {
                         val moveListIndex = tmList.get().indexOf(heldStackTm)
-                        movesScrollingList.scrollAmount = movesScrollingList.maxScroll * when (moveListIndex) {
+                        movesScrollingList.scrollAmount = movesScrollingList.maxScrollAmount() * when (moveListIndex) {
                             tmList.get().lastIndex -> 1.0
                             else -> (moveListIndex / tmList.get().size.toDouble())
                         }
@@ -1111,10 +1114,10 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         super.mouseMoved(mouseX, mouseY)
     }
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
         ticksElapsed = 0
         if (resetScreenSaver()) return false
-        return super.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(event, doubleClick)
     }
 
     override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, type: ClickType) {
@@ -1129,12 +1132,12 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(event: KeyEvent): Boolean {
         ticksElapsed = 0
         if (resetScreenSaver()) return false
         val searchFocused = this::moveSearchWidget.isInitialized && moveSearchWidget.isFocused
 
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode)) {
+        if (isInventoryKeyPressed(minecraft, event.key(), event.scancode())) {
             if (searchFocused) { return true }
             else {
                 onClose()
@@ -1142,7 +1145,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             }
         }
 
-        if (keyCode == InputConstants.KEY_ESCAPE) {
+        if (event.key() == InputConstants.KEY_ESCAPE) {
             if (searchFocused) {
                 // Escape from text box
                 this.focused = null
@@ -1153,15 +1156,13 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             }
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers)
+        return super.keyPressed(event)
     }
 
-    override fun renderBackground(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {}
+    override fun extractBackground(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {}
 
-    override fun renderBg(guiGraphics: GuiGraphicsExtractor, partialTick: Float, mouseX: Int, mouseY: Int) {}
-
-    override fun render(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
-        super.renderTransparentBackground(graphics)
+    override fun extractRenderState(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+        super.extractTransparentBackground(graphics)
 
         val matrices = graphics.pose()
         blitk(
@@ -1225,7 +1226,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             }
         }
 
-        super.render(graphics, mouseX, mouseY, delta)
+        super.extractRenderState(graphics, mouseX, mouseY, delta)
 
         if (mode == TM_BURN_MODE && ::selectedMoveButton.isInitialized) {
             selectedMoveButton.showOverlayBar = !selectedMoveButton.isHovered
@@ -1258,13 +1259,13 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
 
         renderMoveInfo(graphics, mouseX, mouseY)
 
-        this.renderTooltip(graphics, mouseX, mouseY)
+        this.extractTooltip(graphics, mouseX, mouseY)
 
         renderHeldMoveInfoTooltip(graphics, mouseX, mouseY)
     }
 
-    override fun renderBlurredBackground(partialTick: Float) {}
-    override fun renderLabels(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
+    override fun extractBlurredBackground(partialTick: Float) {}
+    override fun extractLabels(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
 
     fun playSound(soundEvent: SoundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
@@ -1305,13 +1306,13 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         }
 
         override fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
-            val xLeft = this.scrollbarPosition
+            val xLeft = this.scrollBarX()
 
             val barHeight = this.bottom - y
 
-            var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
+            var yBottom = ((barHeight * barHeight).toFloat() / this.contentHeight().toFloat()).toInt()
             yBottom = Mth.clamp(yBottom, 16, barHeight - 6)
-            var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + y
+            var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScrollAmount() + y
             if (yTop < y) yTop = y
 
             // Scroll Track
@@ -1335,12 +1336,20 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             )
         }
 
-        override fun getScrollbarPosition(): Int {
+        override fun scrollBarX(): Int {
             return left + width - DESCRIPTION_SCROLLBAR_WIDTH
         }
 
         class TextSlot(val text: String) : Slot<TextSlot>() {
-            override fun render(context: GuiGraphicsExtractor, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
+            override fun extractContent(
+                context: GuiGraphicsExtractor,
+                mouseX: Int,
+                mouseY: Int,
+                hovered: Boolean,
+                tickDelta: Float
+            ) {
+                val x = this.x
+                val y = this.y
                 drawScaledText(
                     context = context,
                     text = text.text(),
@@ -1350,10 +1359,5 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                     shadow = true
                 )
             }
-
-            override fun getNarration(): Component {
-                return Component.literal(text)
-            }
-        }
     }
 }

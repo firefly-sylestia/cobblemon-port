@@ -77,7 +77,7 @@ import org.joml.Vector3f
  * @author Hiroku
  * @since December 5th, 2021
  */
-open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
+open class PosableModel(@Transient override val rootPart: ModelPart) : ModelFrame {
     @Transient
     lateinit var context: RenderContext
 
@@ -387,7 +387,8 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     /** Builds the [locatorAccess] based on the given root part. */
     fun initializeLocatorAccess() {
-        locatorAccess = LocatorAccess.resolve(rootPart) ?: LocatorAccess(rootPart)
+        val rootBone = rootPart as Bone
+        locatorAccess = LocatorAccess.resolve(rootBone) ?: LocatorAccess(rootBone)
     }
 
     fun getPart(name: String) = relevantPartsByName[name]!!
@@ -399,6 +400,11 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     fun registerPartAndAllNamedChildren(name: String, bone: Bone) {
         if (bone is ModelPart) registerRelevantPart(name, bone)
         loadAllNamedChildren(bone)
+    }
+
+    fun registerPartAndAllNamedChildren(name: String, modelPart: ModelPart) {
+        registerRelevantPart(name, modelPart)
+        loadAllNamedChildren(modelPart)
     }
 
     fun loadAllNamedChildren(modelPart: ModelPart) {
@@ -448,7 +454,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
         val color2 = (a2 * 255).toInt() shl 24 or ((r2 * 255).toInt() shl 16) or ((g2 * 255).toInt() shl 8) or (b2 * 255).toInt()
 
-        rootPart.render(
+        (rootPart as Bone).render(
             context,
             stack,
             buffer,
@@ -480,7 +486,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 val tintColor = tintAlpha shl 24 or (tintRed shl 16) or (tintGreen shl 8) or tintBlue
 
                 stack.pushPose()
-                rootPart.render(
+                (rootPart as Bone).render(
                     context,
                     stack,
                     consumer,

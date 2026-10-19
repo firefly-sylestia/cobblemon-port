@@ -12,9 +12,9 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.addRotation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.QuadrupedFrame
-import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.X_AXIS
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.util.Mth
 
 /**
@@ -26,10 +26,10 @@ import net.minecraft.util.Mth
  * @since December 4th, 2021
  */
 class QuadrupedWalkAnimation(
-    val legFrontLeft: Bone?,
-    val legFrontRight: Bone?,
-    val legBackLeft: Bone?,
-    val legBackRight: Bone?,
+    val legFrontLeft: ModelPart?,
+    val legFrontRight: ModelPart?,
+    val legBackLeft: ModelPart?,
+    val legBackRight: ModelPart?,
     /** The multiplier to apply to the cosine movement of the legs. The smaller this value, the quicker the legs move. */
     val periodMultiplier: Float = 0.6662F,
     /** The multiplier to apply to the stride of the entity. The larger this is, the further the legs move. */

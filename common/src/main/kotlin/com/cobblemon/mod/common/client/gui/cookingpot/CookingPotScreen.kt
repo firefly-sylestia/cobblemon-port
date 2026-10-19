@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.systems.RenderSystem
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.ImageButton
 import net.minecraft.client.gui.components.StateSwitchingButton
@@ -129,15 +130,15 @@ class CookingPotScreen(
         addRenderableWidget(cookButton)
     }
 
-    override fun renderLabels(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
+    override fun extractLabels(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
         guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false)
     }
 
-    override fun renderBg(
+    override fun extractBackground(
         context: GuiGraphicsExtractor,
-        partialTick: Float,
         mouseX: Int,
-        mouseY: Int
+        mouseY: Int,
+        partialTick: Float
     ) {
         blitk(
             matrixStack = context.pose(),
@@ -158,7 +159,7 @@ class CookingPotScreen(
         )
     }
 
-    override fun render(
+    override fun extractRenderState(
         context: GuiGraphicsExtractor,
         mouseX: Int,
         mouseY: Int,
@@ -169,11 +170,11 @@ class CookingPotScreen(
         cookButton.setPosition(this.leftPos + 97, topPos + 56)
 
         if (this.recipeBookComponent.isVisible && this.widthTooNarrow) {
-            this.renderBackground(context, mouseX, mouseY, partialTicks)
-            this.recipeBookComponent.render(context, mouseX, mouseY, partialTicks)
+            this.extractBackground(context, mouseX, mouseY, partialTicks)
+            this.recipeBookComponent.extractRenderState(context, mouseX, mouseY, partialTicks)
         } else {
-            super.render(context, mouseX, mouseY, partialTicks)
-            this.recipeBookComponent.render(context, mouseX, mouseY, partialTicks)
+            super.extractRenderState(context, mouseX, mouseY, partialTicks)
+            this.recipeBookComponent.extractRenderState(context, mouseX, mouseY, partialTicks)
             this.recipeBookComponent.renderGhostRecipe(context, this.leftPos, this.topPos, true, partialTicks)
         }
 
@@ -192,21 +193,21 @@ class CookingPotScreen(
             RenderSystem.disableBlend()
 
             if (isHovering(resultSlot.x, resultSlot.y, 16, 16, mouseX.toDouble(), mouseY.toDouble()) && menu.carried.isEmpty) {
-                context.renderTooltip(font, getTooltipFromContainerItem(resultItem), resultItem.tooltipImage, mouseX, mouseY)
+                context.setTooltipForNextFrame(font, getTooltipFromContainerItem(resultItem), resultItem.tooltipImage, mouseX, mouseY)
             }
         }
 
-        this.renderTooltip(context, mouseX, mouseY)
-        this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY)
+        this.extractTooltip(context, mouseX, mouseY)
+        this.recipeBookComponent.extractTooltip(context, this.leftPos, this.topPos, mouseX, mouseY)
     }
 
-    override fun renderSlot(guiGraphics: GuiGraphicsExtractor, slot: Slot) {
+    override fun extractSlot(guiGraphics: GuiGraphicsExtractor, slot: Slot, mouseX: Int, mouseY: Int) {
         if (slot is SeasoningSlot && ((!menu.carried.isEmpty && !slot.mayPlace(menu.carried)) || (slot.hasItem() && !slot.mayPlace(slot.item))) ) {
             val x = slot.x
             val y = slot.y
             guiGraphics.fill(x,y,x+16,y+16,822018048)
         }
-        super.renderSlot(guiGraphics, slot)
+        super.extractSlot(guiGraphics, slot, mouseX, mouseY)
     }
 
     override fun recipesUpdated() {
@@ -215,12 +216,12 @@ class CookingPotScreen(
 
     override fun getRecipeBookComponent(): RecipeBookComponent = this.recipeBookComponent
 
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
         val progressX = leftPos + 96
         val progressY = topPos + 39
         if (Cobblemon.implementation.isModInstalled("jei") &&
-            mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
-            mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
+            event.x() >= progressX && event.x() < progressX + COOK_PROGRESS_WIDTH &&
+            event.y() >= progressY && event.y() < progressY + COOK_PROGRESS_HEIGHT
         ) {
             CobblemonJeiPlugin.jeiRuntime?.recipesGui?.showTypes(
                 listOf(CampfirePotRecipeCategory.RECIPE_TYPE)
@@ -228,27 +229,23 @@ class CookingPotScreen(
             return true
         }
 
-        if (this.recipeBookComponent.mouseClicked(mouseX, mouseY, button)) {
+        if (this.recipeBookComponent.mouseClicked(event, doubleClick)) {
             this.focused = this.recipeBookComponent
 
             if (this.recipeBookComponent.isVisible) {
                 val recipeBookFilterButton = (this.recipeBookComponent as RecipeBookComponentAccessor).filterButton
-                if (recipeBookFilterButton.isMouseOver(mouseX, mouseY)) overrideRecipeBookFilterButton(
+                if (recipeBookFilterButton.isMouseOver(event.x(), event.y())) overrideRecipeBookFilterButton(
                     recipeBookFilterButton
                 )
             }
 
             return true
         } else {
-            return if (this.widthTooNarrow && this.recipeBookComponent.isVisible) true else super.mouseClicked(
-                mouseX,
-                mouseY,
-                button
-            )
+            return if (this.widthTooNarrow && this.recipeBookComponent.isVisible) true else super.mouseClicked(event, doubleClick)
         }
     }
 
-    override fun renderTooltip(
+    override fun extractTooltip(
         guiGraphics: GuiGraphicsExtractor,
         mouseX: Int,
         mouseY: Int
@@ -259,7 +256,7 @@ class CookingPotScreen(
             mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
             mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
         ) {
-            guiGraphics.renderTooltip(
+            guiGraphics.setTooltipForNextFrame(
                 this.font,
                 Component.translatable("jei.tooltip.show.recipes"),
                 mouseX,
@@ -267,7 +264,7 @@ class CookingPotScreen(
             )
             return
         }
-        super.renderTooltip(guiGraphics, mouseX, mouseY)
+        super.extractTooltip(guiGraphics, mouseX, mouseY)
     }
 
     private fun overrideRecipeBookFilterButton(filterButton: StateSwitchingButton) {

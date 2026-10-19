@@ -36,12 +36,44 @@ jobs:
           mkdir -p fabric-26.3/build/ci
           bash ./gradlew -p fabric-26.3 build --stacktrace --console=plain 2>&1 | tee fabric-26.3/build/ci/build.log
 
+      - name: Summarize compiler diagnostics
+        if: always()
+        shell: bash
+        run: |
+          log=fabric-26.3/build/ci/build.log
+          report=fabric-26.3/build/ci/diagnostics.txt
+          mkdir -p fabric-26.3/build/ci
+          if [[ ! -f "$log" ]]; then
+            printf 'Build log was not created. Check earlier workflow steps.\n' > "$report"
+          else
+            diagnostic_count=$(grep -cE '^e: file://' "$log" || true)
+            unique_files=$(grep -E '^e: file://' "$log" | sed -E 's#^e: file://.*/cobblemon-port/cobblemon-port/([^:]+):.*#\1#' | sort -u | wc -l | tr -d ' ' || true)
+            {
+              echo '# Fabric 26.3 compiler diagnostics'
+              echo
+              printf 'Compiler diagnostic lines: %s\n' "$diagnostic_count"
+              printf 'Affected source files: %s\n' "$unique_files"
+              echo
+              echo '## Most affected source files'
+              grep -E '^e: file://' "$log" | sed -E 's#^e: file://.*/cobblemon-port/cobblemon-port/([^:]+):.*#\1#' | sort | uniq -c | sort -nr | head -n 25 || true
+              echo
+              echo '## Most repeated diagnostic messages'
+              grep -E '^e: file://' "$log" | sed -E 's#^e: file://[^:]+:[0-9]+:[0-9]+ ##' | sort | uniq -c | sort -nr | head -n 25 || true
+              echo
+              echo '## Build result'
+              grep -E '^BUILD (SUCCESSFUL|FAILED)' "$log" | tail -n 1 || true
+            } > "$report"
+            cat "$report"
+          fi
+
       - name: Upload build log
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: fabric-26.3-build-log
-          path: fabric-26.3/build/ci/build.log
+          path: |
+            fabric-26.3/build/ci/build.log
+            fabric-26.3/build/ci/diagnostics.txt
           if-no-files-found: warn
           retention-days: 14
 

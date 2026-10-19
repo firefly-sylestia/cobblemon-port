@@ -1663,10 +1663,10 @@ open class PokemonEntity(
         val shoulderRight = player.getShoulderEntityRight()
         val shoulderLeft = player.getShoulderEntityLeft()
         val nbt = when {
-            shoulderRight.isPokemonEntity() && shoulderRight.getCompound(DataKeys.POKEMON)
+            shoulderRight.isPokemonEntity() && shoulderRight.getCompound(DataKeys.POKEMON).orElse(CompoundTag())
                 .getUUID(DataKeys.POKEMON_UUID) == this.pokemon.uuid -> shoulderRight.copy()
 
-            shoulderLeft.isPokemonEntity() && shoulderLeft.getCompound(DataKeys.POKEMON)
+            shoulderLeft.isPokemonEntity() && shoulderLeft.getCompound(DataKeys.POKEMON).orElse(CompoundTag())
                 .getUUID(DataKeys.POKEMON_UUID) == this.pokemon.uuid -> {
                 isLeft = true
                 shoulderLeft.copy()
@@ -1814,7 +1814,8 @@ open class PokemonEntity(
 
     // Copy and paste of how vanilla checks it, unfortunately no util method you can only add then wait for the result
     fun hasRoomToMount(player: Player): Boolean {
-        return (player.getShoulderEntityLeft().isEmpty || player.getShoulderEntityRight().isEmpty)
+        val serverPlayer = player as? ServerPlayer ?: return false
+        return (serverPlayer.getShoulderEntityLeft().isEmpty || serverPlayer.getShoulderEntityRight().isEmpty)
                 && !player.isPassenger
                 && player.onGround()
                 && !player.isInWater

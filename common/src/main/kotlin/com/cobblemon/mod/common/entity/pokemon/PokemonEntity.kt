@@ -1623,7 +1623,7 @@ open class PokemonEntity(
                 ShoulderMountEvent(
                     player,
                     pokemon,
-                    isLeft = player.shoulderEntityLeft.isEmpty
+                    isLeft = player.getShoulderEntityLeft().isEmpty
                 )
             ) {
                 val dirToPlayer = player.eyePosition.subtract(position()).multiply(1.0, 0.0, 1.0).normalize()
@@ -1633,8 +1633,8 @@ open class PokemonEntity(
                 after(seconds = 0.5F) {
                     busyLocks.remove(lock)
                     if (!isBusy && isAlive) {
-                        val isLeft = player.shoulderEntityLeft.isEmpty
-                        if (isLeft || player.shoulderEntityRight.isEmpty) {
+                        val isLeft = player.getShoulderEntityLeft().isEmpty
+                        if (isLeft || player.getShoulderEntityRight().isEmpty) {
                             pokemon.state = ShoulderedState(player.uuid, isLeft, pokemon.uuid)
                             this.setEntityOnShoulder(player)
                             this.pokemon.form.shoulderEffects.forEach { it.applyEffect(this.pokemon, player, isLeft) }
@@ -1660,14 +1660,16 @@ open class PokemonEntity(
         }
         var isLeft = false
         // Use copies because player doesn't expose a forceful update of shoulder data
+        val shoulderRight = player.getShoulderEntityRight()
+        val shoulderLeft = player.getShoulderEntityLeft()
         val nbt = when {
-            player.shoulderEntityRight.isPokemonEntity() && player.shoulderEntityRight.getCompound(DataKeys.POKEMON)
-                .getUUID(DataKeys.POKEMON_UUID) == this.pokemon.uuid -> player.shoulderEntityRight.copy()
+            shoulderRight.isPokemonEntity() && shoulderRight.getCompound(DataKeys.POKEMON)
+                .getUUID(DataKeys.POKEMON_UUID) == this.pokemon.uuid -> shoulderRight.copy()
 
-            player.shoulderEntityLeft.isPokemonEntity() && player.shoulderEntityLeft.getCompound(DataKeys.POKEMON)
+            shoulderLeft.isPokemonEntity() && shoulderLeft.getCompound(DataKeys.POKEMON)
                 .getUUID(DataKeys.POKEMON_UUID) == this.pokemon.uuid -> {
                 isLeft = true
-                player.shoulderEntityLeft.copy()
+                shoulderLeft.copy()
             }
 
             else -> return true

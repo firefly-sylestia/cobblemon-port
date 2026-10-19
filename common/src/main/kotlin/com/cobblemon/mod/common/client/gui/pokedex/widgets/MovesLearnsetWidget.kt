@@ -204,7 +204,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         val matrices = context.pose()
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = if (secondaryType != null) doubleTypeBar else typeBar,
             x = pX,
             y = pY + 12,
@@ -240,7 +240,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         blitk(
             texture = moveCategoryBar,
-            matrixStack = context.pose(),
+            context = context,
             x = pX,
             y = pY + 26,
             width = 91,
@@ -249,7 +249,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         blitk(
             texture = categoryFilterIcon,
-            matrixStack = context.pose(),
+            context = context,
             x = (pX + 3) / SCALE,
             y = (pY + 27.5) / SCALE,
             width = 14,
@@ -287,7 +287,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         matrices.translate(0.0, 0.0, 500.0) // Translate on top of other elements
         blitk(
             texture = scrollBorderTop,
-            matrixStack = context.pose(),
+            context = context,
             x = pX,
             y = pY + 36,
             width = HALF_OVERLAY_WIDTH - SCROLL_BAR_WIDTH,
@@ -322,7 +322,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         )
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = moveInfoBackground,
             x = pX + 3,
             y = pY + 109,
@@ -353,7 +353,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         }
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = movesPowerIconResource,
             x = (pX + 5) / SCALE,
             y = (pY + 120.5) / SCALE,
@@ -363,7 +363,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         )
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = movesAccuracyIconResource,
             x = (pX + 5) / SCALE,
             y = (pY + 130.5) / SCALE,
@@ -373,7 +373,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         )
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = movesEffectIconResource,
             x = (pX + 5) / SCALE,
             y = (pY + 140.5) / SCALE,
@@ -775,7 +775,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             // Scroll Track
             blitk(
                 texture = EntriesScrollingWidget.scrollbarTrack,
-                matrixStack = context.pose(),
+                context = context,
                 x = xLeft,
                 y = yStart,
                 width = SCROLL_BAR_WIDTH,
@@ -785,7 +785,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             // Scroll Slide
             blitk(
                 texture = EntriesScrollingWidget.scrollbarSlide,
-                matrixStack = context.pose(),
+                context = context,
                 x = xLeft,
                 y = yTop,
                 width = SCROLL_BAR_WIDTH,
@@ -807,7 +807,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
                 val barY = y + SCROLL_SLOT_SPACING
                 blitk(
-                    matrixStack = context.pose(),
+                    context = context,
                     texture = moveSlot,
                     x = x,
                     y = barY,
@@ -819,7 +819,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
                 val isSlotHovered = hovered && (mouseX <= x + MOVE_SLOT_WIDTH)
                 if (isSlotHovered || isSlotSelected) {
                     blitk(
-                        matrixStack = context.pose(),
+                        context = context,
                         texture = moveSlotSelected,
                         x = x,
                         y = barY,
@@ -867,7 +867,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
                     val tmY = (barY + 2.5)
 
                     blitk(
-                        matrixStack = context.pose(),
+                        context = context,
                         texture = if (entry.tmUnlocked) tmSprite else tmSpriteUndiscovered,
                         x = tmX / SCALE,
                         y = tmY / SCALE,
@@ -936,7 +936,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             // Scroll Track
             blitk(
                 texture = InfoTextScrollWidget.scrollbarTrack,
-                matrixStack = context.pose(),
+                context = context,
                 x = xLeft + 0.5,
                 y = yStart,
                 width = DESCRIPTION_SCROLLBAR_WIDTH / 2,
@@ -946,7 +946,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             // Scroll Slide
             blitk(
                 texture = InfoTextScrollWidget.scrollbarSlide,
-                matrixStack = context.pose(),
+                context = context,
                 x = xLeft,
                 y = yTop,
                 width = DESCRIPTION_SCROLLBAR_WIDTH,

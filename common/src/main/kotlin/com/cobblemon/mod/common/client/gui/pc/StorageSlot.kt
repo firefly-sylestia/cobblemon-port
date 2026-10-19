@@ -109,7 +109,7 @@ open class StorageSlot(
 
             if (pokemon.gender != Gender.GENDERLESS) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = if (pokemon.gender == Gender.MALE) genderIconMale else genderIconFemale,
                     x = (posX + 21) / PCGUI.SCALE,
                     y = (posY + 1) / PCGUI.SCALE,
@@ -141,7 +141,7 @@ open class StorageSlot(
         if (pokemon.tetheringId != null && !isSlotSelected) {
             if (isStationary()) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     x = posX,
                     y = posY,
                     width = SIZE,
@@ -153,7 +153,7 @@ open class StorageSlot(
             val opacity = if (config is PasturePCGUIConfiguration && config.pasturedPokemon.get().none { it.pokemonId == pokemon.uuid }) 0.5F else 1F
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 x = (posX + 7.5) / PCGUI.SCALE,
                 y = (posY + 7.5) / PCGUI.SCALE,
                 width = 20,
@@ -175,7 +175,7 @@ open class StorageSlot(
                 && config.pasturedPokemon.get().count { it.playerId == Minecraft.getInstance().player!!.uuid } < config.permissions.maxPokemon
             ) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     x = posX,
                     y = posY,
                     width = SIZE,
@@ -184,7 +184,7 @@ open class StorageSlot(
                 )
 
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     x = (posX + 7.5) / PCGUI.SCALE,
                     y = (posY + 7.5) / PCGUI.SCALE,
                     width = 20,
@@ -196,7 +196,7 @@ open class StorageSlot(
 
             // Arrow pointer
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = selectPointerResource,
                 x = (posX + 10) / PCGUI.SCALE,
                 y = ((posY - 3) / PCGUI.SCALE) - parent.pcGui.selectPointerOffsetY,

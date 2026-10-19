@@ -80,7 +80,7 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<
 
     override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = searchBar,
             x = left - 4,
             y = y - 19,
@@ -126,7 +126,7 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<
 
             val matrices = context.pose()
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = if (disabled) MoveSlotButton.moveDisabledResource else MoveSlotWidget.moveResource,
                 x = startPosX,
                 y = startPosY,
@@ -140,7 +140,7 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<
             )
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = MoveSlotWidget.moveOverlayResource,
                 x = startPosX,
                 y = startPosY,
@@ -149,7 +149,7 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<
             )
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = MoveSlotWidget.moveOverlayBarResource,
                 x = startPosX + 60,
                 y = startPosY + 13,
@@ -159,7 +159,7 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<
 
             if (highlighted || (!disabled && isHovered)) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = MoveSlotWidget.moveSelectedOverlayResource,
                     x = startPosX - 1,
                     y = startPosY - 1,

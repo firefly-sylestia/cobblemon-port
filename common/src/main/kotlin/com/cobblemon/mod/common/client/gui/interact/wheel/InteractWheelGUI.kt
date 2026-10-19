@@ -116,7 +116,7 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
     override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val (x, y) = getBasePosition()
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = backgroundResource,
             x = x,
             y = y,

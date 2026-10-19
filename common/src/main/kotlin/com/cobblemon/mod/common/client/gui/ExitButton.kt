@@ -30,7 +30,7 @@ class ExitButton(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = buttonResource,
             x = x,
             y = y,
@@ -41,7 +41,7 @@ class ExitButton(
         )
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = iconResource,
             x = (x + 7) / SCALE,
             y = (y + 4) / SCALE,

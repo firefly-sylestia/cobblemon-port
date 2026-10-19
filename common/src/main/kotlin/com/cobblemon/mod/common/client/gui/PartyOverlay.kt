@@ -167,7 +167,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 val y = startY + indexOffsetY + portraitFrameOffsetY
 
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = portraitBackground,
                     x = panelX + portraitFrameOffsetX + selectedOffsetX,
                     y = y,
@@ -220,7 +220,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
             else partySlotCollapsed
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = slotTexture,
                 x = panelX,
                 y = indexY,
@@ -258,7 +258,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
 
                 if (displayLevelScroll) {
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = levelScroll,
                         x = (panelX + selectedOffsetX + portraitFrameOffsetX + 2),
                         y = (indexY + portraitFrameOffsetY + 2 + levelScrollPositionOffset),
@@ -272,7 +272,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 val stateIcon = pokemon.state.getIcon(pokemon)
                 if (stateIcon != null) {
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = stateIcon,
                         x = (panelX + selectedOffsetX + 8) / SCALE,
                         y = (indexY + portraitFrameOffsetY + 1) / SCALE,
@@ -320,7 +320,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
 
                 if (pokemon.gender != Gender.GENDERLESS) {
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = if (pokemon.gender == Gender.MALE) genderIconMale else genderIconFemale,
                         x = (panelX + selectedOffsetX + 40) / SCALE,
                         y = (indexY + 25)  / SCALE,
@@ -338,7 +338,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 val (red, green) = getDepletableRedGreen(hpRatio)
 
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = CobblemonResources.WHITE,
                     x = panelX + selectedOffsetX + 46,
                     y = indexY + (barHeightMax - hpBarHeight) + 5,
@@ -397,7 +397,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 val expBarHeight = expRatio * barHeightMax
 
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = CobblemonResources.WHITE,
                     x = panelX + selectedOffsetX + 49,
                     y = indexY + (barHeightMax - expBarHeight) + 5,
@@ -494,7 +494,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
 
                 if (evoPopupTransparency > 0) {
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = newEvoPopup,
                         x = (panelX + selectedOffsetX + (if (expTextTransparency > 0 && movePopupTransparency > 0) 78F else 56.5F)) / SCALE,
                         y = (indexY + 4 + evoPopupYOffset) / SCALE,
@@ -506,7 +506,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 }
                 if (movePopupTransparency > 0) {
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = newMovesPopup,
                         x = (panelX + selectedOffsetX + 56.5F) / SCALE,
                         y = (indexY + (if (expTextTransparency > 0) 4 else 17) + movePopupYOffset) / SCALE,
@@ -520,7 +520,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 val ballIcon = pokemon.caughtBall.name.toAssetPath("textures/gui/ball/", ".png")
                 val ballHeight = 22
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = ballIcon,
                     x = (panelX + selectedOffsetX + 43.5) / SCALE,
                     y = (indexY + 22) / SCALE,
@@ -535,7 +535,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 if (!pokemon.isFainted() && status != null) {
                     val statusName = status.showdownName
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = cobblemonResource("textures/gui/party/status_$statusName.png"),
                         x = panelX + selectedOffsetX + 51,
                         y = indexY + 8,

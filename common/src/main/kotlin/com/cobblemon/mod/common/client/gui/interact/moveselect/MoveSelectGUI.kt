@@ -104,7 +104,7 @@ class MoveSelectGUI(
         val y = (height - HEIGHT) / 2
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = baseBackgroundResource,
             x = x,
             y = y,

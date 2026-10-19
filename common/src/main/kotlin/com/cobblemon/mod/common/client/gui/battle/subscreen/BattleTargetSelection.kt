@@ -160,7 +160,7 @@ class BattleTargetSelection(
 
             // Render Base tile texture
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = if (selectable) targetTileTexture else targetTileTextureDisabled,
                 x = x,
                 y = y,
@@ -180,7 +180,7 @@ class BattleTargetSelection(
                     ArrowDirection.DOWN -> Pair(arrowPosition.first, arrowPosition.second + offset)
                 }
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = arrowTexture,
                     x = pos.first * 2,
                     y = pos.second * 2,
@@ -212,7 +212,7 @@ class BattleTargetSelection(
                 val stage = floor((passedSeconds / BattleOverlay.ROLE_CYCLE_SECONDS % 1) * 5)
                 if (!isCurrentPokemon || stage != 4.0) {
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = battleRoleUpper,
                         x = x + 6,
                         y = y + 1,
@@ -278,7 +278,7 @@ class BattleTargetSelection(
 
                 // Lower Battle Role
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = battleRoleLower,
                     x = x + 4,
                     y = y + 29,
@@ -327,7 +327,7 @@ class BattleTargetSelection(
 
         // Draw Background
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = underlayTexture,
             x = x,
             y = y,

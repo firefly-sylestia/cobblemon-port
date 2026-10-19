@@ -59,7 +59,7 @@ class WallpapersScrollingWidget(
 
     override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = backgroundResource,
             x = x,
             y = y - 1,
@@ -118,7 +118,7 @@ class WallpapersScrollingWidget(
             val matrices = guiGraphics.pose()
             val resource = if (Screen.hasShiftDown() && altWallpaper !== null) altWallpaper else wallpaper
             blitk(
-                matrixStack = matrices,
+                context = guiGraphics,
                 texture = resource,
                 x = left + 1,
                 y = top + SLOT_PADDING + 1,
@@ -127,7 +127,7 @@ class WallpapersScrollingWidget(
             )
 
             blitk(
-                matrixStack = matrices,
+                context = guiGraphics,
                 texture = if (isNew) previewOverlayNewResource else previewOverlayResource,
                 x = left,
                 y = top + SLOT_PADDING,

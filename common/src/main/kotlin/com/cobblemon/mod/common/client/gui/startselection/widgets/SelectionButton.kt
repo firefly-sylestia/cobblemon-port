@@ -43,7 +43,7 @@ class SelectionButton(
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = buttonResource,
             x = x,
             y = y,

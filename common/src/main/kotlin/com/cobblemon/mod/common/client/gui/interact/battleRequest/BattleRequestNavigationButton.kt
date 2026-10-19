@@ -43,7 +43,7 @@ class BattleRequestNavigationButton(
         }
         val hovered = (isHovered(pMouseX.toDouble(), pMouseY.toDouble()))
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             x = x / SCALE,
             y = (y + (clickHeight - HEIGHT) / 4) / SCALE,
             texture = if (forward) forwardIcon else backwardIcon,

@@ -27,7 +27,7 @@ class MarkIcon(
 
     fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = mark.texture,
             x = x.toFloat() / SCALE,
             y = y.toFloat() / SCALE,

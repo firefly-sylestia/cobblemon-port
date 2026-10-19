@@ -129,7 +129,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
 
         // Rendering UI Background
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = background,
             x = (width - backgroundWidth) / 2, y = (height - backgroundHeight) / 2,
             width = backgroundWidth, height = backgroundHeight
@@ -153,7 +153,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
             }
         }
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = select,
             x = getWidthForPos(currentSelectionPos.first) + 2.55, y = getHeightFor(currentSelectionPos.second) + 2.45,
             width = 59, height = 34.5,

@@ -222,7 +222,7 @@ class StorageWidget(
         // Party  Label
         if (pcGui.configuration.showParty) {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = partyPanelResource,
                 x = x + 182,
                 y = y - 19,
@@ -264,7 +264,7 @@ class StorageWidget(
             ?: Triple(PCBoxWallpaperRepository.defaultWallpaper, null, null)
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = if (wallpaperData != null) boxWallpaper else screenResource.first,
             x = x,
             y = y,
@@ -275,7 +275,7 @@ class StorageWidget(
 
         if (screenResource.third !== null) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = screenResource.third,
                 x = x - 17,
                 y = y - 17,
@@ -286,7 +286,7 @@ class StorageWidget(
         }
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = screenGridResource,
             x = x + 7,
             y = y + if (pcGui.displayOptions) 16 else 11,
@@ -295,7 +295,7 @@ class StorageWidget(
         )
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = screenOverlayResource,
             x = x,
             y = y,

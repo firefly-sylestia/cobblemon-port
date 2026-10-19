@@ -44,7 +44,7 @@ class ReorderMoveButton(
         val offsetY = if (isUp) OFFSET_Y_UP else OFFSET_Y_DOWN
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             x = (pX - OFFSET_X) / SCALE,
             y = (pY + offsetY) / SCALE,
             texture = if (isUp) moveReorderUpResource else moveReorderDownResource,

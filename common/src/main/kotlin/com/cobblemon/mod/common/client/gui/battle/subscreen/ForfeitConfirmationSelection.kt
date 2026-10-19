@@ -81,7 +81,7 @@ class ForfeitConfirmationSelection(
         val yPos = (Minecraft.getInstance().window.guiScaledHeight / 2) - (HEIGHT / 2)
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = backgroundResource,
             x = xPos,
             y = yPos,

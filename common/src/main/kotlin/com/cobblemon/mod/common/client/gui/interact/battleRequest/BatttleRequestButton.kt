@@ -37,7 +37,7 @@ class BattleRequestButton(
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val hovered = (isHovered(pMouseX.toDouble(), pMouseY.toDouble()))
         blitk(
-                matrixStack = context.pose(),
+                context = context,
                 x = x / SCALE,
                 y = y / SCALE,
                 texture = buttonResource,

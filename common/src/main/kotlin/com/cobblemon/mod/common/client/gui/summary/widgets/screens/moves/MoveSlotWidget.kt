@@ -79,7 +79,7 @@ class MoveSlotWidget(
 
             if (movesWidget.selectedMove == move) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = moveSelectedOverlayResource,
                     x = x - 1,
                     y = y - 1,
@@ -89,7 +89,7 @@ class MoveSlotWidget(
             }
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = moveResource,
                 x = x,
                 y = y,
@@ -103,7 +103,7 @@ class MoveSlotWidget(
             )
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = moveOverlayResource,
                 x = x,
                 y = y,
@@ -112,7 +112,7 @@ class MoveSlotWidget(
             )
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = moveOverlayBarResource,
                 x = x + 60,
                 y = y + 13,

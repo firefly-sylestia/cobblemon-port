@@ -26,7 +26,7 @@ class DescriptionWidget(descX: Int, descY: Int): InfoTextScrollWidget(pX = descX
     override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if (showPlaceholder) {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = unknownIcon,
                 x = pX + 65.5,
                 y = pY + 16,

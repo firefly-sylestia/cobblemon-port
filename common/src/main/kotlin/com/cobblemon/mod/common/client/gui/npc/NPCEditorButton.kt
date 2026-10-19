@@ -49,7 +49,7 @@ class NPCEditorButton(
 
         // Left border
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = buttonBorderResource,
             x = x,
             y = y,
@@ -61,7 +61,7 @@ class NPCEditorButton(
         )
         // Base
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = buttonResource,
             x = x + BORDER_WIDTH,
             y = y,
@@ -72,7 +72,7 @@ class NPCEditorButton(
         )
         // Right border
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = buttonBorderResource,
             x = x + (buttonWidth - BORDER_WIDTH),
             y = y,

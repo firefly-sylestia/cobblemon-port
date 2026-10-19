@@ -33,7 +33,7 @@ class ExitButton(
         isHovered = pMouseX >= x && pMouseY >= y && pMouseX < x + width && pMouseY < y + height
         if (isHovered) {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 x = x + 0.075f, y = y + 1.05f,
                 texture = exitButtonResource,
                 width = EXIT_BUTTON_WIDTH, height = EXIT_BUTTON_HEIGHT

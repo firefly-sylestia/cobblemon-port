@@ -39,7 +39,7 @@ class PastureSlotIconConflictButton(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             x = xPos,
             y = yPos,
             width = WIDTH,
@@ -50,7 +50,7 @@ class PastureSlotIconConflictButton(
         )
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             x = (xPos + 5) / SCALE,
             y = (yPos + 3) / SCALE,
             width = ICON_SIZE,

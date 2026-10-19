@@ -71,7 +71,7 @@ class PartySlotButton(
         val status = pokemon.status
         if (hpRatio > 0F && status != null) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = cobblemonResource("textures/gui/interact/party_select_status_$status.png"),
                 x = x + 27,
                 y = y + 22,
@@ -90,7 +90,7 @@ class PartySlotButton(
         }
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = if (currentHealth <= 0F) slotFaintedResource else slotResource,
             x = x,
             y = y,
@@ -116,7 +116,7 @@ class PartySlotButton(
         val ballIcon = pokemon.pokeball!!.asIdentifierDefaultingNamespace().toAssetPath("textures/gui/ball/", ".png")
         val ballHeight = 22
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = ballIcon,
             x = (x - 2) / SCALE,
             y = (y - 3) / SCALE,
@@ -153,7 +153,7 @@ class PartySlotButton(
 
         if ("male" in pokemon.aspects || "female" in pokemon.aspects) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = if ("male" in pokemon.aspects) PartySlotWidget.genderIconMale else PartySlotWidget.genderIconFemale,
                 x = (x + 60.5) / SCALE,
                 y = (y + 12.5) / SCALE,
@@ -170,7 +170,7 @@ class PartySlotButton(
         val (red, green) = getDepletableRedGreen(hpRatio)
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = CobblemonResources.WHITE,
             x = x + 1,
             y = y + 20,

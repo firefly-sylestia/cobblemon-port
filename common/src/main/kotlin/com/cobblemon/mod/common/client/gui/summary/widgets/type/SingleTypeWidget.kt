@@ -24,7 +24,7 @@ class SingleTypeWidget(
         val matrices = context.pose()
         matrices.pushPose()
         matrices.translate(0.35, 0.0, 0.0)
-        renderType(type, matrices)
+        renderType(type, context)
         matrices.popPose()
         // Render Type Name
         if (this.renderText) {

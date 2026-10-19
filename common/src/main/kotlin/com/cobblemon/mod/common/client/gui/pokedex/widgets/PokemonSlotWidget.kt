@@ -50,7 +50,7 @@ abstract class PokemonSlotWidget {
             val matrices = context.pose()
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = slotResource,
                 x = x,
                 y = y,
@@ -60,7 +60,7 @@ abstract class PokemonSlotWidget {
 
             if (isHovered) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = slotHighlight,
                     x = x,
                     y = y,
@@ -99,7 +99,7 @@ abstract class PokemonSlotWidget {
                 context.disableScissor()
             } else {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = unknownIcon,
                     x = x + 8.5,
                     y = y + 9,
@@ -109,7 +109,7 @@ abstract class PokemonSlotWidget {
 
                 if (!species.implemented) {
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = unimplementedIcon,
                         x = (x + 14) / SCALE,
                         y = (y + 15.5) / SCALE,
@@ -135,7 +135,7 @@ abstract class PokemonSlotWidget {
 
             if (discoveryLevel == PokedexEntryProgress.OWNED) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = caughtIcon,
                     x = (x + 18) / SCALE,
                     y = (y + 1.5) / SCALE,

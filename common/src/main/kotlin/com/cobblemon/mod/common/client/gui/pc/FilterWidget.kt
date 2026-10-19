@@ -39,7 +39,7 @@ class FilterWidget(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             x = (x - 9) / SCALE,
             y = (y + 3) / SCALE,
             texture = iconFilterResource,

@@ -103,7 +103,7 @@ class PartyWidget(
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = backgroundResource,
             x = x,
             y = y,
@@ -125,7 +125,7 @@ class PartyWidget(
         swapButton.render(context, pMouseX, pMouseY, pPartialTicks)
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = swapButtonIconResource,
             x = (x + 90) / SCALE,
             y = (y - 6) / SCALE,

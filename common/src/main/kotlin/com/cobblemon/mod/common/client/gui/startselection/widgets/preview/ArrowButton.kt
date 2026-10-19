@@ -41,7 +41,7 @@ class ArrowButton(
         isHovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height
         if (isHovered) {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 x = x + 2.4F, y = y - 0.0F,
                 texture = texture,
                 width = ARROW_BUTTON_WIDTH, height = ARROW_BUTTON_HEIGHT,
@@ -49,7 +49,7 @@ class ArrowButton(
             )
         } else {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 x = x + 2.4F, y = y - 0.0F,
                 texture = texture,
                 width = ARROW_BUTTON_WIDTH, height = ARROW_BUTTON_HEIGHT

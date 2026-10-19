@@ -38,7 +38,7 @@ class TypeIcon(
 
         if (secondaryType != null) {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = if (small) smallTypesResource else typesResource,
                 x = (x.toFloat() + secondaryOffset - offsetX) / SCALE,
                 y = y.toFloat() / SCALE,
@@ -52,7 +52,7 @@ class TypeIcon(
         }
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = if (small) smallTypesResource else typesResource,
             x = (x.toFloat() - offsetX) / SCALE,
             y = y.toFloat() / SCALE,

@@ -111,7 +111,7 @@ class TypesScrollingWidget(val pX: Int, val pY: Int, val setType: (ElementalType
 
                 val slotHovered = getHoveredSlotIndex(mouseX, mouseY) == index
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = if (disabled && !disabledExclusions.contains(type)) slotDisabledResource else slotResource,
                     x = startPosX,
                     y = startPosY,
@@ -125,7 +125,7 @@ class TypesScrollingWidget(val pX: Int, val pY: Int, val setType: (ElementalType
                     TypeIcon(startPosX + 3, startPosY + 3, type).render(context)
                 } else {
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = allIconResource,
                         x = startPosX + 7,
                         y = startPosY + 7,

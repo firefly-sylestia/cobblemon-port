@@ -127,7 +127,7 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
                 }
 
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = slotResource,
                     x = startPosX,
                     y = startPosY,

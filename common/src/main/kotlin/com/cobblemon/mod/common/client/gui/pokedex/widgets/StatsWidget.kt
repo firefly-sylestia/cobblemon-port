@@ -167,7 +167,7 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         val matrices = context.pose()
 
-        blitk(matrixStack = matrices, texture = divider, x = pX + 51, y = pY + 4, height = 33.5, width = 1)
+        blitk(context = context, texture = divider, x = pX + 51, y = pY + 4, height = 33.5, width = 1)
 
         for (i in statLabels.indices) {
             drawScaledText(
@@ -193,7 +193,7 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
                 val (red, green, blue) = getStatValueRGB(statValue)
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = CobblemonResources.WHITE,
                     x = pX + 55,
                     y = pY + 4 + (6 * i),
@@ -234,8 +234,8 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
                 )
             }
 
-            blitk(matrixStack = matrices, texture = divider, x = pX + 51, y = pY + 10, height = 27.5, width = 1)
-            blitk(matrixStack = matrices, texture = divider, x = pX + 9, y = pY + 2, height = 6, width = 121)
+            blitk(context = context, texture = divider, x = pX + 51, y = pY + 10, height = 27.5, width = 1)
+            blitk(context = context, texture = divider, x = pX + 9, y = pY + 2, height = 6, width = 121)
 
             val rideStyle = selectedBehaviour.value.key.path.toString().split("/").last().lowercase()
             drawScaledText(
@@ -270,7 +270,7 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
                     val baseStatWidth = (range.start / 100F) * MAX_BAR_WIDTH
                     val boostedStatWidth = ((range.endInclusive / 100F) * MAX_BAR_WIDTH) - baseStatWidth
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = CobblemonResources.WHITE,
                         x = barStart,
                         y = startPosY,
@@ -294,7 +294,7 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
                     // Boostable range
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = CobblemonResources.WHITE,
                         x = barStart + baseStatWidth,
                         y = startPosY,

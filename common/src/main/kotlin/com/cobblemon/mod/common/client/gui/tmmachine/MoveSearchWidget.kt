@@ -39,7 +39,7 @@ class MoveSearchWidget(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             x = (x - 10.5) / SCALE,
             y = (y + 2.5) / SCALE,
             texture = iconFilterResource,

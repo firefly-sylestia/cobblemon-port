@@ -53,7 +53,7 @@ class ScaledButton(
         val matrices = context.pose()
         if (isVisible && resource != null) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = resource,
                 x = buttonX / scale,
                 y = buttonY / scale,

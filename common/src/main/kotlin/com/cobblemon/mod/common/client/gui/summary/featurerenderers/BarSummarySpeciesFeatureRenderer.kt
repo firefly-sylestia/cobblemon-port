@@ -48,7 +48,7 @@ open class BarSummarySpeciesFeatureRenderer(
         val barWidth = Mth.ceil(barRatio * 110)
 
         blitk(
-            matrixStack = guiGraphics.pose(),
+            context = guiGraphics,
             texture = underlay,
             x = x,
             y = y,
@@ -59,7 +59,7 @@ open class BarSummarySpeciesFeatureRenderer(
         renderBar(guiGraphics, x, y, barValue, barRatio, barWidth)
 
         blitk(
-            matrixStack = guiGraphics.pose(),
+            context = guiGraphics,
             texture = overlay,
             x = (x + 3) / StatWidget.SCALE,
             y = (y + 13) / StatWidget.SCALE,
@@ -104,7 +104,7 @@ open class BarSummarySpeciesFeatureRenderer(
         val blue = (colour?.z ?: 255.0) / 255.0
 
         blitk(
-            matrixStack = guiGraphics.pose(),
+            context = guiGraphics,
             texture = CobblemonResources.WHITE,
             x = x + 3,
             y = y + 13,

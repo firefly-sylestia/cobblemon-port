@@ -130,7 +130,7 @@ class BehaviourOptionsList(
             applyButton.render(guiGraphics, mouseX, mouseY, partialTick)
 
             blitk(
-                matrixStack = guiGraphics.pose(),
+                context = guiGraphics,
                 texture = cobblemonResource("textures/gui/npc/icon_move.png"),
                 x = (applyButton.x + 4.5) / 0.5,
                 y = (applyButton.y + 4.5) / 0.5,

@@ -82,7 +82,7 @@ class PokedexScannerRenderer {
         fun infoFrameResource(isLeft: Boolean, tier: Int): Identifier = cobblemonResource("textures/gui/pokedex/scan/scan_info_frame_${if (isLeft) "left" else "right"}_$tier.png")
     }
 
-    fun renderInfoFrames(graphics: GuiGraphicsExtractor, poseStack: PoseStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
+    fun renderInfoFrames(graphics: GuiGraphicsExtractor, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
         if (usageContext.focusIntervals > 0) {
             var infoDisplayedCounter = 0
             usageContext.availableInfoFrames.forEachIndexed {index, isLeftSide ->
@@ -95,7 +95,7 @@ class PokedexScannerRenderer {
                     val xOffset = (if (isInnerFrame) (-177) else (-120)) + (if (isLeftSide) 0 else (if (isInnerFrame) 234 else 148))
                     val yOffset = when(index) { 0 -> -80; 1 -> -26; 2 -> 6; 3 -> 25; else -> 0 }
                     blitk(
-                        matrixStack = poseStack,
+                        context = graphics,
                         texture = infoFrameResource(isLeftSide, index),
                         x = centerX + xOffset,
                         y = centerY + yOffset,
@@ -168,7 +168,7 @@ class PokedexScannerRenderer {
 
                             if (usageContext.isPokemonInFocusOwned) {
                                 blitk(
-                                    matrixStack = poseStack,
+                                    context = graphics,
                                     texture = caughtIndicator,
                                     x = (centerX + xOffset + xOffsetText - 7 - (speciesNameWidth / 2)) / SCALE,
                                     y = (centerY + yOffset + yOffsetText + yOffsetName + 2) / SCALE,
@@ -245,7 +245,7 @@ class PokedexScannerRenderer {
         }
     }
 
-    fun renderScanRings(poseStack: PoseStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
+    fun renderScanRings(graphics: GuiGraphicsExtractor, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
         val rotation = usageContext.usageIntervals % 360
 
         poseStack.pushPose()
@@ -253,7 +253,7 @@ class PokedexScannerRenderer {
 
         poseStack.pushPose()
         poseStack.mulPose(Quaternionf().rotateZ(Math.toRadians((-rotation) * 0.5).toFloat()))
-        blitk(matrixStack = poseStack, texture = SCAN_RING_OUTER, x = -(SCAN_RING_OUTER_DIAMETER / 2), y = -(SCAN_RING_OUTER_DIAMETER / 2), width = SCAN_RING_OUTER_DIAMETER, height = SCAN_RING_OUTER_DIAMETER, alpha = opacity)
+        blitk(context = graphics, texture = SCAN_RING_OUTER, x = -(SCAN_RING_OUTER_DIAMETER / 2), y = -(SCAN_RING_OUTER_DIAMETER / 2), width = SCAN_RING_OUTER_DIAMETER, height = SCAN_RING_OUTER_DIAMETER, alpha = opacity)
         poseStack.popPose()
 
         var progressOpacity = opacity
@@ -271,13 +271,13 @@ class PokedexScannerRenderer {
             val rotationQuaternion = Quaternionf().rotateZ(Math.toRadians((i * 4.5) + (rotation * 0.5)).toFloat())
             poseStack.pushPose()
             poseStack.mulPose(rotationQuaternion)
-            blitk(matrixStack = poseStack, texture = SCAN_RING_MIDDLE, x = -(SCAN_RING_MIDDLE_WIDTH / 2), y = -(SCAN_RING_MIDDLE_HEIGHT.toFloat() / 2F), width = SCAN_RING_MIDDLE_WIDTH, height = SCAN_RING_MIDDLE_HEIGHT, alpha = progressOpacity)
+            blitk(context = graphics, texture = SCAN_RING_MIDDLE, x = -(SCAN_RING_MIDDLE_WIDTH / 2), y = -(SCAN_RING_MIDDLE_HEIGHT.toFloat() / 2F), width = SCAN_RING_MIDDLE_WIDTH, height = SCAN_RING_MIDDLE_HEIGHT, alpha = progressOpacity)
             poseStack.popPose()
         }
 
         poseStack.pushPose()
         poseStack.mulPose(Quaternionf().rotateZ(Math.toRadians(-usageContext.innerRingRotation.toDouble()).toFloat()))
-        blitk(matrixStack = poseStack, texture = SCAN_RING_INNER, x = -(SCAN_RING_INNER_DIAMETER / 2), y = -(SCAN_RING_INNER_DIAMETER / 2), width = SCAN_RING_INNER_DIAMETER, height = SCAN_RING_INNER_DIAMETER, alpha = opacity)
+        blitk(context = graphics, texture = SCAN_RING_INNER, x = -(SCAN_RING_INNER_DIAMETER / 2), y = -(SCAN_RING_INNER_DIAMETER / 2), width = SCAN_RING_INNER_DIAMETER, height = SCAN_RING_INNER_DIAMETER, alpha = opacity)
         poseStack.popPose()
 
         poseStack.popPose()
@@ -312,8 +312,8 @@ class PokedexScannerRenderer {
             val centerY = (screenHeight - (BASE_HEIGHT * scale)) / 2
 
             val opacity = if (effectiveIntervals > 11) 0F else effectiveIntervals / PokedexUsageContext.TRANSITION_INTERVALS
-            blitk(matrixStack = matrices, texture = CobblemonClient.pokedexUsageContext.type.getTexturePath(), x = centerX / scale, y = centerY / scale, width = BASE_WIDTH, height = BASE_HEIGHT, scale = scale, alpha = opacity)
-            blitk(matrixStack = matrices, texture = SCAN_SCREEN, x = centerX / scale, y = centerY / scale, width = BASE_WIDTH, height = BASE_HEIGHT, scale = scale, alpha = opacity)
+            blitk(context = graphics, texture = CobblemonClient.pokedexUsageContext.type.getTexturePath(), x = centerX / scale, y = centerY / scale, width = BASE_WIDTH, height = BASE_HEIGHT, scale = scale, alpha = opacity)
+            blitk(context = graphics, texture = SCAN_SCREEN, x = centerX / scale, y = centerY / scale, width = BASE_WIDTH, height = BASE_HEIGHT, scale = scale, alpha = opacity)
         }
 
         // Scanning overlay
@@ -321,40 +321,40 @@ class PokedexScannerRenderer {
         // Draw scan lines
         val interlacePos = ceil((usageContext.usageIntervals % 14) * 0.5) * 0.5
         for (i in 0 until screenHeight) {
-            if (i % 4 == 0) blitk(matrixStack = matrices, texture = SCAN_OVERLAY_LINES, x = 0, y = i - interlacePos, width = screenWidth, height = 4, alpha = opacity)
+            if (i % 4 == 0) blitk(context = graphics, texture = SCAN_OVERLAY_LINES, x = 0, y = i - interlacePos, width = screenWidth, height = 4, alpha = opacity)
         }
 
         // Draw borders
         // Top left corner
-        blitk(matrixStack = matrices, texture = SCAN_OVERLAY_CORNERS, x = 0, y = 0, width = 4, height = 4, textureWidth = 8, textureHeight = 8, alpha = opacity)
+        blitk(context = graphics, texture = SCAN_OVERLAY_CORNERS, x = 0, y = 0, width = 4, height = 4, textureWidth = 8, textureHeight = 8, alpha = opacity)
         // Top right corner
-        blitk(matrixStack = matrices, texture = SCAN_OVERLAY_CORNERS, x = (screenWidth - 4), y = 0, width = 4, height = 4, textureWidth = 8, textureHeight = 8, uOffset = 4, alpha = opacity)
+        blitk(context = graphics, texture = SCAN_OVERLAY_CORNERS, x = (screenWidth - 4), y = 0, width = 4, height = 4, textureWidth = 8, textureHeight = 8, uOffset = 4, alpha = opacity)
         // Bottom left corner
-        blitk(matrixStack = matrices, texture = SCAN_OVERLAY_CORNERS, x = 0, y = (screenHeight - 4), width = 4, height = 4, textureWidth = 8, textureHeight = 8, vOffset = 4, alpha = opacity)
+        blitk(context = graphics, texture = SCAN_OVERLAY_CORNERS, x = 0, y = (screenHeight - 4), width = 4, height = 4, textureWidth = 8, textureHeight = 8, vOffset = 4, alpha = opacity)
         // Bottom right corner
-        blitk(matrixStack = matrices, texture = SCAN_OVERLAY_CORNERS, x = (screenWidth - 4), y = (screenHeight - 4), width = 4, height = 4, textureWidth = 8, textureHeight = 8, vOffset = 4, uOffset = 4, alpha = opacity)
+        blitk(context = graphics, texture = SCAN_OVERLAY_CORNERS, x = (screenWidth - 4), y = (screenHeight - 4), width = 4, height = 4, textureWidth = 8, textureHeight = 8, vOffset = 4, uOffset = 4, alpha = opacity)
 
         // Border sides
         val notchStartX = (screenWidth - SCAN_OVERLAY_NOTCH_WIDTH) / 2
-        blitk(matrixStack = matrices, texture = SCAN_OVERLAY_TOP, x = 4, y = 0, width = notchStartX - 4, height = 3, alpha = opacity)
-        blitk(matrixStack = matrices, texture = SCAN_OVERLAY_TOP, x = notchStartX + SCAN_OVERLAY_NOTCH_WIDTH, y = 0, width = (screenWidth - (notchStartX + SCAN_OVERLAY_NOTCH_WIDTH + 4)), height = 3, alpha = opacity)
-        blitk(matrixStack = matrices, texture = SCAN_OVERLAY_BOTTOM, x = 4, y = (screenHeight - 3), width = (screenWidth - 8), height = 3, alpha = opacity)
-        blitk(matrixStack = matrices, texture = SCAN_OVERLAY_LEFT, x = 0, y = 4, width = 3, height = (screenHeight - 8), alpha = opacity)
-        blitk(matrixStack = matrices, texture = SCAN_OVERLAY_RIGHT, x = (screenWidth - 3), y = 4, width = 3, height = (screenHeight - 8), alpha = opacity)
-        blitk(matrixStack = matrices, texture = SCAN_OVERLAY_NOTCH, x = notchStartX, y = 0, width = SCAN_OVERLAY_NOTCH_WIDTH, height = 12, alpha = opacity)
+        blitk(context = graphics, texture = SCAN_OVERLAY_TOP, x = 4, y = 0, width = notchStartX - 4, height = 3, alpha = opacity)
+        blitk(context = graphics, texture = SCAN_OVERLAY_TOP, x = notchStartX + SCAN_OVERLAY_NOTCH_WIDTH, y = 0, width = (screenWidth - (notchStartX + SCAN_OVERLAY_NOTCH_WIDTH + 4)), height = 3, alpha = opacity)
+        blitk(context = graphics, texture = SCAN_OVERLAY_BOTTOM, x = 4, y = (screenHeight - 3), width = (screenWidth - 8), height = 3, alpha = opacity)
+        blitk(context = graphics, texture = SCAN_OVERLAY_LEFT, x = 0, y = 4, width = 3, height = (screenHeight - 8), alpha = opacity)
+        blitk(context = graphics, texture = SCAN_OVERLAY_RIGHT, x = (screenWidth - 3), y = 4, width = 3, height = (screenHeight - 8), alpha = opacity)
+        blitk(context = graphics, texture = SCAN_OVERLAY_NOTCH, x = notchStartX, y = 0, width = SCAN_OVERLAY_NOTCH_WIDTH, height = 12, alpha = opacity)
 
         val centerX = screenWidth / 2
         val centerY = screenHeight / 2
 
         // Scan info frame
-        renderInfoFrames(graphics, matrices, usageContext, centerX, centerY, opacity)
+        renderInfoFrames(graphics, usageContext, centerX, centerY, opacity)
 
         // Scan rings
-        renderScanRings(matrices, usageContext, centerX, centerY, opacity)
+        renderScanRings(graphics, usageContext, centerX, centerY, opacity)
 
         if (usageContext.displayRegisterInfoIntervals > 0) {
             blitk(
-                matrixStack = matrices,
+                context = graphics,
                 texture = CENTER_INFO_FRAME,
                 x = centerX - (CENTER_INFO_FRAME_WIDTH / 2),
                 y = centerY - (CENTER_INFO_FRAME_HEIGHT / 2),
@@ -387,7 +387,7 @@ class PokedexScannerRenderer {
                         ) * 0.1F
 
                 blitk(
-                    matrixStack = matrices,
+                    context = graphics,
                     texture = UNKNOWN_MARK,
                     x = centerX - (UNKNOWN_MARK_WIDTH / 2),
                     y = centerY - (UNKNOWN_MARK_HEIGHT / 2) + 2,
@@ -402,7 +402,7 @@ class PokedexScannerRenderer {
                 matrices.pushPose()
                 matrices.mulPose(Quaternionf().rotateZ(Math.toRadians(usageContext.innerRingRotation * 0.5).toFloat()))
                 blitk(
-                    matrixStack = matrices,
+                    context = graphics,
                     texture = POINTER,
                     x = -POINTER_WIDTH - POINTER_OFFSET,
                     y = -(POINTER_HEIGHT / 2),
@@ -413,7 +413,7 @@ class PokedexScannerRenderer {
                 )
 
                 blitk(
-                    matrixStack = matrices,
+                    context = graphics,
                     texture = POINTER,
                     x = POINTER_OFFSET,
                     y = -(POINTER_HEIGHT / 2),
@@ -429,7 +429,7 @@ class PokedexScannerRenderer {
                 val pointerOpacity = usageContext.viewInfoTicks * 0.1F
 
                 blitk(
-                    matrixStack = matrices,
+                    context = graphics,
                     texture = POINTER,
                     x = centerX - POINTER_WIDTH - POINTER_OFFSET + usageContext.viewInfoTicks,
                     y = centerY - (POINTER_HEIGHT / 2),
@@ -440,7 +440,7 @@ class PokedexScannerRenderer {
                 )
 
                 blitk(
-                    matrixStack = matrices,
+                    context = graphics,
                     texture = POINTER,
                     x = centerX + POINTER_OFFSET - usageContext.viewInfoTicks,
                     y = centerY - (POINTER_HEIGHT / 2),

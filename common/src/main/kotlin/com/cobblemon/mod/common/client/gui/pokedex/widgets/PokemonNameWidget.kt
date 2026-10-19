@@ -77,7 +77,7 @@ class PokemonNameWidget(
 
         if (isOwned) {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = caughtIcon,
                 x = (pX + 129) / SCALE,
                 y = (pY + 2) / SCALE,

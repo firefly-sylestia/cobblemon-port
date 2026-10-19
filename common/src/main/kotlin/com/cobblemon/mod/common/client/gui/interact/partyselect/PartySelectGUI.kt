@@ -125,7 +125,7 @@ class PartySelectGUI(
         val y = (height - HEIGHT) / 2
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = baseBackgroundResource,
             x = x,
             y = y,
@@ -144,7 +144,7 @@ class PartySelectGUI(
         )
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = spacerResource,
             x = (x + 86.5) / SCALE,
             y = (y + 111) / SCALE,

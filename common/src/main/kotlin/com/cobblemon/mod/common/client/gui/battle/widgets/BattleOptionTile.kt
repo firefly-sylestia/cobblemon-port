@@ -43,7 +43,7 @@ class BattleOptionTile(
             return
         }
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = resource,
             x = x,
             y = y,

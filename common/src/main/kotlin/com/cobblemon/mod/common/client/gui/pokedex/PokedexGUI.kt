@@ -313,7 +313,7 @@ class PokedexGUI private constructor(
 
         // Render Base Resource
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = type.getTexturePath(),
             x = x, y = y,
             width = BASE_WIDTH,
@@ -321,7 +321,7 @@ class PokedexGUI private constructor(
         )
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = screenBackground,
             x = x, y = y,
             width = BASE_WIDTH,
@@ -330,7 +330,7 @@ class PokedexGUI private constructor(
 
         // Region
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = globeIcon,
             x = (x + 26) / SCALE,
             y = (y + 15) / SCALE,
@@ -351,7 +351,7 @@ class PokedexGUI private constructor(
 
         // Seen icon
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = caughtSeenIcon,
             x = (x + 252) / SCALE,
             y = (y + 15) / SCALE,
@@ -364,7 +364,7 @@ class PokedexGUI private constructor(
 
         // Caught icon
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = caughtSeenIcon,
             x = (x + 290) / SCALE,
             y = (y + 15) / SCALE,
@@ -396,7 +396,7 @@ class PokedexGUI private constructor(
         )
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = if (evolutionTreeExpanded) expandedBackgroundOverlay else backgroundOverlay,
             x = pokemonInfoWidget.x, y = pokemonInfoWidget.y,
             width = HALF_OVERLAY_WIDTH,
@@ -405,7 +405,7 @@ class PokedexGUI private constructor(
 
         // Category filter
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = categoryBarOverlay,
             x = x + 26,
             y = y + 180,
@@ -414,7 +414,7 @@ class PokedexGUI private constructor(
         )
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = categoryFilterIcon,
             x = (x + 29) / SCALE,
             y = (y + 182) / SCALE,
@@ -436,7 +436,7 @@ class PokedexGUI private constructor(
         if (selectedEntry?.let { selectedForm in getSufficientlyKnownForms(it, tabInfoIndex) } == true) {
             // Tab arrow
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = tabSelectArrow,
                 x = (x + BASE_WIDTH / 2 + ICONS_ARROW_PADDING_AROUND + tabInfoIndex * ICONS_PADDING_BETWEEN) / SCALE,
                 y = (y + 177) / SCALE,

@@ -322,7 +322,7 @@ class BattleConfigureGUI(
         // Render background panel
         val (x, y) = getDimensions()
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = backgroundResource,
             x = x,
             y = y,
@@ -343,7 +343,7 @@ class BattleConfigureGUI(
 
         // Render battle type icon
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = battleTypeData.tileTexture,
             x = 2*(x + 113 / 2 - 190 / 4),
             y = 2*(y + 126 / 2 - 120 / 4 - 10),
@@ -354,7 +354,7 @@ class BattleConfigureGUI(
         // Render battle type overlay
         if(ticksPassed % blinkRate < blinkRate / 2) {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = battleTypeData.overlayTexture,
                 x = 2*(x + 113 / 2 - 190 / 4),
                 y = 2*(y + 126 / 2 - 120 / 4 - 10),
@@ -425,7 +425,7 @@ class BattleConfigureGUI(
 
         // Draw colored decor arrows
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = battleArrowsResource,
             x = x + 1,
             y = y + 106,

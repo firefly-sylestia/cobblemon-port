@@ -42,7 +42,7 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
         super.extractWidgetRenderState(context, mouseX, mouseY, delta)
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = scrollBorder,
             x = (pX + 1) / SCALE,
             y = (pY + 40) / SCALE,
@@ -86,7 +86,7 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
         // Scroll Track
         blitk(
             texture = scrollbarTrack,
-            matrixStack = context.pose(),
+            context = context,
             x = xLeft + 1,
             y = yStart,
             width = SCROLL_TRACK_WIDTH,
@@ -96,7 +96,7 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
         // Scroll Slide
         blitk(
             texture = scrollbarSlide,
-            matrixStack = context.pose(),
+            context = context,
             x = xLeft,
             y = yTop,
             width = SCROLL_SLIDE_WIDTH,

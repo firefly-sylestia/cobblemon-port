@@ -57,7 +57,7 @@ class MoveSlotButton(
             val matrices = context.pose()
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = if (enabled) moveResource else moveDisabledResource,
                 x = x,
                 y = y,
@@ -71,7 +71,7 @@ class MoveSlotButton(
             )
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = moveOverlayResource,
                 x = x,
                 y = y,
@@ -81,7 +81,7 @@ class MoveSlotButton(
 
             if (showOverlayBar) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = moveOverlayBarResource,
                     x = x + 60,
                     y = y + 13,

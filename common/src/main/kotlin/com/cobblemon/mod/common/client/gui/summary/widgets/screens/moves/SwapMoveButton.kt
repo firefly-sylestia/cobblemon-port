@@ -49,7 +49,7 @@ class SwapMoveButton(
         val swapScreen = movesWidget.summary.sideScreen
         val selected = if (swapScreen is MoveSwapScreen) swapScreen.replacedMove?.template == move else false
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = if (move == null) addMoveButtonResource else switchMoveButtonResource,
             x = (pX + OFFSET_X) / SCALE,
             y = (pY + OFFSET_Y) / SCALE,

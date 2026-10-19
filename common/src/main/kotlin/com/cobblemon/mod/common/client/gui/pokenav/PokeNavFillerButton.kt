@@ -22,13 +22,12 @@ class PokeNavFillerButton(
 ): PokeNavImageButton(posX, posY, pX, pY, pWidth, pHeight, pXTexStart, pYTexStart, pYDiffText, FILLER, pTextureWidth, pTextureHeight, {}, "".text()) {
 
     override fun renderWidget(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        this.applyBlitk(context.pose(), pMouseX, pMouseY, pPartialTicks)
-        context.pose().pushPose()
+        this.applyBlitk(context, pMouseX, pMouseY, pPartialTicks)
     }
 
-    override fun applyBlitk(matrices: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun applyBlitk(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = FILLER,
             x = x, y = y + 0.25,
             width = width, height = height,

@@ -519,7 +519,7 @@ class EvolutionTreeWidget(
             )
 
             blitk(
-                matrixStack = guiGraphics.pose(),
+                context = guiGraphics,
                 texture = slotResource,
                 x = iconX,
                 y = iconY,

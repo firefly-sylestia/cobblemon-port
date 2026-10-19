@@ -51,7 +51,7 @@ open class PartySlot(
         val matrices = context.pose()
         if (!isOpposing && isHovered(mouseX, mouseY)) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = hoverBackgroundResource,
                 x = x,
                 y = y,
@@ -93,7 +93,7 @@ open class PartySlot(
 
             if (pokemon.gender != Gender.GENDERLESS) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = if (pokemon.gender == Gender.MALE) genderIconMale else genderIconFemale,
                     x = (x + 21) / TradeGUI.SCALE,
                     y = (y + 1) / TradeGUI.SCALE,
@@ -106,7 +106,7 @@ open class PartySlot(
                 matrices.pushPose()
                 matrices.translate(0F, 0F, 10F)
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = untradeableResource,
                     x = (x + 8) / TradeGUI.SCALE,
                     y = (y + 8) / TradeGUI.SCALE,
@@ -120,7 +120,7 @@ open class PartySlot(
             matrices.popPose()
             if (hasSelected()) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = selectPointerResource,
                     x = (x + 10) / TradeGUI.SCALE,
                     y = ((y - 3) / TradeGUI.SCALE) - parent.selectPointerOffsetY,

@@ -82,7 +82,7 @@ class PartySlotWidget(
         state.currentAspects = slotPokemon?.aspects ?: emptySet()
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = getSlotTexture(slotPokemon),
             x = x,
             y = y,
@@ -98,7 +98,7 @@ class PartySlotWidget(
             val stateIcon = slotPokemon.state.getIcon(slotPokemon)
             if (stateIcon != null) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = stateIcon,
                     x = (x + 24.5) / halfScale,
                     y = (y + 3) / halfScale,
@@ -111,7 +111,7 @@ class PartySlotWidget(
             val ballIcon = slotPokemon.caughtBall.name.toAssetPath("textures/gui/ball/", ".png")
             val ballHeight = 22
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = ballIcon,
                 x = (x - 2) / halfScale,
                 y = (y - 3) / halfScale,
@@ -125,7 +125,7 @@ class PartySlotWidget(
             if (!slotPokemon.isFainted() && status != null) {
                 val statusName = status.showdownName
                     blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = cobblemonResource("textures/gui/party/status_$statusName.png"),
                     x = x + 42,
                     y = y + 5,
@@ -140,7 +140,7 @@ class PartySlotWidget(
             val (red, green) = getDepletableRedGreen(hpRatio)
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = CobblemonResources.WHITE,
                 x = x + 4,
                 y = y + 25,
@@ -184,7 +184,7 @@ class PartySlotWidget(
 
             if (slotPokemon.gender != Gender.GENDERLESS) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = if (slotPokemon.gender == Gender.MALE) genderIconMale else genderIconFemale,
                     x = (x + 40) / halfScale,
                     y = (y + 20) / halfScale,

@@ -128,7 +128,7 @@ private fun blitSlicedVertical(
 ) {
     val middleHeight = totalHeight - 2
 
-    blitk(matrixStack = poseStack, texture = texture, x = x, y = y, width = width, height = 1, vOffset = 0, textureHeight = TOOLTIP_SLICE_SIZE)
-    blitk(matrixStack = poseStack, texture = texture, x = x, y = y + 1, width = width, height = middleHeight, vOffset = middleHeight, textureHeight = TOOLTIP_SLICE_SIZE * middleHeight)
-    blitk(matrixStack = poseStack, texture = texture, x = x, y = y + 1 + middleHeight, width = width, height = 1, vOffset = TOOLTIP_SLICE_SIZE - 1, textureHeight = TOOLTIP_SLICE_SIZE)
+    blitk(context = context, texture = texture, x = x, y = y, width = width, height = 1, vOffset = 0, textureHeight = TOOLTIP_SLICE_SIZE)
+    blitk(context = context, texture = texture, x = x, y = y + 1, width = width, height = middleHeight, vOffset = middleHeight, textureHeight = TOOLTIP_SLICE_SIZE * middleHeight)
+    blitk(context = context, texture = texture, x = x, y = y + 1 + middleHeight, width = width, height = 1, vOffset = TOOLTIP_SLICE_SIZE - 1, textureHeight = TOOLTIP_SLICE_SIZE)
 }

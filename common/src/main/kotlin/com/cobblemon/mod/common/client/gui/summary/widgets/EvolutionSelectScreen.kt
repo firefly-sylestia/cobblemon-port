@@ -110,7 +110,7 @@ class EvolutionSelectScreen(
             state.currentAspects = evolution.aspects
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = slotResource,
                 x = x,
                 y = y,

@@ -324,7 +324,7 @@ class PCGUI(
 
         // Render Portrait Background
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = portraitBackgroundResource,
             x = x + 6,
             y = y + 27,
@@ -339,7 +339,7 @@ class PCGUI(
 
         // Render Base Resource
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = baseResource,
             x = x, y = y,
             width = BASE_WIDTH,
@@ -348,7 +348,7 @@ class PCGUI(
 
         // Render Info Box
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = if (currentStatIndex > 0) infoBoxStatResource else infoBoxResource,
             x = x + 9,
             y = y + 128,
@@ -417,7 +417,7 @@ class PCGUI(
             if (pokemon.isFainted() || status != null) {
                 val statusName = if (pokemon.isFainted()) "fnt" else status?.showdownName
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = cobblemonResource("textures/gui/battle/battle_status_$statusName.png"),
                     x = x + 34,
                     y = y + 1,
@@ -428,7 +428,7 @@ class PCGUI(
                 )
 
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = cobblemonResource("textures/gui/summary/status_trim.png"),
                     x = x + 34,
                     y = y + 2,
@@ -467,7 +467,7 @@ class PCGUI(
             // Poké Ball
             val ballResource = pokemon.caughtBall.name.toAssetPath("textures/item/poke_balls/", ".png")
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = ballResource,
                 x = (x + 3.5) / SCALE,
                 y = (y + 12) / SCALE,
@@ -519,7 +519,7 @@ class PCGUI(
             // Shiny Icon
             if (pokemon.shiny) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = Summary.iconShinyResource,
                     x = (x + 62.5) / SCALE,
                     y = (y + 28.5) / SCALE,
@@ -530,7 +530,7 @@ class PCGUI(
             }
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = if (pokemon.secondaryType != null) typeSpacerDoubleResource else typeSpacerSingleResource,
                 x = (x + 9) / SCALE,
                 y = (y + 118.5) / SCALE,
@@ -645,7 +645,7 @@ class PCGUI(
 
         } else {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = typeSpacerResource,
                 x = (x + 7) / SCALE,
                 y = (y + 118.5) / SCALE,
@@ -656,7 +656,7 @@ class PCGUI(
         }
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = topSpacerResource,
             x = (x + 86.5) / SCALE,
             y = (y + 13) / SCALE,
@@ -666,7 +666,7 @@ class PCGUI(
         )
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = bottomSpacerResource,
             x = (x + 86.5) / SCALE,
             y = (y + 189) / SCALE,
@@ -676,7 +676,7 @@ class PCGUI(
         )
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = rightSpacerResource,
             x = (x + 275.5) / SCALE,
             y = (y + 184) / SCALE,

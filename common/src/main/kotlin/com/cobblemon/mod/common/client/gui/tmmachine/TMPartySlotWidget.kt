@@ -80,7 +80,7 @@ class TMPartySlotWidget(
 
         if (pokemon != null) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = getResource(),
                 x = x,
                 y = y,
@@ -93,7 +93,7 @@ class TMPartySlotWidget(
             val ballIcon = cobblemonResource("textures/gui/ball/" + pokemon.caughtBall.name.path + ".png")
             val ballHeight = 22
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = ballIcon,
                 x = (x - 2) / HALF_SCALE,
                 y = (y - 3) / HALF_SCALE,
@@ -128,7 +128,7 @@ class TMPartySlotWidget(
 
             if (pokemon.gender != Gender.GENDERLESS) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = if (pokemon.gender == Gender.MALE) genderIconMale else genderIconFemale,
                     x = (x + 51) / HALF_SCALE,
                     y = (y + 19) / HALF_SCALE,
@@ -171,7 +171,7 @@ class TMPartySlotWidget(
             }
         } else {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = slotDisabledResource,
                 x = x + 55,
                 y = y,

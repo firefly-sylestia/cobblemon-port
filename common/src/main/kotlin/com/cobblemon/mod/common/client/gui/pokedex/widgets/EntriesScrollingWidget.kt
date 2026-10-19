@@ -82,7 +82,7 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
         // Scroll Track
         blitk(
             texture = scrollbarTrack,
-            matrixStack = context.pose(),
+            context = context,
             x = xLeft,
             y = yStart,
             width = SCROLL_BAR_WIDTH,
@@ -92,7 +92,7 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
         // Scroll Slide
         blitk(
             texture = scrollbarSlide,
-            matrixStack = context.pose(),
+            context = context,
             x = xLeft,
             y = yTop,
             width = SCROLL_BAR_WIDTH,

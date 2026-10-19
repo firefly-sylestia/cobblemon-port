@@ -38,7 +38,7 @@ class DialoguePortraitWidget(
         val startX = if (face.isLeftSide) (x + 1) else (x + DialogueScreen.BOX_WIDTH + DialogueScreen.PORTRAIT_WIDTH - 1)
         blitk(
             texture = frameBackground,
-            matrixStack = context.pose(),
+            context = context,
             x = startX,
             y = y,
             width = width,
@@ -62,7 +62,7 @@ class DialoguePortraitWidget(
         context.pose().translate(0F, 0F, 100F)
         blitk(
             texture = if (face.isLeftSide) frameLeftResource else frameRightResource,
-            matrixStack = context.pose(),
+            context = context,
             x = startX,
             y = y,
             width = width,
@@ -72,7 +72,7 @@ class DialoguePortraitWidget(
 
         blitk(
             texture = DialogueBox.boxResource,
-            matrixStack = context.pose(),
+            context = context,
             x = startX + if (face.isLeftSide) (width - DIALOGUE_ARROW_WIDTH) else 0,
             y = y + height - ceil(DIALOGUE_ARROW_HEIGHT / 2.0),
             width = DIALOGUE_ARROW_WIDTH,

@@ -85,7 +85,7 @@ class DialogueBox(
         // Scroll Track
         blitk(
             texture = background ?: boxResource,
-            matrixStack = context.pose(),
+            context = context,
             x = xLeft + 1,
             y = yStart,
             width = SCROLL_TRACK_WIDTH,
@@ -98,7 +98,7 @@ class DialogueBox(
         // Scroll Bar
         blitk(
             texture = background ?: boxResource,
-            matrixStack = context.pose(),
+            context = context,
             x = xLeft,
             y = yTop,
             width = SCROLL_BAR_WIDTH,
@@ -135,7 +135,7 @@ class DialogueBox(
         val gibber = dialogueScreen.gibber
         correctSize()
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = background ?: boxResource,
             x = x,
             y = y,

@@ -87,7 +87,7 @@ class BattleMessagePane(
 
     override fun renderSelection(guiGraphics: GuiGraphicsExtractor, top: Int, width: Int, height: Int, outerColor: Int, innerColor: Int) {
         blitk(
-            matrixStack = guiGraphics.pose(),
+            context = guiGraphics,
             texture = battleMessageHighlight,
             x = x + 6,
             y = top - 2,
@@ -97,7 +97,7 @@ class BattleMessagePane(
         )
 
         blitk(
-            matrixStack = guiGraphics.pose(),
+            context = guiGraphics,
             texture = battleMessageHighlight,
             x = x + 6,
             y = top - 2,
@@ -107,7 +107,7 @@ class BattleMessagePane(
         )
 
         blitk(
-            matrixStack = guiGraphics.pose(),
+            context = guiGraphics,
             texture = battleMessageHighlight,
             x = x + 6,
             y = top + 7,
@@ -117,7 +117,7 @@ class BattleMessagePane(
         )
 
         blitk(
-            matrixStack = guiGraphics.pose(),
+            context = guiGraphics,
             texture = battleMessageHighlight,
             x = x + 6 + LINE_WIDTH - 1,
             y = top - 2,
@@ -138,7 +138,7 @@ class BattleMessagePane(
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         correctSize()
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = if (expanded) battleMessagePaneFrameExpandedResource else battleMessagePaneFrameResource,
             x = this.x,
             y = appropriateY,

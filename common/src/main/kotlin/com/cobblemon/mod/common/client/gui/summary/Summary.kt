@@ -499,7 +499,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
 
         // Render Portrait Background
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = portraitBackgroundResource,
             x = x + 6,
             y = y + 32,
@@ -511,7 +511,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
 
         // Render Base Resource
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = baseResource,
             x = x,
             y = y,
@@ -524,7 +524,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         if (selectedPokemon.isFainted() || status != null) {
             val statusName = if (selectedPokemon.isFainted()) "fnt" else status?.showdownName
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = cobblemonResource("textures/gui/battle/battle_status_$statusName.png"),
                 x = x + 34,
                 y = y + 4,
@@ -535,7 +535,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             )
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = cobblemonResource("textures/gui/summary/status_trim.png"),
                 x = x + 34,
                 y = y + 5,
@@ -555,7 +555,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         // Poké Ball
         val ballResource = selectedPokemon.caughtBall.name.toAssetPath("textures/item/poke_balls/", ".png")
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = ballResource,
             x = (x + 3.5) / SCALE,
             y = (y + 15) / SCALE,
@@ -599,7 +599,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         // Shiny Icon
         if (selectedPokemon.shiny) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = iconShinyResource,
                 x = (x + 62.5) / SCALE,
                 y = (y + 33.5) / SCALE,
@@ -611,7 +611,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
 
         // Type Icon(s)
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = if (selectedPokemon.secondaryType != null) typeSpacerDoubleResource else typeSpacerResource,
             x = (x + 5.5) / SCALE,
             y = (y + 126) / SCALE,
@@ -646,7 +646,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         ).render(context)
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = sideSpacerResource,
             x = (x + 217) / SCALE,
             y = (y + 141) / SCALE,

@@ -36,7 +36,7 @@ class CookButton(
         val closedIcon = cobblemonResource("textures/item/campfire_pots/campfire_pot_${color.suffix}.png")
         val openIcon = cobblemonResource("textures/item/campfire_pots/campfire_pot_${color.suffix}_open.png")
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = buttonResource,
             x = x,
             y = y,
@@ -47,7 +47,7 @@ class CookButton(
         )
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = if (selected) closedIcon else openIcon,
             x = x + 2,
             y = y + 2,

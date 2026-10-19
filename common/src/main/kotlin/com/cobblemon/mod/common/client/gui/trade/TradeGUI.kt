@@ -268,7 +268,7 @@ class TradeGUI(
         val backgroundX = x + 68
         val backgroundY = y + 23
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = baseBackgroundResource,
             x = backgroundX,
             y = backgroundY,
@@ -286,7 +286,7 @@ class TradeGUI(
                 else (tradeAnimationProgress - MODEL_SCALE_BUFFER_FRAMES)
             ) * TRADE_ANIMATION_HEIGHT
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = tradeAnimationResource,
                 x = (x + 80.5) / SCALE,
                 y = (y + 31) / SCALE,
@@ -298,7 +298,7 @@ class TradeGUI(
             )
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = tradeAnimationResource,
                 x = (x + 155.5) / SCALE,
                 y = (y + 31) / SCALE,
@@ -332,7 +332,7 @@ class TradeGUI(
 
         // Render Base Resource
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = baseResource,
             x = x, y = y,
             width = BASE_WIDTH,
@@ -346,7 +346,7 @@ class TradeGUI(
 
         if (trade.acceptedOppositeOffer) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = tradeReadyResource,
                 x = x + 85,
                 y = y + 126,
@@ -358,7 +358,7 @@ class TradeGUI(
 
             if (!tradeProcessing) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = tradeReadyTopResource,
                     x = x + 112,
                     y = y + 2,
@@ -372,7 +372,7 @@ class TradeGUI(
 
         if (trade.oppositeAcceptedMyOffer.get()) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = opposingTradeReadyResource,
                 x = x + 180,
                 y = y + 126,
@@ -384,7 +384,7 @@ class TradeGUI(
 
             if (!tradeProcessing) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = opposingTradeReadyTopResource,
                     x = x + 153,
                     y = y + 2,
@@ -399,7 +399,7 @@ class TradeGUI(
         // Trade animation arrows
         if (tradeAnimationProgress >= (TRADE_ANIMATION_FRAMES + MODEL_SCALE_BUFFER_FRAMES) && tradeAnimationProgress < REVERSE_ANIMATION_TICK) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = tradeAnimationArrowsResource,
                 x = x + 112,
                 y = y + 2,
@@ -587,7 +587,7 @@ class TradeGUI(
             val nameXOffset = if (isOpposing) 75 else 0
             val ballResource = pokemon.caughtBall.name.toAssetPath("textures/item/poke_balls/", ".png")
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = ballResource,
                 x = (x + 73.5 + nameXOffset) / SCALE,
                 y = (y + 12) / SCALE,
@@ -632,7 +632,7 @@ class TradeGUI(
             // Shiny Icon
             if (pokemon.shiny) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = Summary.iconShinyResource,
                     x = (x + (if (isOpposing) 213.5 else 71.5)) / SCALE,
                     y = (y + 33.5) / SCALE,
@@ -643,7 +643,7 @@ class TradeGUI(
             }
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = if (pokemon.secondaryType != null) typeSpacerDoubleResource else typeSpacerSingleResource,
                 x = (x + (if (isOpposing) 153 else 73)) / SCALE,
                 y = (y + 113.5) / SCALE,
@@ -819,7 +819,7 @@ class TradeGUI(
             )
         } else {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = typeSpacerResource,
                 x = (x + (if (isOpposing) 153 else 73)) / SCALE,
                 y = (y + 113.5) / SCALE,

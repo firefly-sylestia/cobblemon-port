@@ -104,7 +104,7 @@ class BattleMoveSelection(
             val selectConditionOpacity = moveSelection.opacity * if (!selectable) 0.5F else 1F
 
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = moveTexture,
                 x = x,
                 y = y,
@@ -119,7 +119,7 @@ class BattleMoveSelection(
             )
 
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = moveOverlayTexture,
                 x = x,
                 y = y,
@@ -190,7 +190,7 @@ class BattleMoveSelection(
         }
         backButton.render(context, mouseX, mouseY, delta)
         gimmickButtons.forEach {
-            it.render(context.pose(), mouseX, mouseY, delta)
+            it.render(context, mouseX, mouseY, delta)
         }
         if(this.request.activePokemon.getFormat().battleType.slotsPerActor == 3 && (request.activePokemon.getPNX()[2] == 'a' || request.activePokemon.getPNX()[2] == 'c')) {
             shiftButton.render(context, mouseX, mouseY, delta)

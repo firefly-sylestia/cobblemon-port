@@ -68,7 +68,7 @@ class InteractWheelButton(
         passedTicks += delta
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = buttonResources[orientation],
             x = x,
             y = y,
@@ -89,7 +89,7 @@ class InteractWheelButton(
             val (iconX, iconY) = getIconPosition(orientation)
             val colour = this.colour() ?: Vector3f(1F, 1F, 1F)
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = iconResource,
                 x = iconX,
                 y = iconY,
@@ -108,7 +108,7 @@ class InteractWheelButton(
                 val (iconX, iconY) = getIconPosition(orientation)
                 val colour = this.colour() ?: Vector3f(1F, 1F, 1F)
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = secondaryIconResource,
                     x = iconX,
                     y = iconY - ICON_SIZE,

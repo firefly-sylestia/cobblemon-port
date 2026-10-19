@@ -30,7 +30,7 @@ class PastureSlotIconButton(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             x = xPos / SCALE,
             y = yPos / SCALE,
             width = SIZE,

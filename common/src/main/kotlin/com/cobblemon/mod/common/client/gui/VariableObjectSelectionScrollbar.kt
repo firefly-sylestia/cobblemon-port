@@ -35,7 +35,7 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
             val scrollPosition = (parent.scrollAmount() / parent.maxScrollAmount()) * (height - SCROLLER_HEIGHT)
 
             blitk(
-                matrixStack = guiGraphics.pose(),
+                context = guiGraphics,
                 texture = scrollerBackgroundResource,
                 x = x,
                 y = y,
@@ -44,7 +44,7 @@ class VariableObjectSelectionScrollbar(var parent: VariableObjectSelectionList, 
             )
 
             blitk(
-                matrixStack = guiGraphics.pose(),
+                context = guiGraphics,
                 texture = scrollerResource,
                 x = x,
                 y = y + scrollPosition,

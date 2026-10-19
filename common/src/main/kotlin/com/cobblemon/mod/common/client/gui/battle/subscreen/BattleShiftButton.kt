@@ -24,7 +24,7 @@ class BattleShiftButton(val x: Float, val y: Float) {
 
     fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = baseTexture,
             x = x * 2,
             y = y * 2,

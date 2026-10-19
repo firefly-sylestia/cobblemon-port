@@ -36,7 +36,7 @@ open class PokeNavImageButton(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         // Render Button Image
-        this.applyBlitk(context.pose(), pMouseX, pMouseY, pPartialTicks)
+        this.applyBlitk(context, pMouseX, pMouseY, pPartialTicks)
         // Draw Text
         drawScaledText(
             context = context,
@@ -63,9 +63,9 @@ open class PokeNavImageButton(
         }
     }
 
-    protected open fun applyBlitk(pPoseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    protected open fun applyBlitk(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         blitk(
-            matrixStack = pPoseStack,
+            context = context,
             texture = resourceLocation,
             x = x, y = y + 0.25,
             width = width, height = height

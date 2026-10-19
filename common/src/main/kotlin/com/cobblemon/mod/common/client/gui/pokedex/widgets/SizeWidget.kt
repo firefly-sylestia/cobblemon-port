@@ -105,7 +105,7 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         matrices.translate(0.0, 0.0, 100.0)
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = gridPlayer,
             x = pX + 85,
             y = pY + 23.5,
@@ -114,7 +114,7 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         )
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = heightGrid,
             x = pX + 1,
             y = pY,
@@ -123,7 +123,7 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         )
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = scrollBorder,
             x = (pX + 1) / SCALE,
             y = pY / SCALE,
@@ -135,7 +135,7 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         )
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = scrollBorder,
             x = (pX + 1) / SCALE,
             y = (pY + 40) / SCALE,

@@ -36,7 +36,7 @@ class MarkingButton(
         val matrices = context.pose()
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = resource,
             x = buttonX.toFloat() / SCALE,
             y = buttonY.toFloat() / SCALE,

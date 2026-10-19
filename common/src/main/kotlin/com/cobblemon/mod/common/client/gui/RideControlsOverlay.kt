@@ -276,7 +276,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
 
             if (showHorizontal) {
                 blitk(
-                    matrixStack = context.pose(),
+                    context = context,
                     texture = mouseArrowLeftResource,
                     x = posX + 15 + offsetX,
                     y = posY - 15,
@@ -288,7 +288,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                 )
 
                 blitk(
-                    matrixStack = context.pose(),
+                    context = context,
                     texture = mouseArrowRightResource,
                     x = posX + 67 + offsetX,
                     y = posY - 15,
@@ -302,7 +302,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
 
             if (showVertical) {
                 blitk(
-                    matrixStack = context.pose(),
+                    context = context,
                     texture = mouseArrowUpResource,
                     x = posX + 39 + offsetX,
                     y = posY - 38,
@@ -314,7 +314,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                 )
 
                 blitk(
-                    matrixStack = context.pose(),
+                    context = context,
                     texture = mouseArrowDownResource,
                     x = posX + 39 + offsetX,
                     y = posY + 13,
@@ -327,7 +327,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
             }
 
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = mouseResource,
                 x = (posX + 35) + offsetX + (if (showHorizontal) mouseOffsetX else 0F),
                 y = posY - 22 + (if (showVertical) mouseOffsetY else 0F),
@@ -355,7 +355,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
             )
 
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = keyUpResource,
                 x = (posX - 50 + offsetX) / HALF_SCALE,
                 y = (posY - 33 + offsetY) / HALF_SCALE,
@@ -368,7 +368,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
             )
 
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = keyDownResource,
                 x = (posX - 48 + offsetX) / HALF_SCALE,
                 y = (posY - 21 + offsetY) / HALF_SCALE,
@@ -382,7 +382,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
 
             if (disableHorizontal) {
                 blitk(
-                    matrixStack = context.pose(),
+                    context = context,
                     texture = keyHorizontalDisabledResource,
                     x = (posX - 61 + offsetX) / HALF_SCALE,
                     y = (posY - 23 + offsetY) / HALF_SCALE,
@@ -393,7 +393,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                 )
             } else {
                 blitk(
-                    matrixStack = context.pose(),
+                    context = context,
                     texture = keyLeftResource,
                     x = (posX - 61 + offsetX) / HALF_SCALE,
                     y = (posY - 23 + offsetY) / HALF_SCALE,
@@ -406,7 +406,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                 )
 
                 blitk(
-                    matrixStack = context.pose(),
+                    context = context,
                     texture = keyRightResource,
                     x = (posX - 38 + offsetX) / HALF_SCALE,
                     y = (posY - 23 + offsetY) / HALF_SCALE,
@@ -427,7 +427,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
             if (showJump && showSneak) {
                 label = "key.sneak".asTranslated().append("/").append("key.jump".asTranslated())
                 blitk(
-                    matrixStack = context.pose(),
+                    context = context,
                     texture = keySneakResource,
                     x = (posX - 73 + offsetX) / HALF_SCALE,
                     y = (posY - 1 + offsetY) / HALF_SCALE,
@@ -440,7 +440,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                 )
 
                 blitk(
-                    matrixStack = context.pose(),
+                    context = context,
                     texture = keyJumpResource,
                     x = (posX - 41 + offsetX) / HALF_SCALE,
                     y = (posY - 1 + offsetY) / HALF_SCALE,
@@ -455,7 +455,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
             else {
                 label = (if (showSneak) "key.sneak" else "key.jump").asTranslated()
                 blitk(
-                    matrixStack = context.pose(),
+                    context = context,
                     texture = if (showSneak) keySneakWideResource else keyJumpWideResource,
                     x = (posX - 61 + offsetX) / HALF_SCALE,
                     y = (posY - 1 + offsetY) / HALF_SCALE,

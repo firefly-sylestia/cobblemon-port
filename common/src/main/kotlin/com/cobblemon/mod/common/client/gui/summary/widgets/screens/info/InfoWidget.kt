@@ -49,7 +49,7 @@ class InfoWidget(
         val matrices = context.pose()
         // Base texture
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = infoBaseResource,
             x = x,
             y = y,
@@ -76,7 +76,7 @@ class InfoWidget(
         // Size
         val size = if (pokemon.isAlpha) "alpha" else pokemon.getSizeCategory().name.lowercase()
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = cobblemonResource("textures/gui/summary/icon_size_${size}.png"),
             x = (x + 107.5) / HALF_SCALE,
             y = (y + 6.5) / HALF_SCALE,
@@ -213,7 +213,7 @@ class InfoWidget(
         val expBarWidth = expRatio * expBarWidthMax
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = CobblemonResources.WHITE,
             x = x + 72,
             y = y + 131,

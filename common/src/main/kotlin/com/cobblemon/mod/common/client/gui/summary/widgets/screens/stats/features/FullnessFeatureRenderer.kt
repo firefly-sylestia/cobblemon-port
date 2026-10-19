@@ -41,7 +41,7 @@ class FullnessFeatureRenderer(
         }
 
         blitk(
-            matrixStack = guiGraphics.pose(),
+            context = guiGraphics,
             texture = CobblemonResources.WHITE,
             x = x + 3,
             y = y + 13,

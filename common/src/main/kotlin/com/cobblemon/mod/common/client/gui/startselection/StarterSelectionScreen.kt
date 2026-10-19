@@ -162,7 +162,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
 
         //Background
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = backgroundResource,
             x = x + 6,
             y = y + 17,
@@ -171,7 +171,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         )
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = backgroundBallResource,
             x = x + 10.5,
             y = y + 12.5,
@@ -183,7 +183,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
 
         //Platform
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = platformResource,
             x = x + 8.5,
             y = y + 88,
@@ -193,7 +193,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         val typePlatform = currentPokemon?.let { getPlatformResource(it.form.primaryType) }
         if (typePlatform != null) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = typePlatform,
                 x = x + 8.5,
                 y = y + 82,
@@ -202,7 +202,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             )
         }
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = platformShadow,
             x = (x + 43) / 0.5F,
             y = (y + 93.5) / 0.5F,
@@ -213,7 +213,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
 
         if (currentPokemon == null) { // Model widget won't render
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = unknownResource,
                 x = (x + 36) / 0.15f,
                 y = (y + 36) / 0.15f,
@@ -225,7 +225,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
 
         //Base
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = baseResource,
             x = x,
             y = y,
@@ -245,7 +245,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
 
             if (currentPokemon!!.form.secondaryType == null) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = typeSpacerResource,
                     x = x + 47,
                     y = y + 123,
@@ -257,7 +257,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
 
         //Name
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = ballResource,
             x = (x + 4) / 0.5F,
             y = (y + 3) / 0.5F,

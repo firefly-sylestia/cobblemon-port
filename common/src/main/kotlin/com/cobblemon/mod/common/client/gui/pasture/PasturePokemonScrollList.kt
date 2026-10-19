@@ -105,7 +105,7 @@ class PasturePokemonScrollList(
 
         // Scroll Overlay
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = scrollOverlayResource,
             x = listX,
             y = listY - 13,
@@ -213,7 +213,7 @@ class PasturePokemonScrollList(
 
             val matrixStack = context.pose()
             blitk(
-                matrixStack = matrixStack,
+                context = context,
                 texture = if (isOwned()) slotOwnerResource else slotResource,
                 x = x,
                 y = y,
@@ -268,7 +268,7 @@ class PasturePokemonScrollList(
 
             if ("male" in pokemon.aspects || "female" in pokemon.aspects) {
                 blitk(
-                    matrixStack = matrixStack,
+                    context = context,
                     texture = if ("male" in pokemon.aspects) PartySlotWidget.genderIconMale else PartySlotWidget.genderIconFemale,
                     x = (x + 56.5) / SCALE,
                     y = (y + 24) / SCALE,

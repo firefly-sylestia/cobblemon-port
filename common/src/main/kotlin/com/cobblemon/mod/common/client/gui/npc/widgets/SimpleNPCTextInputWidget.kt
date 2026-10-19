@@ -96,7 +96,7 @@ class SimpleNPCTextInputWidget(
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if (texture != null) {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 x = x,
                 y = y,
                 width = width,

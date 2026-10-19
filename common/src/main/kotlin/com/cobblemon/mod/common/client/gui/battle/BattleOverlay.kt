@@ -253,7 +253,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         val portraitStartX = x + if (!reversed) portraitOffsetX else { tileWidth - portraitDiameter - portraitOffsetX }
         val matrixStack = context.pose()
         blitk(
-            matrixStack = matrixStack,
+            context = context,
             texture = battleInfoUnderlay,
             y = y + portraitOffsetY,
             x = portraitStartX,
@@ -265,7 +265,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         if (status != null) {
             val statusWidth = if (isCompact) 40 else 37
             blitk(
-                matrixStack = matrixStack,
+                context = context,
                 texture = cobblemonResource("textures/gui/battle/battle_status_" + status.showdownName + ".png"),
                 x = x + if (reversed) 65 else (if (isCompact) 23 else 38),
                 y = y + if (isCompact) 22 else 28,
@@ -331,7 +331,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
 
         // Third render the tile
         blitk(
-            matrixStack = matrixStack,
+            context = context,
             texture = if (isCompact) (if (reversed) battleInfoBaseFlippedCompact else battleInfoBaseCompact) else (if (reversed) battleInfoBaseFlipped else battleInfoBase),
             x = x,
             y = y,
@@ -346,7 +346,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         if (colour != null && (!isSelected || stage != 4.0)) {
             val (r, g, b) = colour
             blitk(
-                matrixStack = matrixStack,
+                context = context,
                 texture = if (reversed) battleInfoRoleFlipped else battleInfoRole,
                 x = x + if (isCompact) (if (reversed) 93 else 8) else (if (reversed) 102 else 11),
                 y = y + 1,
@@ -362,7 +362,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
 
             if (dexState == PokedexEntryProgress.OWNED) {
                 blitk(
-                    matrixStack = matrixStack,
+                    context = context,
                     texture = caughtIndicator,
                     x = (x + 7) / SCALE,
                     y = (y + 9) / SCALE,
@@ -427,7 +427,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         val barOffsetX = if (isCompact) (if (reversed) 1 else 3) else 2
         val barX = if (!reversed) infoBoxX - barOffsetX else infoBoxX - barOffsetX + (fullWidth - barWidth)
         blitk(
-            matrixStack = matrixStack,
+            context = context,
             texture = CobblemonResources.WHITE,
             x = barX,
             y = y + if (isCompact) 16 else 22,

@@ -49,7 +49,7 @@ class StartButton(
             else (if (processing) baseStop else base)
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = resource,
             x = buttonX,
             y = buttonY,
@@ -60,7 +60,7 @@ class StartButton(
         )
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = if (processing) iconStop else (if (shouldRepeat) iconRepeat else iconStart),
             x = buttonX,
             y = buttonY,

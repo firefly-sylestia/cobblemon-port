@@ -37,7 +37,7 @@ class ReleaseConfirmButton(
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if (parent.canDeleteSelected() && parent.displayConfirmRelease) {
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = buttonResource,
                 x = x,
                 y = y,

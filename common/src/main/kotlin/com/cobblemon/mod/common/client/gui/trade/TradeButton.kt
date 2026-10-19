@@ -43,7 +43,7 @@ class TradeButton(
         val texture = if (!enabled) buttonDisabledResource
             else (if (active) buttonActiveResource else buttonResource)
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = texture,
             x = x,
             y = y,

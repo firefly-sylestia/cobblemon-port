@@ -23,7 +23,7 @@ class BattleBackButton(val x: Float, val y: Float) : CobblemonRenderable {
 
     override fun extractRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = cobblemonResource("textures/gui/battle/battle_back.png"),
             x = x * 2,
             y = y * 2,

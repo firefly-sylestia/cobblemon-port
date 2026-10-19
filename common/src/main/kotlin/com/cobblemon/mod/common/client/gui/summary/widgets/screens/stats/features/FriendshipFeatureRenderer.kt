@@ -39,7 +39,7 @@ class FriendshipFeatureRenderer(
         val blue: Number = if (barValue >= 160) 0.4 else 0.64
 
         blitk(
-            matrixStack = guiGraphics.pose(),
+            context = guiGraphics,
             texture = CobblemonResources.WHITE,
             x = x + 3,
             y = y + 13,

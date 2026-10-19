@@ -248,7 +248,7 @@ class StatWidget(
 
         // Background
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = if (renderOtherStats)  statsOtherBaseResource else statsBaseResource,
             x= x,
             y = y,
@@ -287,7 +287,7 @@ class StatWidget(
             }
             if (featuresList.size > 4) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = statsOtherSidebarsResource,
                     x= x,
                     y = y + 13,
@@ -305,7 +305,7 @@ class StatWidget(
                     val canSwitchStyle = behaviours.size > 1 && centerHovered(pMouseX, pMouseY)
 
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = if (canSwitchStyle) statsChartPentagonHighlightResource else statsChartPentagonResource,
                         x= (x + 20.5) / SCALE,
                         y = (y + 22) / SCALE,
@@ -340,7 +340,7 @@ class StatWidget(
                     val rideStyle = selectedBehaviour.value.key.path.toString().split("/").last().lowercase()
                     val iconResource = cobblemonResource("textures/gui/summary/icon_ride_${selectedBehaviour.key.toString().lowercase()}_${rideStyle}.png")
                     blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = iconResource,
                         x= (x + 59) / SCALE,
                         y = (y + 62.5) / SCALE,
@@ -385,7 +385,7 @@ class StatWidget(
 
             } else {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = statsChartResource,
                     x= (x + 25.5) / SCALE,
                     y = (y + 22) / SCALE,
@@ -455,8 +455,8 @@ class StatWidget(
                 // Nature-modified Stat Icons
                 if (statOptions.get(statTabIndex) == STATS) {
                     val nature = pokemon.effectiveNature
-                    renderModifiedStatIcon(matrices, nature.increasedStat, true)
-                    renderModifiedStatIcon(matrices, nature.decreasedStat, false)
+                    renderModifiedStatIcon(context, nature.increasedStat, true)
+                    renderModifiedStatIcon(context, nature.decreasedStat, false)
                 }
             }
         }
@@ -480,7 +480,7 @@ class StatWidget(
         }
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = tabMarkerResource,
             x= (startPosX + (statTabIndex * statTabWidth) - (MARKER_WIDTH / 4)) / SCALE,
             y = (y + 140) / SCALE,
@@ -527,7 +527,7 @@ class StatWidget(
         }
     }
 
-    private fun renderModifiedStatIcon(pPoseStack: PoseStack, stat: Stat?, increasedStat: Boolean) {
+    private fun renderModifiedStatIcon(context: GuiGraphicsExtractor, stat: Stat?, increasedStat: Boolean) {
         if (stat != null) {
             var posX = x.toDouble()
             var posY = y.toDouble()
@@ -542,7 +542,7 @@ class StatWidget(
             }
 
             blitk(
-                matrixStack = pPoseStack,
+                context = context,
                 texture = if (increasedStat) statIncreaseResource else statDecreaseResource,
                 x= posX / SCALE,
                 y = posY / SCALE,

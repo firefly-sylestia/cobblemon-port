@@ -41,7 +41,7 @@ class IconButton(
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
 
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             x = x / SCALE,
             y = y / SCALE,
             texture = if (altResource != null && showAlt) altResource else resource,

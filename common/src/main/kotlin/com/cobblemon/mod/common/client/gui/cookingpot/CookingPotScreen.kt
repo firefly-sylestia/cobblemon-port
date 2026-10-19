@@ -140,7 +140,7 @@ class CookingPotScreen(
         mouseY: Int
     ) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = BACKGROUND,
             x = leftPos, y = (height - BACKGROUND_HEIGHT) / 2,
             width = BACKGROUND_WIDTH, height = BACKGROUND_HEIGHT
@@ -148,7 +148,7 @@ class CookingPotScreen(
 
         val cookProgress = ceil(menu.getBurnProgress() * COOK_PROGRESS_WIDTH).toInt()
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = COOK_PROGRESS_SPRITE,
             x = leftPos + 96,
             y = topPos + 39,

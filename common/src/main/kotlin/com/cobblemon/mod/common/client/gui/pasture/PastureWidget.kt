@@ -50,7 +50,7 @@ class PastureWidget(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = baseResource,
             x = x,
             y = y,

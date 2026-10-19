@@ -74,7 +74,7 @@ class MoveSwapScreen(
                 val rgb = elementalType.hue.toRGB()
 
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = moveResource,
                         x = rowLeft,
                         y = tweakedRowTop,
@@ -88,7 +88,7 @@ class MoveSwapScreen(
                 )
 
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = moveOverlayResource,
                         x = rowLeft,
                         y = tweakedRowTop,
@@ -121,7 +121,7 @@ class MoveSwapScreen(
 
                 // Move icons
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = MovesWidget.movesPowerIconResource,
                         x= (rowLeft + 10) / MovesWidget.SCALE,
                         y = (tweakedRowTop + 11) / MovesWidget.SCALE,
@@ -131,7 +131,7 @@ class MoveSwapScreen(
                 )
 
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = MovesWidget.movesAccuracyIconResource,
                         x= (rowLeft + 30) / MovesWidget.SCALE,
                         y = (tweakedRowTop + 11) / MovesWidget.SCALE,
@@ -141,7 +141,7 @@ class MoveSwapScreen(
                 )
 
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = MovesWidget.movesEffectIconResource,
                         x= (rowLeft + 53.5) / MovesWidget.SCALE,
                         y = (tweakedRowTop + 11) / MovesWidget.SCALE,
@@ -190,7 +190,7 @@ class MoveSwapScreen(
             } else {
                 // Forget move slot
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = forgetMoveOverlayResource,
                         x = rowLeft - 9,
                         y = tweakedRowTop,
@@ -200,7 +200,7 @@ class MoveSwapScreen(
                         textureHeight = SLOT_HEIGHT * 2,
                 )
                 blitk(
-                        matrixStack = matrices,
+                        context = context,
                         texture = forgetMoveIconResource,
                         x = rowLeft + rowWidth / 2 - 7,
                         y = tweakedRowTop + SLOT_HEIGHT / 2 - 4,

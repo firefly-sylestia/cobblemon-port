@@ -20,6 +20,6 @@ class DualTypeWidget(
 ) : TypeWidget(pX, pY, pWidth, pHeight, pMessage) {
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        renderType(mainType, secondaryType, context.pose())
+        renderType(mainType, secondaryType, context)
     }
 }

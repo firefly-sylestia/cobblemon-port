@@ -63,7 +63,7 @@ class SearchWidget(
         val matrices = context.pose()
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = searchBarOverlay,
             x = posX, y = posY,
             width = HALF_OVERLAY_WIDTH,
@@ -71,7 +71,7 @@ class SearchWidget(
         )
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = searchIcon,
             x = (posX.toInt() + 3) / SCALE,
             y = (posY.toInt() + 2) / SCALE,

@@ -67,7 +67,7 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
 
             val textScale = 1F
             blitk(
-                matrixStack = context.pose(),
+                context = context,
                 texture = scrollSlotResource,
                 x = x,
                 y = y,

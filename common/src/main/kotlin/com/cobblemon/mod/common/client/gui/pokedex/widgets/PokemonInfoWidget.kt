@@ -263,7 +263,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
         val matrices = context.pose()
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = backgroundOverlay,
             x = pX, y = pY,
             width = HALF_OVERLAY_WIDTH,
@@ -272,7 +272,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
 
         if (!suppressViewport) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = viewportOverlay,
                 x = pX,
                 y = pY + 24,
@@ -281,7 +281,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
             )
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = pokeBallOverlay,
                 x = pX + 15,
                 y = pY + 25,
@@ -293,7 +293,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
 
             // Platform
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = platformBase,
                 x = pX + 13,
                 y = pY + 69,
@@ -305,7 +305,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
             val platformType = getPlatformResource()
             if (platformType != null && isSelectedPokemonOwned()) {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = platformType,
                     x = pX + 13,
                     y = pY + 66,
@@ -316,7 +316,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
             }
 
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = platformShadow,
                 x = (pX + 47) / SCALE,
                 y = (pY + 76.5F) / SCALE,
@@ -358,7 +358,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
             } else {
                 // Render question mark
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = platformUnknown,
                     x = pX + 50.5,
                     y = pY + 39,
@@ -375,7 +375,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
                 val primaryType = type[0]
                 val secondaryType = type[1]
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = if (secondaryType != null) typeBarDouble else typeBar,
                     x = pX,
                     y = pY + 14,
@@ -393,7 +393,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
                 }
             } else {
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = typeBar,
                     x = pX,
                     y = pY + 14,
@@ -447,7 +447,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
 
                 // Cry
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = buttonCryBase,
                     x = (pX + 114) / SCALE,
                     y = (pY + 81) / SCALE,
@@ -460,7 +460,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
 
                 // Animation
                 blitk(
-                    matrixStack = matrices,
+                    context = context,
                     texture = buttonAnimationBase,
                     x = (pX + 3) / SCALE,
                     y = (pY + 81) / SCALE,

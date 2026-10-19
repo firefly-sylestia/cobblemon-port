@@ -78,7 +78,7 @@ class MarksWidget(
         val matrices = context.pose()
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = marksBaseResource,
             x = x,
             y = y,

@@ -63,7 +63,7 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
         correctSize()
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = backgroundResource,
             x = listX,
             y = listY,
@@ -82,7 +82,7 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
         // Scroll Overlay
         val scrollOverlayOffset = 4
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = scrollOverlayResource,
             x = listX,
             y = listY - (scrollOverlayOffset / 2) - 1,

@@ -109,7 +109,7 @@ class BattleSwitchPokemonSelection(
 
         val matrixStack = context.pose()
         blitk(
-            matrixStack = matrixStack,
+            context = context,
             texture = underlayTexture,
             x = x,
             y = y,
@@ -131,7 +131,7 @@ class BattleSwitchPokemonSelection(
         for (index in 0 until 6) {
             val (slotX, slotY) = getSlotPosition(index)
             blitk(
-                matrixStack = matrixStack,
+                context = context,
                 texture = SwitchTile.partySelectDisabledResourse,
                 x = slotX,
                 y = slotY,
@@ -204,7 +204,7 @@ class BattleSwitchPokemonSelection(
                 val status = pokemon.status?.status?.showdownName
                 if (hpRatio > 0F && status != null) {
                     blitk(
-                        matrixStack = matrixStack,
+                        context = context,
                         texture = cobblemonResource("textures/gui/interact/party_select_status_$status.png"),
                         x = x + 27,
                         y = y + 24,
@@ -223,7 +223,7 @@ class BattleSwitchPokemonSelection(
                 }
 
                 blitk(
-                    matrixStack = matrixStack,
+                    context = context,
                     texture = if (!isFainted && !isCurrentlyInBattle) partySelectResource else partySelectDisabledResourse,
                     x = x,
                     y = y,
@@ -236,7 +236,7 @@ class BattleSwitchPokemonSelection(
                 val ballIcon = pokemon.caughtBall.name.toAssetPath("textures/gui/ball/", ".png")
                 val ballHeight = 22
                 blitk(
-                    matrixStack = matrixStack,
+                    context = context,
                     texture = ballIcon,
                     x = (x + 85) / SCALE,
                     y = (y - 3) / SCALE,
@@ -335,7 +335,7 @@ class BattleSwitchPokemonSelection(
                 val (red, green) = getDepletableRedGreen(hpRatio)
 
                 blitk(
-                    matrixStack = matrixStack,
+                    context = context,
                     texture = CobblemonResources.WHITE,
                     x = x + 1,
                     y = y + 22,

@@ -34,7 +34,7 @@ class RecallButton(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             texture = buttonResource,
             x = x,
             y = y,

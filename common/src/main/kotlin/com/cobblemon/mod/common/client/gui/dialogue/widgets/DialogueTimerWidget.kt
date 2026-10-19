@@ -44,7 +44,7 @@ class DialogueTimerWidget(
         context.setColor(1F, 1F, 1F, 1F)
         blitk(
             texture = timerResource,
-            matrixStack = context.pose(),
+            context = context,
             x = x,
             y = y,
             width = width,
@@ -53,7 +53,7 @@ class DialogueTimerWidget(
         )
         blitk(
             texture = CobblemonResources.WHITE,
-            matrixStack = context.pose(),
+            context = context,
             x = x.toFloat() + 4,
             y = y.toFloat() + 1,
             width = width * ratio - 8,

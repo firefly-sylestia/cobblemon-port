@@ -36,7 +36,7 @@ class DialogueNameWidget(
 
         blitk(
             texture = nameResource,
-            matrixStack = context.pose(),
+            context = context,
             x = x,
             y = y,
             width = width,

@@ -33,7 +33,7 @@ class NavigationButton(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             x = x / SCALE,
             y = y / SCALE,
             texture = if (forward) forwardButtonResource else backwardsButtonResource,

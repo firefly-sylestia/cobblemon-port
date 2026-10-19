@@ -29,6 +29,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.network.chat.Component
@@ -40,7 +41,7 @@ import org.joml.Vector3f
 
 @JvmOverloads
 fun blitk(
-    matrixStack: PoseStack,
+    context: GuiGraphicsExtractor,
     texture: Identifier? = null,
     x: Number,
     y: Number,
@@ -58,45 +59,26 @@ fun blitk(
     blend: Boolean = true,
     scale: Float = 1F
 ) {
-    RenderSystem.setShader { GameRenderer.getPositionTexShader() }
-    texture?.run { RenderSystem.setShaderTexture(0, this) }
-    if (blend) {
-        RenderSystem.enableBlend()
-        RenderSystem.defaultBlendFunc()
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
-    }
-    RenderSystem.setShaderColor(red.toFloat(), green.toFloat(), blue.toFloat(), alpha.toFloat())
-    matrixStack.pushPose()
-    matrixStack.scale(scale, scale, 1F)
-    drawRectangle(
-        matrixStack.last().pose(),
-        x.toFloat(), y.toFloat(), x.toFloat() + width.toFloat(), y.toFloat() + height.toFloat(),
-        blitOffset.toFloat(),
-        uOffset.toFloat() / textureWidth.toFloat(), (uOffset.toFloat() + width.toFloat()) / textureWidth.toFloat(),
-        vOffset.toFloat() / textureHeight.toFloat(), (vOffset.toFloat() + height.toFloat()) / textureHeight.toFloat()
+    texture ?: return
+    fun channel(value: Number) = (value.toFloat().coerceIn(0F, 1F) * 255F).toInt()
+    val colour = (channel(alpha) shl 24) or (channel(red) shl 16) or (channel(green) shl 8) or channel(blue)
+    val pose = context.pose()
+    pose.pushMatrix()
+    pose.scale(scale, scale)
+    context.blit(
+        RenderPipelines.GUI_TEXTURED,
+        texture,
+        x.toInt(),
+        y.toInt(),
+        uOffset.toFloat(),
+        vOffset.toFloat(),
+        width.toInt(),
+        height.toInt(),
+        textureWidth.toInt(),
+        textureHeight.toInt(),
+        colour
     )
-    matrixStack.popPose()
-    RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
-}
-
-fun drawRectangle(
-    matrix: Matrix4f,
-    x: Float,
-    y: Float,
-    endX: Float,
-    endY: Float,
-    blitOffset: Float,
-    minU: Float,
-    maxU: Float,
-    minV: Float,
-    maxV: Float
-) {
-    val bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX)
-    bufferbuilder.addVertex(matrix, x, endY, blitOffset).setUv(minU, maxV)
-    bufferbuilder.addVertex(matrix, endX, endY, blitOffset).setUv(maxU, maxV)
-    bufferbuilder.addVertex(matrix, endX, y, blitOffset).setUv(maxU, minV)
-    bufferbuilder.addVertex(matrix, x, y, blitOffset).setUv(minU, minV)
-    BufferUploader.drawWithShader(bufferbuilder.buildOrThrow())
+    pose.popMatrix()
 }
 
 @JvmOverloads

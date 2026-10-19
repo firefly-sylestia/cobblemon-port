@@ -81,7 +81,7 @@ class MovesWidget(
         val matrices = context.pose()
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = movesBaseResource,
             x= x,
             y = y,
@@ -95,7 +95,7 @@ class MovesWidget(
 
         // Move icons
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = movesPowerIconResource,
             x= (x + 7) / SCALE,
             y = (y + 114.5) / SCALE,
@@ -105,7 +105,7 @@ class MovesWidget(
         )
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = movesAccuracyIconResource,
             x= (x + 7) / SCALE,
             y = (y + 125.5) / SCALE,
@@ -115,7 +115,7 @@ class MovesWidget(
         )
 
         blitk(
-            matrixStack = matrices,
+            context = context,
             texture = movesEffectIconResource,
             x= (x + 7) / SCALE,
             y = (y + 136.5) / SCALE,

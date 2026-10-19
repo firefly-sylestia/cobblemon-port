@@ -41,7 +41,7 @@ class SummaryTab(
         val matrices = context.pose()
         if (isActive) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = tabResource,
                 x = x,
                 y = y,
@@ -52,7 +52,7 @@ class SummaryTab(
 
         if (icon !== null) {
             blitk(
-                matrixStack = matrices,
+                context = context,
                 texture = icon,
                 x = (x + 15.5) / SCALE,
                 y = (y + 3.5) / SCALE,

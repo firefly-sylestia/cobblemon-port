@@ -38,7 +38,7 @@ class ArrowButton(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = context.pose(),
+            context = context,
             x = x,
             y = y,
             texture = if (isRight) ARROW_RIGHT_RESOURCE else ARROW_LEFT_RESOURCE,

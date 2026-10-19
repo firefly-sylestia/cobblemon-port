@@ -204,9 +204,9 @@ class ConfigVariableList(
                     shadow = true
                 )
 
-                blitk(matrixStack = context.pose(), texture = textInputBackground, x = x, y = y + 16, height = 12, width = 1)
-                blitk(matrixStack = context.pose(), texture = textInputBackground, x = x + 1, y = y + 15, height = 14, width = SLOT_WIDTH - 2)
-                blitk(matrixStack = context.pose(), texture = textInputBackground, x = x + SLOT_WIDTH - 1, y = y + 16, height = 12, width = 1)
+                blitk(context = context, texture = textInputBackground, x = x, y = y + 16, height = 12, width = 1)
+                blitk(context = context, texture = textInputBackground, x = x + 1, y = y + 15, height = 14, width = SLOT_WIDTH - 2)
+                blitk(context = context, texture = textInputBackground, x = x + SLOT_WIDTH - 1, y = y + 16, height = 12, width = 1)
 
                 editBox.x = x + 4
                 editBox.y = y + 18

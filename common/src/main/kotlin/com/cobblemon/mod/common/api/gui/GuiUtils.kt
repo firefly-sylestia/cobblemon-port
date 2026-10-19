@@ -26,7 +26,7 @@ import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.RenderType
@@ -101,7 +101,7 @@ fun drawRectangle(
 
 @JvmOverloads
 fun drawCenteredText(
-    context: GuiGraphics,
+    context: GuiGraphicsExtractor,
     font: Identifier? = null,
     text: Component,
     x: Number,
@@ -116,7 +116,7 @@ fun drawCenteredText(
 
 @JvmOverloads
 fun drawText(
-    context: GuiGraphics,
+    context: GuiGraphicsExtractor,
     font: Identifier? = null,
     text: MutableComponent,
     x: Number,
@@ -148,7 +148,7 @@ fun drawText(
 
 @JvmOverloads
 fun drawTextJustifiedRight(
-    context: GuiGraphics,
+    context: GuiGraphicsExtractor,
     font: Identifier? = null,
     text: MutableComponent,
     x: Number,
@@ -163,7 +163,7 @@ fun drawTextJustifiedRight(
 
 @JvmOverloads
 fun drawText(
-    context: GuiGraphics,
+    context: GuiGraphicsExtractor,
     text: FormattedCharSequence,
     x: Number,
     y: Number,
@@ -182,7 +182,7 @@ fun drawText(
 
 @JvmOverloads
 fun drawString(
-    context: GuiGraphics,
+    context: GuiGraphicsExtractor,
     text: String,
     x: Number,
     y: Number,

@@ -32,7 +32,7 @@ import mezz.jei.api.recipe.RecipeType
 import mezz.jei.api.recipe.category.IRecipeCategory
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
@@ -111,7 +111,7 @@ class CampfirePotRecipeCategory(registration: IRecipeCategoryRegistration) : IRe
     override fun draw(
         recipe: CookingPotRecipeBase,
         recipeSlotsView: IRecipeSlotsView,
-        guiGraphics: GuiGraphics,
+        guiGraphics: GuiGraphicsExtractor,
         mouseX: Double,
         mouseY: Double
     ) {

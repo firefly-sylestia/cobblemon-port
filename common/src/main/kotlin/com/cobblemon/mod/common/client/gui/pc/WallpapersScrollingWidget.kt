@@ -20,7 +20,7 @@ import com.cobblemon.mod.common.client.render.gui.PCBoxWallpaperRepository
 import com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
@@ -57,7 +57,7 @@ class WallpapersScrollingWidget(
 
     override fun getScrollbarPosition(): Int = x + width - 3
 
-    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
             matrixStack = context.pose(),
             texture = backgroundResource,
@@ -104,7 +104,7 @@ class WallpapersScrollingWidget(
 
     inner class WallpaperEntry(val wallpaper: Identifier, var altWallpaper: Identifier?, var isNew: Boolean) : Slot<WallpaperEntry>() {
         override fun render(
-            guiGraphics: GuiGraphics,
+            guiGraphics: GuiGraphicsExtractor,
             index: Int,
             top: Int,
             left: Int,

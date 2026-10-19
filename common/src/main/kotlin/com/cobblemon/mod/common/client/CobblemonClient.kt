@@ -75,7 +75,7 @@ import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.cobblemon.mod.common.util.isLookingAt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.color.block.BlockColor
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.MenuScreens
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.model.BoatModel
@@ -522,7 +522,7 @@ object CobblemonClient {
         this.createBoatModelLayers()
     }
 
-    fun beforeChatRender(context: GuiGraphics, partialDeltaTicks: Float) {
+    fun beforeChatRender(context: GuiGraphicsExtractor, partialDeltaTicks: Float) {
         val partialDeltaTicks = Minecraft.getInstance().timer // Checking that this even works
 //        ClientTaskTracker.update(partialDeltaTicks / 20f)
         if (battle == null) {

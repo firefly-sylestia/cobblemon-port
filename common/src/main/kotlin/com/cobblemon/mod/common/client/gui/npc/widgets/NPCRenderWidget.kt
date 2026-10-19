@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.gui.drawProfile
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import java.util.UUID
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.resources.Identifier
 
@@ -36,7 +36,7 @@ class NPCRenderWidget(
 
     override fun isFocused() = false
     override fun setFocused(focused: Boolean) {}
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
 
         context.enableScissor(
             x,

@@ -48,7 +48,7 @@ import com.cobblemon.mod.common.util.math.toRGB
 import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.core.BlockPos
@@ -684,7 +684,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         )
     }
 
-    fun renderMoveInfo(context: GuiGraphics, mouseX: Int, mouseY: Int) {
+    fun renderMoveInfo(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
         val moveTemplate = moveInfoTM?.moveName
 
         blitk(
@@ -800,7 +800,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         }
     }
 
-    fun renderHeldMoveInfoTooltip(context: GuiGraphics, mouseX: Int, mouseY: Int) {
+    fun renderHeldMoveInfoTooltip(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
         heldStackMove?.let { moveTemplate ->
             val matrices = context.pose()
             val posX = mouseX + 10
@@ -943,7 +943,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         }
     }
 
-    fun renderScreenSaver(context: GuiGraphics) {
+    fun renderScreenSaver(context: GuiGraphicsExtractor) {
         val poseStack = context.pose()
         // Screen saver
         if (ticksElapsed > SCREEN_SAVER_TIMEOUT_TICKS) {
@@ -1156,11 +1156,11 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    override fun renderBackground(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {}
+    override fun renderBackground(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {}
 
-    override fun renderBg(guiGraphics: GuiGraphics, partialTick: Float, mouseX: Int, mouseY: Int) {}
+    override fun renderBg(guiGraphics: GuiGraphicsExtractor, partialTick: Float, mouseX: Int, mouseY: Int) {}
 
-    override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(graphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         super.renderTransparentBackground(graphics)
 
         val matrices = graphics.pose()
@@ -1264,7 +1264,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
     }
 
     override fun renderBlurredBackground(partialTick: Float) {}
-    override fun renderLabels(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {}
+    override fun renderLabels(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
 
     fun playSound(soundEvent: SoundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
@@ -1304,7 +1304,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             scrollAmount = 0.0
         }
 
-        override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        override fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
             val xLeft = this.scrollbarPosition
 
             val barHeight = this.bottom - y
@@ -1340,7 +1340,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         }
 
         class TextSlot(val text: String) : Slot<TextSlot>() {
-            override fun render(context: GuiGraphics, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
+            override fun render(context: GuiGraphicsExtractor, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
                 drawScaledText(
                     context = context,
                     text = text.text(),

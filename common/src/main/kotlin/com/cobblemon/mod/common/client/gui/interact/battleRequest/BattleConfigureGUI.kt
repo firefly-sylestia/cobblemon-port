@@ -25,7 +25,7 @@ import com.cobblemon.mod.common.net.messages.server.battle.BattleTeamResponsePac
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
@@ -201,7 +201,7 @@ class BattleConfigureGUI(
     private var ticksPassed = 0F
 
     override fun renderBlurredBackground(delta: Float) { }
-    override fun renderMenuBackground(context: GuiGraphics) { }
+    override fun renderMenuBackground(context: GuiGraphicsExtractor) { }
 
 
     override fun init() {
@@ -316,7 +316,7 @@ class BattleConfigureGUI(
         }
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         ticksPassed += delta
         val battleTypeData = battleRequestMap[options[currentPage]] ?: return
         // Render background panel

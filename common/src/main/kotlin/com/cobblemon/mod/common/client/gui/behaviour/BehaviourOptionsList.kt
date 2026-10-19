@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.client.gui.behaviour.BehaviourOptionsList.Behavi
 import com.cobblemon.mod.common.client.gui.npc.NPCEditorButton
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.ContainerObjectSelectionList
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.components.WidgetTooltipHolder
@@ -51,9 +51,9 @@ class BehaviourOptionsList(
         }
     }
 
-    override fun renderListBackground(context: GuiGraphics) {}
+    override fun renderListBackground(context: GuiGraphicsExtractor) {}
 
-    override fun renderListSeparators(guiGraphics: GuiGraphics) {}
+    override fun renderListSeparators(guiGraphics: GuiGraphicsExtractor) {}
 
     override fun getScrollbarPosition() = left + width - 6
 
@@ -109,7 +109,7 @@ class BehaviourOptionsList(
         override fun isFocused() = false
 
         override fun render(
-            guiGraphics: GuiGraphics,
+            guiGraphics: GuiGraphicsExtractor,
             index: Int,
             top: Int,
             left: Int,

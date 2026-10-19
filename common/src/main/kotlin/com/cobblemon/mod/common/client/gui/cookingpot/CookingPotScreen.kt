@@ -25,7 +25,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.systems.RenderSystem
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.ImageButton
 import net.minecraft.client.gui.components.StateSwitchingButton
 import net.minecraft.client.gui.components.Tooltip
@@ -129,12 +129,12 @@ class CookingPotScreen(
         addRenderableWidget(cookButton)
     }
 
-    override fun renderLabels(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
+    override fun renderLabels(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {
         guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false)
     }
 
     override fun renderBg(
-        context: GuiGraphics,
+        context: GuiGraphicsExtractor,
         partialTick: Float,
         mouseX: Int,
         mouseY: Int
@@ -159,7 +159,7 @@ class CookingPotScreen(
     }
 
     override fun render(
-        context: GuiGraphics,
+        context: GuiGraphicsExtractor,
         mouseX: Int,
         mouseY: Int,
         partialTicks: Float
@@ -200,7 +200,7 @@ class CookingPotScreen(
         this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY)
     }
 
-    override fun renderSlot(guiGraphics: GuiGraphics, slot: Slot) {
+    override fun renderSlot(guiGraphics: GuiGraphicsExtractor, slot: Slot) {
         if (slot is SeasoningSlot && ((!menu.carried.isEmpty && !slot.mayPlace(menu.carried)) || (slot.hasItem() && !slot.mayPlace(slot.item))) ) {
             val x = slot.x
             val y = slot.y
@@ -249,7 +249,7 @@ class CookingPotScreen(
     }
 
     override fun renderTooltip(
-        guiGraphics: GuiGraphics,
+        guiGraphics: GuiGraphicsExtractor,
         mouseX: Int,
         mouseY: Int
     ) {

@@ -23,7 +23,7 @@ import kotlin.math.min
 import kotlin.random.Random
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.resources.Identifier
@@ -76,7 +76,7 @@ class PokedexUsageContext {
         resetState(false)
     }
 
-    fun renderUpdate(graphics: GuiGraphics, tickCounter: DeltaTracker) {
+    fun renderUpdate(graphics: GuiGraphicsExtractor, tickCounter: DeltaTracker) {
         val tickDelta = tickCounter.realtimeDeltaTicks.takeIf { !Minecraft.getInstance().isPaused } ?: 0F
         val updateInterval = (tickDelta / 20) * RENDER_UPDATES_PER_SECOND
 

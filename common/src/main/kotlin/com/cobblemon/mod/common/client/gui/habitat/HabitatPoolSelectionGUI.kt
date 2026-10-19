@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.lang
 import java.awt.Color
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.ObjectSelectionList
 import net.minecraft.client.gui.screens.Screen
@@ -67,7 +67,7 @@ class HabitatPoolSelectionGUI(
         )
     }
 
-    override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun render(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.fill(0, 0, width, height, Color(0, 0, 0, 100).rgb)
         guiGraphics.fill(0, 0, width, headerHeight, Color(0, 0, 0, 150).rgb)
         guiGraphics.fill(0, getFooterTop(), width, height, Color(0, 0, 0, 150).rgb)
@@ -112,7 +112,7 @@ class HabitatPoolSelectionGUI(
             setSelected(children().firstOrNull { it.poolId == selectedPoolId })
         }
 
-        override fun renderListBackground(guiGraphics: GuiGraphics) {}
+        override fun renderListBackground(guiGraphics: GuiGraphicsExtractor) {}
 
         override fun getRowWidth(): Int {
             return listWidth - 8
@@ -128,7 +128,7 @@ class HabitatPoolSelectionGUI(
             private val onSelect: (Identifier?) -> Unit
         ) : ObjectSelectionList.Entry<PoolEntry>() {
             override fun render(
-                guiGraphics: GuiGraphics,
+                guiGraphics: GuiGraphicsExtractor,
                 index: Int,
                 rowTop: Int,
                 rowLeft: Int,

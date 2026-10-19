@@ -22,7 +22,7 @@ import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.MutableComponent
@@ -124,7 +124,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
     /**
      * Rendering the background texture
      */
-    override fun render(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun render(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         renderBackground(context, pMouseX, pMouseY, pPartialTicks)
 
         // Rendering UI Background

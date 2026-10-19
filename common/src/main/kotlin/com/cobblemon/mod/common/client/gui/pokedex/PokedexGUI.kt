@@ -62,7 +62,7 @@ import com.cobblemon.mod.common.util.isInventoryKeyPressed
 import com.cobblemon.mod.common.util.lang
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
@@ -187,7 +187,7 @@ class PokedexGUI private constructor(
         }
 
     override fun renderBlurredBackground(delta: Float) {}
-    override fun renderMenuBackground(context: GuiGraphics) {}
+    override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
 
     public override fun init() {
         super.init()
@@ -304,7 +304,7 @@ class PokedexGUI private constructor(
         CobblemonClient.clientPokedexData.getCaughtForms(selectedEntry)
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
         renderBackground(context, mouseX, mouseY, delta)
 

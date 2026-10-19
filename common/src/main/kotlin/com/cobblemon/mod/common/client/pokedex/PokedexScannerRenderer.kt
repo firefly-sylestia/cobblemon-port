@@ -28,7 +28,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth.clamp
@@ -82,7 +82,7 @@ class PokedexScannerRenderer {
         fun infoFrameResource(isLeft: Boolean, tier: Int): Identifier = cobblemonResource("textures/gui/pokedex/scan/scan_info_frame_${if (isLeft) "left" else "right"}_$tier.png")
     }
 
-    fun renderInfoFrames(graphics: GuiGraphics, poseStack: PoseStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
+    fun renderInfoFrames(graphics: GuiGraphicsExtractor, poseStack: PoseStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
         if (usageContext.focusIntervals > 0) {
             var infoDisplayedCounter = 0
             usageContext.availableInfoFrames.forEachIndexed {index, isLeftSide ->
@@ -292,7 +292,7 @@ class PokedexScannerRenderer {
         return lang("ui.pokedex.scan.registered_suffix", type).bold()
     }
 
-    fun renderScanOverlay(graphics: GuiGraphics, tickDelta: Float) {
+    fun renderScanOverlay(graphics: GuiGraphicsExtractor, tickDelta: Float) {
         val client = Minecraft.getInstance()
         val matrices = graphics.pose()
         val usageContext = CobblemonClient.pokedexUsageContext
@@ -456,7 +456,7 @@ class PokedexScannerRenderer {
         RenderSystem.disableBlend()
     }
 
-    fun onRenderOverlay(graphics: GuiGraphics, tickCounter: DeltaTracker) {
+    fun onRenderOverlay(graphics: GuiGraphicsExtractor, tickCounter: DeltaTracker) {
         if ((CobblemonClient.pokedexUsageContext.scanningGuiOpen || CobblemonClient.pokedexUsageContext.transitionIntervals > 0) && Minecraft.getInstance().options.cameraType.isFirstPerson) {
             val tickDelta = tickCounter.realtimeDeltaTicks
             renderScanOverlay(graphics, tickDelta)

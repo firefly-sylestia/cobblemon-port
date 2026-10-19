@@ -37,7 +37,7 @@ import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.toasts.Toast
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
@@ -80,7 +80,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
 
     override fun renderBlurredBackground(delta: Float) {}
 
-    override fun renderMenuBackground(context: GuiGraphics) {}
+    override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
 
     override fun init() {
         super.init()
@@ -155,7 +155,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         ))
     }
 
-    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2

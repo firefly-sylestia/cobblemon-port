@@ -21,7 +21,7 @@ import com.mojang.math.Axis
 import net.minecraft.Util
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -104,7 +104,7 @@ fun getDepletableRedGreen(
 }
 
 fun drawScrollingText(
-    context: GuiGraphics,
+    context: GuiGraphicsExtractor,
     font: Font,
     text: Component,
     minX: Int,
@@ -121,7 +121,7 @@ fun drawScrollingText(
 
 /** Copied from [net.minecraft.client.gui.components.AbstractWidget.renderScrollingString] **/
 fun renderScrollingString(
-    context: GuiGraphics,
+    context: GuiGraphicsExtractor,
     font: Font,
     text: Component,
     minX: Int,
@@ -154,7 +154,7 @@ fun renderScrollingString(
 }
 
 fun drawScaledText(
-    context: GuiGraphics,
+    context: GuiGraphicsExtractor,
     font: Identifier? = null,
     text: MutableComponent,
     x: Number,
@@ -198,7 +198,7 @@ fun drawScaledText(
 }
 
 fun drawScaledText(
-    context: GuiGraphics,
+    context: GuiGraphicsExtractor,
     text: FormattedCharSequence,
     x: Number,
     y: Number,
@@ -228,7 +228,7 @@ fun drawScaledText(
 }
 
 fun drawScaledTextJustifiedRight(
-    context: GuiGraphics,
+    context: GuiGraphicsExtractor,
     font: Identifier? = null,
     text: MutableComponent,
     x: Number,
@@ -261,7 +261,7 @@ fun drawScaledTextJustifiedRight(
 }
 
 fun drawScaledTextJustifiedRight(
-    context: GuiGraphics,
+    context: GuiGraphicsExtractor,
     text: MutableComponent,
     x: Number,
     y: Number,

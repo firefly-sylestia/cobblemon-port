@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client.gui.toast
 import com.cobblemon.mod.common.net.messages.client.toast.ToastPacket
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.toasts.Toast
 import net.minecraft.client.gui.components.toasts.ToastComponent
 import net.minecraft.world.item.ItemStack
@@ -55,7 +55,7 @@ class CobblemonToast(
         return font.split(this.description, maxWidth)
     }
 
-    override fun render(context: GuiGraphics, manager: ToastComponent, startTime: Long): Toast.Visibility {
+    override fun render(context: GuiGraphicsExtractor, manager: ToastComponent, startTime: Long): Toast.Visibility {
         if (this.startTime == -1L) this.startTime = startTime
 
         val elapsedTime = startTime - this.startTime

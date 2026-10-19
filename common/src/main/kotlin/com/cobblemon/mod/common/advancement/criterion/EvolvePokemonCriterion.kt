@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.advancement.criterion
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
+import net.minecraft.advancements.predicates.entity.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.Identifier
 import java.util.Optional
@@ -19,7 +19,7 @@ import java.util.Optional
 class EvolvePokemonContext(val species : Identifier, val evolution : Identifier, times: Int) : CountableContext(times)
 
 class EvolvePokemonCriterion(
-    playerCtx: Optional<ContextAwarePredicate>,
+    playerCtx: Optional<EntityPredicate>,
     val species: String,
     val evolution: String,
     count: Int
@@ -27,7 +27,7 @@ class EvolvePokemonCriterion(
 
     companion object {
         val CODEC: Codec<EvolvePokemonCriterion> = RecordCodecBuilder.create { it.group(
-            ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(EvolvePokemonCriterion::playerCtx),
+            EntityPredicate.CODEC.optionalFieldOf("player").forGetter(EvolvePokemonCriterion::playerCtx),
             Codec.STRING.optionalFieldOf("species", "any").forGetter(EvolvePokemonCriterion::species),
             Codec.STRING.optionalFieldOf("evolution", "any").forGetter(EvolvePokemonCriterion::evolution),
             Codec.INT.optionalFieldOf("count", 0).forGetter(EvolvePokemonCriterion::count)

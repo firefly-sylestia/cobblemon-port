@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
-import net.minecraft.advancements.critereon.ContextAwarePredicate
 import net.minecraft.advancements.predicates.entity.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.Identifier
@@ -20,13 +19,13 @@ import net.minecraft.resources.Identifier
 class CastPokeRodContext(val baitId: Identifier)
 
 class CastPokeRodCriterionCondition(
-    playerCtx: Optional<ContextAwarePredicate>,
+    playerCtx: Optional<EntityPredicate>,
     val baitId: String
 ): SimpleCriterionCondition<CastPokeRodContext>(playerCtx) {
 
     companion object {
         val CODEC: Codec<CastPokeRodCriterionCondition> = RecordCodecBuilder.create { it.group(
-                EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(CastPokeRodCriterionCondition::playerCtx),
+                EntityPredicate.CODEC.optionalFieldOf("player").forGetter(CastPokeRodCriterionCondition::playerCtx),
                 Codec.STRING.optionalFieldOf("baitId", "empty_bait").forGetter(CastPokeRodCriterionCondition::baitId)
         ).apply(it, { playerCtx, baitId -> CastPokeRodCriterionCondition(playerCtx, baitId.ifEmpty { "empty_bait" }) }) }
     }

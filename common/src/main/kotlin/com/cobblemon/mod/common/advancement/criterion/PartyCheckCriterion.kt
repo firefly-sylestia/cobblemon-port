@@ -12,20 +12,19 @@ import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
 import net.minecraft.advancements.predicates.entity.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.Identifier
 import java.util.Optional
 
 class PartyCheckCriterion(
-    playerCtx: Optional<ContextAwarePredicate>,
+    playerCtx: Optional<EntityPredicate>,
     val party: List<Identifier>,
 ): SimpleCriterionCondition<PlayerPartyStore>(playerCtx) {
 
     companion object {
         val CODEC: Codec<PartyCheckCriterion> = RecordCodecBuilder.create { it.group(
-            EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(PartyCheckCriterion::playerCtx),
+            EntityPredicate.CODEC.optionalFieldOf("player").forGetter(PartyCheckCriterion::playerCtx),
             Identifier.CODEC.listOf().optionalFieldOf("party", listOf()).forGetter(PartyCheckCriterion::party)
         ).apply(it, ::PartyCheckCriterion) }
     }

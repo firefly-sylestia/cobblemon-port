@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.advancement.criterion
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
 import net.minecraft.advancements.predicates.entity.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.Identifier
@@ -20,13 +19,13 @@ import java.util.Optional
 class PokemonInteractContext(val species: Identifier, val item: Identifier)
 
 class PokemonInteractCriterion(
-    playerCtx: Optional<ContextAwarePredicate>,
+    playerCtx: Optional<EntityPredicate>,
     val species: String,
     val item: String
 ): SimpleCriterionCondition<PokemonInteractContext>(playerCtx) {
     companion object {
         val CODEC: Codec<PokemonInteractCriterion> = RecordCodecBuilder.create { it.group(
-            EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(PokemonInteractCriterion::playerCtx),
+            EntityPredicate.CODEC.optionalFieldOf("player").forGetter(PokemonInteractCriterion::playerCtx),
             Codec.STRING.optionalFieldOf("species", "any").forGetter(PokemonInteractCriterion::species),
             Codec.STRING.optionalFieldOf("item", "any").forGetter(PokemonInteractCriterion::item)
         ).apply(it, ::PokemonInteractCriterion) }

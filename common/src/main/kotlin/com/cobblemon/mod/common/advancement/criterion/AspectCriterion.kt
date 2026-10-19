@@ -11,13 +11,13 @@ package com.cobblemon.mod.common.advancement.criterion
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
+import net.minecraft.advancements.predicates.entity.EntityPredicate
 import net.minecraft.resources.Identifier
 import net.minecraft.server.level.ServerPlayer
 import java.util.Optional
 
 class AspectCriterion(
-    playerCtx: Optional<ContextAwarePredicate>,
+    playerCtx: Optional<EntityPredicate>,
     val species: Identifier,
     val aspects: List<String>
 ): SimpleCriterionCondition<MutableMap<Identifier, MutableSet<String>>>(playerCtx) {
@@ -25,7 +25,7 @@ class AspectCriterion(
     companion object {
         val CODEC: Codec<AspectCriterion> = RecordCodecBuilder.create { it.group(
             //All three of these codecs used to use Codecs.createStrictOptionalFieldCodec, that no longer exists
-            ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(AspectCriterion::playerCtx),
+            EntityPredicate.CODEC.optionalFieldOf("player").forGetter(AspectCriterion::playerCtx),
             Identifier.CODEC.optionalFieldOf("species", cobblemonResource("pikachu")).forGetter(AspectCriterion::species),
             Codec.STRING.listOf().optionalFieldOf("aspects", listOf()).forGetter(AspectCriterion::aspects)
         ) .apply(it, ::AspectCriterion) }

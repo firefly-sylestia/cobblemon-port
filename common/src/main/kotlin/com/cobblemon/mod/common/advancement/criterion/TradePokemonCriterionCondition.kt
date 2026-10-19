@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
 import net.minecraft.advancements.predicates.entity.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
 import java.util.Optional
@@ -20,7 +19,7 @@ import java.util.Optional
 class TradePokemonContext(val traded: Pokemon, val received: Pokemon)
 
 class TradePokemonCriterion(
-    playerCtx: Optional<ContextAwarePredicate>,
+    playerCtx: Optional<EntityPredicate>,
     val traded: String,
     val received: String,
     val tradedHeldItem: String,
@@ -29,7 +28,7 @@ class TradePokemonCriterion(
 
     companion object {
         val CODEC: Codec<TradePokemonCriterion> = RecordCodecBuilder.create { it.group(
-            EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TradePokemonCriterion::playerCtx),
+            EntityPredicate.CODEC.optionalFieldOf("player").forGetter(TradePokemonCriterion::playerCtx),
             Codec.STRING.optionalFieldOf("traded", "any").forGetter(TradePokemonCriterion::traded),
             Codec.STRING.optionalFieldOf("received", "any").forGetter(TradePokemonCriterion::received),
             Codec.STRING.optionalFieldOf("traded_held_item", "minecraft:air").forGetter(TradePokemonCriterion::tradedHeldItem),

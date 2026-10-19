@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.advancement.criterion
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
 import net.minecraft.advancements.predicates.entity.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
 import java.util.Optional
@@ -18,13 +17,13 @@ import java.util.Optional
 open class CountableContext(var times: Int)
 
 open class CountableCriterion<T : CountableContext>(
-    playerCtx: Optional<ContextAwarePredicate>,
+    playerCtx: Optional<EntityPredicate>,
     val count: Int
 ): SimpleCriterionCondition<T>(playerCtx) {
 
     companion object {
         val CODEC: Codec<CountableCriterion<CountableContext>> = RecordCodecBuilder.create { it.group(
-            EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(CountableCriterion<CountableContext>::playerCtx),
+            EntityPredicate.CODEC.optionalFieldOf("player").forGetter(CountableCriterion<CountableContext>::playerCtx),
             Codec.INT.optionalFieldOf("count", 0).forGetter(CountableCriterion<CountableContext>::count)
         ).apply(it, ::CountableCriterion) }
     }

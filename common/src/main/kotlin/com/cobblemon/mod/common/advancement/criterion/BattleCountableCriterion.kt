@@ -12,21 +12,21 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
+import net.minecraft.advancements.predicates.entity.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
 import java.util.Optional
 
 open class BattleCountableContext(var battle : PokemonBattle, times : Int) : CountableContext(times)
 
 class BattleCountableCriterion(
-    playerCtx: Optional<ContextAwarePredicate>,
+    playerCtx: Optional<EntityPredicate>,
     val battleTypes: List<String>,
     count: Int
 ): CountableCriterion<BattleCountableContext>(playerCtx, count) {
 
     companion object {
         val CODEC: Codec<BattleCountableCriterion> = RecordCodecBuilder.create { it.group(
-            ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(BattleCountableCriterion::playerCtx),
+            EntityPredicate.CODEC.optionalFieldOf("player").forGetter(BattleCountableCriterion::playerCtx),
             Codec.STRING.listOf().optionalFieldOf("battle_types", listOf("any")).forGetter(BattleCountableCriterion::battleTypes),
             Codec.INT.optionalFieldOf("count", 0).forGetter(BattleCountableCriterion::count)
         ).apply(it, ::BattleCountableCriterion) }

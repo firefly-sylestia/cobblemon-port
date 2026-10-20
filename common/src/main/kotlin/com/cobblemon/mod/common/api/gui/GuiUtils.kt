@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.gui
 
 import com.cobblemon.mod.common.api.text.font
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay.Companion.PORTRAIT_DIAMETER
 import com.cobblemon.mod.common.client.render.SpriteType
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
@@ -223,7 +224,7 @@ fun drawPosablePortrait(
         context.put(RenderContext.POSABLE_STATE, state)
         context.put(RenderContext.DO_QUIRKS, doQuirks)
 
-        val renderType = RenderType.entityCutout(texture)
+        val renderType = RenderTypes.entityCutout(texture)
 
         val quaternion1 = Axis.YP.rotationDegrees(-32F * if (reversed) -1F else 1F)
         val quaternion2 = Axis.XP.rotationDegrees(5F)
@@ -294,7 +295,7 @@ fun drawProfile(
         context.put(RenderContext.POSABLE_STATE, state)
         state.currentModel = model
 
-        val renderType = RenderType.entityCutout(texture)//model.getLayer(texture)
+        val renderType = RenderTypes.entityCutout(texture)//model.getLayer(texture)
 
         state.setPoseToFirstSuitable(PoseType.PORTRAIT)
         state.updatePartialTicks(partialTicks)

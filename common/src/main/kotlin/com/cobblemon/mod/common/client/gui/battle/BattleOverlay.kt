@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.battle
 
 import com.cobblemon.mod.common.Cobblemon
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.gui.drawPosablePortrait
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
@@ -491,7 +492,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         val context = RenderContext()
         val model = VaryingModelRepository.getPoser(state.pokeBall.name, state)
         val texture = VaryingModelRepository.getTexture(state.pokeBall.name, state)
-        val renderType = RenderType.entityCutout(texture)//model.getLayer(texture)
+        val renderType = RenderTypes.entityCutout(texture)//model.getLayer(texture)
 
         RenderSystem.applyModelViewMatrix()
         val quaternion1 = Axis.YP.rotationDegrees(-32F * if (reversed) -1F else 1F)

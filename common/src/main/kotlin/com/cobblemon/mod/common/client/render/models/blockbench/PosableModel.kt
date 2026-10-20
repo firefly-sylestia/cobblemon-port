@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.models.blockbench
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
@@ -526,9 +527,9 @@ open class PosableModel(@Transient override val rootPart: ModelPart) : ModelFram
     /** Makes a [RenderType] in a jank way. Mostly works so that's cool. */
     fun getLayer(texture: Identifier, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
         return if (!emissive && !translucent) {
-            RenderType.entityCutout(texture)
+            RenderTypes.entityCutout(texture)
         } else if (!emissive && !translucentCull) {
-            RenderType.entityTranslucent(texture)
+            RenderTypes.entityTranslucent(texture)
         } else {
             makeLayer(RenderStateShard.TextureStateShard(texture, false, false), emissive = emissive, translucent = translucent, translucentCull = translucentCull)
         }

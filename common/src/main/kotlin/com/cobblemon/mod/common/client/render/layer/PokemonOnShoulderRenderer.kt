@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.layer
 import com.cobblemon.mod.common.util.getUUID
+import net.minecraft.client.renderer.rendertype.RenderTypes
 
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
@@ -200,7 +201,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             context.put(RenderContext.POSABLE_STATE, state)
             state.currentModel = model
             val vertexConsumer = buffer.getBuffer(
-                RenderType.entityCutout(
+                RenderTypes.entityCutout(
                     VaryingModelRepository.getTexture(
                         shoulderData.species.resourceIdentifier,
                         state

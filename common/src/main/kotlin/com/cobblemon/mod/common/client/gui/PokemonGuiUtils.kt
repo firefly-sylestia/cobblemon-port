@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui
 
 import com.cobblemon.mod.common.api.gui.renderSprite
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.client.render.SpriteType
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
@@ -117,7 +118,7 @@ fun drawProfilePokemon(
 
         state.currentModel = model
 
-        val renderType = RenderType.entityCutout(texture)
+        val renderType = RenderTypes.entityCutout(texture)
 
         state.setPoseToFirstSuitable(poseType)
         state.updatePartialTicks(partialTicks)

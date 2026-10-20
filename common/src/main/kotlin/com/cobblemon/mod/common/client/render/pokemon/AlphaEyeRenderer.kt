@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.pokemon
 
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.toVec3d
@@ -186,7 +187,7 @@ fun renderEyeTrail(
 ) {
     if (positions.size < 2) return
 
-    val consumer = bufferSource.getBuffer(RenderType.lightning())
+    val consumer = bufferSource.getBuffer(RenderTypes.lightning())
     val entityPos = entity.getPosition(partialTicks)
     val matrix = poseStack.last().pose()
     val n = positions.size

@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.util.RandomSource
 
 import net.minecraft.world.level.ScheduledTickAccess
@@ -36,7 +38,6 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
 
@@ -136,7 +137,7 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
     override fun isPathfindable(state: BlockState, type: PathComputationType): Boolean = false
 
     companion object {
-        val ITEM_DIRECTION = DirectionProperty.create("item_facing")
+        val ITEM_DIRECTION = EnumProperty.create("item_facing", Direction::class.java)
     }
 
 }

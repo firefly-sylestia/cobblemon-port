@@ -20,7 +20,6 @@ import kotlin.collections.get
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
-import kotlin.collections.get
 import kotlin.math.max
 
 /**

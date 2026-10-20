@@ -35,7 +35,7 @@ import kotlin.math.pow
 
 object PartySendBinding : CobblemonBlockingKeyBinding(
     "key.cobblemon.throwpartypokemon",
-    InputConstants.Type.KEYSYM,
+    InputConstants.Type.KEYBOARD,
     InputConstants.KEY_R,
     KeybindCategories.COBBLEMON_CATEGORY
 ) {

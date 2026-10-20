@@ -20,7 +20,7 @@ import com.mojang.blaze3d.platform.InputConstants
  */
 abstract class CobblemonCustomKeyBinding(
     name: String,
-    type: InputConstants.Type = InputConstants.Type.KEYSYM,
+    type: InputConstants.Type = InputConstants.Type.KEYBOARD,
     key: Int,
     category: String
 ) : CobblemonKeyBinding(name, type, key, category) {

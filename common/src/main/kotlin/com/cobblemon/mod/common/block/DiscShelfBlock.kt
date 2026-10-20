@@ -31,6 +31,11 @@ import net.minecraft.world.phys.shapes.VoxelShape
 
 class DiscShelfBlock(properties: Properties) : BaseEntityBlock(properties) {
     companion object {
+        val FACING: DirectionProperty = HorizontalDirectionalBlock.FACING
+    }
+
+    init {
+        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH))
     }
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {

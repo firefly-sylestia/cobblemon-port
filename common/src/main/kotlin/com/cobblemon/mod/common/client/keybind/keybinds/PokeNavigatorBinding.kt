@@ -18,7 +18,7 @@ import com.mojang.blaze3d.platform.InputConstants
 // ToDo PartyOverlay#render needs to be replaced back to this keybind
 object PokeNavigatorBinding : CobblemonPartyLockedKeyBinding(
     "key.cobblemon.pokenavigator",
-    InputConstants.Type.KEYSYM,
+    InputConstants.Type.KEYBOARD,
     InputConstants.KEY_N,
     KeybindCategories.COBBLEMON_CATEGORY
 ) {

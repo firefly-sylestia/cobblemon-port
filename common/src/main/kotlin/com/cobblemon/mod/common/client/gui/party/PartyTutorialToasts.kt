@@ -34,12 +34,12 @@ object PartyTutorialToasts {
     val downKey = DownShiftPartyBinding.boundKey()
 
     val upDisplay =
-        if (upKey.type == InputConstants.Type.KEYSYM && upKey.value == InputConstants.KEY_UP)
+        if (upKey.type == InputConstants.Type.KEYBOARD && upKey.value == InputConstants.KEY_UP)
             Component.literal("↑")
         else upKey.displayName
 
     val downDisplay =
-        if (downKey.type == InputConstants.Type.KEYSYM && downKey.value == InputConstants.KEY_DOWN)
+        if (downKey.type == InputConstants.Type.KEYBOARD && downKey.value == InputConstants.KEY_DOWN)
             Component.literal("↓")
         else downKey.displayName
 

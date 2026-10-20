@@ -55,8 +55,4 @@ class PonigiriItem : Item(
     }
 
     override fun getUseAnimation(stack: ItemStack) = ItemUseAnimation.EAT
-
-    override fun getEatingSound(): SoundEvent {
-        return SoundEvents.GENERIC_EAT.value()
-    }
 }

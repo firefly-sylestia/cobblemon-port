@@ -68,8 +68,6 @@ class RegionalFoodItem(properties: Properties) : Item(properties), PokemonSelect
 
     override fun getUseDuration(stack: ItemStack, entity: LivingEntity): Int = 32
 
-    override fun getEatingSound(): SoundEvent = SoundEvents.GENERIC_EAT.value()
-
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
         return pokemon.status != null && pokemon.currentHealth > 0
     }

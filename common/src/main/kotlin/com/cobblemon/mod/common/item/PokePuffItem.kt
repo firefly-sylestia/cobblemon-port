@@ -135,9 +135,6 @@ class PokePuffItem : Item(Properties().stacksTo(64)), PokemonSelectingItem {
         return if (getFlavorType(stack) == "plain") 32 else 0
     }
 
-    override fun getEatingSound(): SoundEvent = SoundEvents.GENERIC_EAT.value()
-    override fun getDrinkingSound(): SoundEvent = SoundEvents.GENERIC_EAT.value()
-
     override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
         if (!world.isClientSide && user is Player && getFlavorType(stack) == "plain") {
             val ingredients = stack.get(CobblemonItemComponents.INGREDIENT)?.ingredientIds?.map { it.toString() } ?: emptyList()

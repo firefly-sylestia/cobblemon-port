@@ -43,18 +43,13 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.plus
 import com.cobblemon.mod.common.util.toRGBA
-import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
-import com.mojang.renderpearl.api.vertex.VertexFormat
 import com.mojang.math.Axis
 import net.minecraft.util.Util
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.client.renderer.rendertype.RenderType
-import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraft.resources.Identifier
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
@@ -415,13 +410,6 @@ open class PosableModel(@Transient override val rootPart: ModelPart) : ModelFram
 
     fun registerRelevantPart(pairing: Pair<String, ModelPart>) = registerRelevantPart(pairing.first, pairing.second)
 
-    /** Needed a custom one, so I can make it take in a dynamic texture instead of resource location */
-    class DynamicStateShard(texture: DynamicTexture) : RenderStateShard.EmptyTextureStateShard(Runnable {
-        RenderSystem.setShaderTexture(0, texture.id)
-    }, Runnable {
-        texture.close() // Cleanup
-    })
-
     /** Renders the model. Assumes rotations have been set. Will simply render the base model and then any extra layers. */
     fun render(
         context: RenderContext,
@@ -462,7 +450,7 @@ open class PosableModel(@Transient override val rootPart: ModelPart) : ModelFram
                     getScrollingLayer(texture, scrolling, layer)
                 } else if (layer.texture is AnimatedModelTextureSupplier && layer.texture.interpolation) {
                     val interpolatedTexture = layer.texture.interpolatedTexture(currentState ?: FloatingState()) ?: continue
-                    makeLayer(DynamicStateShard(interpolatedTexture), layer.emissive, layer.translucent, layer.translucent_cull)
+                    getLayer(interpolatedTexture.id, layer.emissive, layer.translucent, layer.translucent_cull)
                 } else {
                     getLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
                 }
@@ -493,46 +481,12 @@ open class PosableModel(@Transient override val rootPart: ModelPart) : ModelFram
         return ItemDisplayContext.valueOf(displayContextString)
     }
 
-    /** Generates a [RenderType] by the power of god and anime. Only possible thanks to 100 access wideners. */
-    fun makeLayer(texture: RenderStateShard.EmptyTextureStateShard, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
-        val multiPhaseParameters: RenderType.CompositeState = RenderType.CompositeState.builder()
-            .setShaderState(
-                when {
-                    emissive && translucent -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER
-                    !emissive && translucent && translucentCull -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER
-                    !emissive && translucent -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER
-                    !emissive && !translucent -> RenderStateShard.RENDERTYPE_ENTITY_CUTOUT_SHADER
-                    else -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER
-                }
-            )
-            .setTextureState(texture)
-            .setTransparencyState(if (translucent) RenderStateShard.TRANSLUCENT_TRANSPARENCY else RenderStateShard.NO_TRANSPARENCY)
-            .setLightmapState(if (!emissive) RenderStateShard.LIGHTMAP else RenderStateShard.LightmapStateShard(false))
-            .setCullState(RenderStateShard.CULL)
-            .setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
-            .setOverlayState(RenderStateShard.OVERLAY)
-            .createCompositeState(false)
-
-        return RenderType.create(
-            "cobblemon_entity_layer",
-            DefaultVertexFormat.NEW_ENTITY,
-            VertexFormat.Mode.QUADS,
-            256,
-            true,
-            translucent,
-            multiPhaseParameters
-        )
-    }
-
-    /** Makes a [RenderType] in a jank way. Mostly works so that's cool. */
-    fun getLayer(texture: Identifier, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
-        return if (!emissive && !translucent) {
-            RenderTypes.entityCutout(texture)
-        } else if (!emissive && !translucentCull) {
-            RenderTypes.entityTranslucent(texture)
-        } else {
-            makeLayer(RenderStateShard.TextureStateShard(texture, false, false), emissive = emissive, translucent = translucent, translucentCull = translucentCull)
-        }
+    /** Builds the [RenderType] for a model layer from the 26.3 render-type catalogue. */
+    fun getLayer(texture: Identifier, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType = when {
+        emissive && translucent -> RenderTypes.entityTranslucentEmissive(texture)
+        !emissive && translucent && translucentCull -> RenderTypes.entityTranslucentCull(texture)
+        !emissive && translucent -> RenderTypes.entityTranslucent(texture)
+        else -> RenderTypes.entityCutout(texture)
     }
 
     fun getScrollingLayer(texture: Identifier, scrolling: ScrollingTextureSettings, layer: ModelLayer): RenderType {
@@ -540,9 +494,9 @@ open class PosableModel(@Transient override val rootPart: ModelPart) : ModelFram
         val offsetU = (gameTime * scrolling.speedU) % 1.0f
         val offsetV = (gameTime * scrolling.speedV) % 1.0f
         return if (layer.emissive) {
-            RenderType.energySwirl(texture, offsetU, offsetV)
+            RenderTypes.energySwirl(texture, offsetU, offsetV)
         } else {
-            RenderType.breezeWind(texture, offsetU, offsetV)
+            RenderTypes.breezeWind(texture, offsetU, offsetV)
         }
     }
 

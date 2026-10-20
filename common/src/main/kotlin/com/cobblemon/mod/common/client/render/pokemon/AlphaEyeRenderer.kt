@@ -22,7 +22,6 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 
@@ -123,7 +122,7 @@ fun renderAlphaEyeBloom(
 
         // Render bloom using concentric "rings" (its all just triangle pizza in the end)
         val rings = 5 //TODO: is this too many?
-        val consumer = bufferSource.getBuffer(RenderType.dragonRays()) // rgba flat color triangle rendering
+        val consumer = bufferSource.getBuffer(RenderTypes.dragonRays()) // rgba flat color triangle rendering
 
         for (ring in 0 until rings) {
             val t0 = ring.toFloat() / rings

@@ -72,6 +72,12 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     override val registry: Registry<Item> = BuiltInRegistries.ITEM
     override val resourceKey: ResourceKey<Registry<Item>> = Registries.ITEM
 
+    /**
+     * Food eaten faster than the default 1.6 seconds, previously `FoodProperties.Builder.fast()`.
+     * Declared before the entries that use it so object initialization sees a real value.
+     */
+    private val FAST_CONSUMABLE: Consumable = Consumable.builder().consumeSeconds(0.8F).build()
+
     @JvmField
     val NPC_EDITOR = create("npc_editor", CobblemonItem(Item.Properties().stacksTo(1)))
 
@@ -1635,9 +1641,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
             }
         }
     )
-
-    /** Food that is eaten faster than the default 1.6 seconds, previously `FoodProperties.Builder.fast()`. */
-    private val FAST_CONSUMABLE: Consumable = Consumable.builder().consumeSeconds(0.8F).build()
 
     private fun campfirePotItem(block: Block, color: CampfirePotColor): CampfirePotItem {
         val item = create("campfire_pot_${color.suffix}", CampfirePotItem(block, color))

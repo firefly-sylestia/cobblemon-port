@@ -133,7 +133,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     private var mainScreenIndex = INFO
     var sideScreenIndex = PARTY
 
-    override fun renderBlurredBackground(delta: Float) { }
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
 
     /**
      * Initializes the Summary Screen

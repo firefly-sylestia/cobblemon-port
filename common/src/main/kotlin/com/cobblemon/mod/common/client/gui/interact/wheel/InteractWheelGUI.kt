@@ -41,7 +41,7 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
     private val buttons = mutableListOf<InteractWheelButton>()
     private var maxPage = 1
     private var currentPage = 0
-    override fun renderBlurredBackground(delta: Float) { }
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
     override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
 
     override fun init() {

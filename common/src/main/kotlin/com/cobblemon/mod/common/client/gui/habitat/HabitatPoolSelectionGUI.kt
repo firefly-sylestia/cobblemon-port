@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.habitat
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.api.habitats.HabitatPool
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
@@ -119,7 +120,7 @@ class HabitatPoolSelectionGUI(
             return listWidth - 8
         }
 
-        override fun getScrollbarPosition(): Int {
+        override fun scrollBarX(): Int {
             return left + listWidth - 6
         }
 

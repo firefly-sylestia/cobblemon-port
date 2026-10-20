@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.mark.Mark
 import com.cobblemon.mod.common.api.text.text
@@ -43,7 +44,7 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
 
     override fun getRowLeft(): Int = if (children().size > 5) (left + 1) else left
 
-    override fun getScrollbarPosition(): Int = rowLeft + width - 3
+    override fun scrollBarX(): Int = rowLeft + width - 3
 
     override fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         // Do not render scrollbar if all rows are already visible

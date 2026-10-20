@@ -67,7 +67,7 @@ class ConfigVariableList(
         }
     }
 
-    override fun getScrollbarPosition() = x + width - 3
+    override fun scrollBarX() = x + width - 3
 
     public override fun addEntry(entry: ConfigVariable) = super.addEntry(entry)
     public override fun removeEntry(entry: ConfigVariable) = super.removeEntry(entry)

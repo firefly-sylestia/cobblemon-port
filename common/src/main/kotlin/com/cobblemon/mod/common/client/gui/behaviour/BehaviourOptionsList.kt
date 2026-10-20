@@ -57,7 +57,7 @@ class BehaviourOptionsList(
 
     override fun renderListSeparators(guiGraphics: GuiGraphicsExtractor) {}
 
-    override fun getScrollbarPosition() = left + width - 6
+    override fun scrollBarX() = left + width - 6
 
     fun removeEntry(entry: Identifier) {
         children().find { it.resourceLocation == entry }?.let { removeEntry(it) }

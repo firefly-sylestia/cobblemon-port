@@ -1272,7 +1272,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         renderHeldMoveInfoTooltip(graphics, mouseX, mouseY)
     }
 
-    override fun renderBlurredBackground(partialTick: Float) {}
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
     override fun renderLabels(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int) {}
 
     fun playSound(soundEvent: SoundEvent) {
@@ -1344,7 +1344,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             )
         }
 
-        override fun getScrollbarPosition(): Int {
+        override fun scrollBarX(): Int {
             return left + width - DESCRIPTION_SCROLLBAR_WIDTH
         }
 

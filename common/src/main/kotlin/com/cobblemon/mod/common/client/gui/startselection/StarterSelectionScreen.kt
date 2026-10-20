@@ -80,7 +80,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
     var ticksElapsed = 0
     var currentBallBackgroundFrame = 0
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
 
     override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
 

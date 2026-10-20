@@ -127,7 +127,7 @@ class DialogueBox(
         return LINE_WIDTH
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return this.x + 186
     }
 

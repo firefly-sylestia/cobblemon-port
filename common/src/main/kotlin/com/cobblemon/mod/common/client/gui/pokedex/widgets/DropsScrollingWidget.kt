@@ -56,7 +56,7 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
         }
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return left + width - scrollBarWidth - 7
     }
 

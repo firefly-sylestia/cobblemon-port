@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
@@ -35,7 +36,7 @@ class MoveDescriptionScrollList(
         this.setRenderHeader(false, 0)
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return x + width - 3
     }
 
@@ -82,8 +83,8 @@ class MoveDescriptionScrollList(
     override fun renderListBackground(guiGraphics: GuiGraphicsExtractor) {}
 
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {
-        scrolling = mouseX >= getScrollbarPosition().toDouble()
-                && mouseX < (getScrollbarPosition() + 3).toDouble()
+        scrolling = mouseX >= scrollBarX().toDouble()
+                && mouseX < (scrollBarX() + 3).toDouble()
                 && mouseY >= y
                 && mouseY < bottom
     }

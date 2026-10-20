@@ -145,7 +145,7 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
 
     override fun renderBackground(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {}
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
 
     override fun init() {
         super.init()

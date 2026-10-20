@@ -104,7 +104,7 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
         )
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return left + width - scrollBarWidth
     }
 

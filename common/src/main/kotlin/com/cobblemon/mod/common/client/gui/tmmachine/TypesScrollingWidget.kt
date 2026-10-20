@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.tmmachine
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
@@ -45,7 +46,7 @@ class TypesScrollingWidget(val pX: Int, val pY: Int, val setType: (ElementalType
         }
     }
 
-    override fun getScrollbarPosition(): Int = rowLeft + width - 3
+    override fun scrollBarX(): Int = rowLeft + width - 3
 
     override fun renderScrollbar(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val xLeft = this.scrollBarX()

@@ -83,7 +83,7 @@ class PasturePokemonScrollList(
         }
     }
 
-    override fun getScrollbarPosition() = x + width - 3
+    override fun scrollBarX() = x + width - 3
 
     public override fun addEntry(entry: PastureSlot) = super.addEntry(entry)
     public override fun removeEntry(entry: PastureSlot) = super.removeEntry(entry)

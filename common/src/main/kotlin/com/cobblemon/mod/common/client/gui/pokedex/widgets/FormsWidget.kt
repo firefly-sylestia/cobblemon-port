@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.ScrollingWidget
@@ -41,7 +42,7 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
         }
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return left + width - scrollBarWidth
     }
 

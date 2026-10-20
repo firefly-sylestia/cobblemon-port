@@ -80,7 +80,7 @@ class BehaviourEditorScreen(
         )
     }
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
 
     override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
 

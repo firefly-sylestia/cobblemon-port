@@ -65,7 +65,7 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
         return super.addEntry(entry)
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return pX + width - SCROLL_BAR_WIDTH
     }
 

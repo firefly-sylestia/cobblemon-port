@@ -758,7 +758,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             selectedEntry = entry
         }
 
-        override fun getScrollbarPosition(): Int {
+        override fun scrollBarX(): Int {
             return left + HALF_OVERLAY_WIDTH - SCROLL_BAR_WIDTH
         }
 
@@ -959,7 +959,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             )
         }
 
-        override fun getScrollbarPosition(): Int {
+        override fun scrollBarX(): Int {
             return left + width - DESCRIPTION_SCROLLBAR_WIDTH
         }
 

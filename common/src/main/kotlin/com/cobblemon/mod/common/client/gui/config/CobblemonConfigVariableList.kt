@@ -122,7 +122,7 @@ class CobblemonConfigVariableList(
     }
 
     override fun getRowWidth(): Int = width
-    override fun getScrollbarPosition(): Int = width / 2 - SLOT_WIDTH / 2 + SLOT_WIDTH + PADDING
+    override fun scrollBarX(): Int = width / 2 - SLOT_WIDTH / 2 + SLOT_WIDTH + PADDING
 
     fun filterConfigurations(text: String) {
         for (entry in entries) {

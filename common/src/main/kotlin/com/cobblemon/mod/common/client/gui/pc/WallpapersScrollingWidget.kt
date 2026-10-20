@@ -58,7 +58,7 @@ class WallpapersScrollingWidget(
         createEntries()
     }
 
-    override fun getScrollbarPosition(): Int = x + width - 3
+    override fun scrollBarX(): Int = x + width - 3
 
     override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(

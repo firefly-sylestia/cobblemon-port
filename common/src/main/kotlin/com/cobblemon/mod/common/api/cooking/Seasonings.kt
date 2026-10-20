@@ -72,7 +72,7 @@ object Seasonings : JsonDataRegistry<Seasoning> {
     }
 
     fun getFlavoursFromItemStack(stack: ItemStack): Map<Flavour, Int>? {
-        val holder = stack.typeHolder
+        val holder = stack.typeHolder()
         val seasoning = seasonings.find { it.ingredient.fits(holder) }
         val inherentFlavours = stack.get(CobblemonItemComponents.FLAVOUR)?.flavours
         val seasoningFlavours = seasoning?.flavours
@@ -122,7 +122,7 @@ object Seasonings : JsonDataRegistry<Seasoning> {
     }
 
     fun getFromItemStack(stack: ItemStack): Seasoning? {
-        val holder = stack.typeHolder
+        val holder = stack.typeHolder()
         return seasonings.find { it.ingredient.fits(holder) }
     }
 

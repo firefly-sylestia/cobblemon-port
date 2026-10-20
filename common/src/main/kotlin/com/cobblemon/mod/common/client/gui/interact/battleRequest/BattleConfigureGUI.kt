@@ -200,7 +200,7 @@ class BattleConfigureGUI(
     private var hasRequest = false
     private var ticksPassed = 0F
 
-    override fun renderBlurredBackground(delta: Float) { }
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
     override fun renderMenuBackground(context: GuiGraphicsExtractor) { }
 
 

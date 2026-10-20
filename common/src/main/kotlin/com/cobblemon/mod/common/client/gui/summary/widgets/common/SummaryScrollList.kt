@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.common
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
@@ -53,7 +54,7 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
         correctSize()
     }
 
-    override fun getScrollbarPosition(): Int {
+    override fun scrollBarX(): Int {
         return x + width - 3
     }
 

@@ -99,7 +99,7 @@ class NPCEditorScreen(
         addRenderableWidget(ConfigVariableList(leftX + 134, topY + 35, this))
     }
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
 
     override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
 

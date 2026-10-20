@@ -133,7 +133,7 @@ class PCGUI(
     var selectPointerOffsetIncrement = false
     var displayOptions = false
 
-    override fun renderBlurredBackground(delta: Float) {}
+    override fun extractBlurredBackground(context: GuiGraphicsExtractor) {}
 
     override fun renderMenuBackground(context: GuiGraphicsExtractor) {}
 

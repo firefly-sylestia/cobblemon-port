@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.tmmachine
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.reactive.SettableObservable
@@ -77,7 +78,7 @@ class MovesScrollingWidget(val pX: Int, val pY: Int, tmList: SettableObservable<
         }
     }
 
-    override fun getScrollbarPosition(): Int = rowLeft + width - 3
+    override fun scrollBarX(): Int = rowLeft + width - 3
 
     override fun renderWidget(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(

@@ -194,8 +194,8 @@ class BattleTargetSelection(
             if (battlePokemon.hpValue > 0) {
                 // Render Pokémon
                 matrices.pushMatrix()
-                matrices.translate(x + TARGET_WIDTH - (25 / 2.0) - 2, y + 5.0, 0.0)
-                matrices.scale(2.5F, 2.5F, 1F)
+                matrices.translate((x + TARGET_WIDTH - (25 / 2.0) - 2).toFloat(), (y + 5.0).toFloat())
+                matrices.scale(2.5F, 2.5F)
                 // Grab aspects for right variant
                 state.currentAspects = battlePokemon.state.currentAspects
                 drawProfilePokemon(

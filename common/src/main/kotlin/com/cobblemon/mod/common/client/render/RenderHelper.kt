@@ -214,8 +214,8 @@ fun drawScaledText(
         return
     }
     val matrixStack = context.pose()
-    matrixStack.pushPose()
-    matrixStack.scale(scaleX, scaleY, 1F)
+    matrixStack.pushMatrix()
+    matrixStack.scale(scaleX, scaleY)
     drawText(
         context = context,
         text = text,
@@ -225,7 +225,7 @@ fun drawScaledText(
         colour = colour,
         shadow = shadow
     )
-    matrixStack.popPose()
+    matrixStack.popMatrix()
 }
 
 fun drawScaledTextJustifiedRight(
@@ -247,8 +247,8 @@ fun drawScaledTextJustifiedRight(
     val extraScale = if (textWidth < maxCharacterWidth) 1F else (maxCharacterWidth / textWidth.toFloat())
     val fontHeight = if (font == null) 5F else 6F
     val matrixStack = context.pose()
-    matrixStack.pushPose()
-    matrixStack.scale(scale * extraScale, scale * extraScale, 1F)
+    matrixStack.pushMatrix()
+    matrixStack.scale(scale * extraScale, scale * extraScale)
     drawTextJustifiedRight(
         context = context,
         font = font,
@@ -258,7 +258,7 @@ fun drawScaledTextJustifiedRight(
         colour = colour,
         shadow = shadow
     )
-    matrixStack.popPose()
+    matrixStack.popMatrix()
 }
 
 fun drawScaledTextJustifiedRight(
@@ -276,8 +276,8 @@ fun drawScaledTextJustifiedRight(
         return
     }
     val matrixStack = context.pose()
-    matrixStack.pushPose()
-    matrixStack.scale(scaleX, scaleY, 1F)
+    matrixStack.pushMatrix()
+    matrixStack.scale(scaleX, scaleY)
     drawTextJustifiedRight(
         context = context,
         text = text,
@@ -286,7 +286,7 @@ fun drawScaledTextJustifiedRight(
         colour = colour,
         shadow = shadow
     )
-    matrixStack.popPose()
+    matrixStack.popMatrix()
 }
 
 fun renderBeaconBeam(

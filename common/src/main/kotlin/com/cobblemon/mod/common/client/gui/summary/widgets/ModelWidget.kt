@@ -80,8 +80,8 @@ class ModelWidget(
             y + height
         )
 
-        matrices.translate(x + width * 0.5, y.toDouble() + offsetY, 0.0)
-        matrices.scale(baseScale, baseScale, baseScale)
+        matrices.translate((x + width * 0.5).toFloat(), (y.toDouble() + offsetY).toFloat())
+        matrices.scale((baseScale).toFloat(), (baseScale).toFloat())
         matrices.pushMatrix()
 
         if (isHovered) {

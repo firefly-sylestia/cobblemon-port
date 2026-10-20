@@ -105,8 +105,8 @@ class TMPartySlotWidget(
 
             // Render Pokémon
             matrices.pushMatrix()
-            matrices.translate(x + (PORTRAIT_DIAMETER / 2.0) - 2, y - 1.0, 0.0)
-            matrices.scale(2.5F, 2.5F, 1F)
+            matrices.translate((x + (PORTRAIT_DIAMETER / 2.0) - 2).toFloat(), (y - 1.0).toFloat())
+            matrices.scale(2.5F, 2.5F)
             drawProfilePokemon(
                 species = pokemon.species.resourceIdentifier,
                 matrixStack = matrices,

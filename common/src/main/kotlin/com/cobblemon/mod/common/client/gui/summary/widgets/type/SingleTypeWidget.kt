@@ -23,7 +23,7 @@ class SingleTypeWidget(
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()
         matrices.pushMatrix()
-        matrices.translate(0.35, 0.0, 0.0)
+        matrices.translate(0.35F, 0.0F)
         renderType(type, context)
         matrices.popMatrix()
         // Render Type Name

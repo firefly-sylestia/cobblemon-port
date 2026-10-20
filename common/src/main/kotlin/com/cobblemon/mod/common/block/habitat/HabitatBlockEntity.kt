@@ -220,8 +220,8 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         // Don't tell the client everything, otherwise hackermans may learn too much
         val tag = CompoundTag()
         tag.putString(DataKeys.HABITAT_MIMIC, mimicId.toString())
-        val speciesListTag = tag.list(DISPLAY_SPECIES_KEY, Codec.STRING)
-        displaySpeciesIds.forEach { speciesListTag.add(it.toString()) }
+        val speciesListTag = ListTag()
+        displaySpeciesIds.forEach { speciesListTag.add(StringTag.valueOf(it.toString())) }
         return tag
     }
 

@@ -99,7 +99,7 @@ class MarksWidget(
             ).render(context, mouseX, mouseY)
 
             matrices.pushMatrix()
-            matrices.scale(SCALE, SCALE, 1F)
+            matrices.scale((SCALE).toFloat(), (SCALE).toFloat())
             MultiLineLabelK.create(
                 component = selectedMark!!.getDescription(),
                 width = 85 / SCALE,

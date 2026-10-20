@@ -46,7 +46,7 @@ class NPCRenderWidget(
         )
         context.pose().pushMatrix()
         // Decrease on Z-axis to prevent model from rendering above other components like tooltips
-        context.pose().translate(x + (WIDTH / 2F), y + HEIGHT + (HEIGHT / 4F), -500F)
+        context.pose().translate((x + (WIDTH / 2F)).toFloat(), (y + HEIGHT + (HEIGHT / 4F)).toFloat())
 
         drawProfile(
             resourceIdentifier = identifier,

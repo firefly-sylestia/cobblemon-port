@@ -73,8 +73,8 @@ open class StorageSlot(
 
         // Render Pokémon
         matrices.pushMatrix()
-        matrices.translate(posX + (SIZE / 2.0), posY + 1.0, 0.0)
-        matrices.scale(2.5F, 2.5F, 1F)
+        matrices.translate((posX + (SIZE / 2.0)).toFloat(), (posY + 1.0).toFloat())
+        matrices.scale(2.5F, 2.5F)
 
         val animationConfig = if (this is PartyStorageSlot) Cobblemon.config.summaryProfileAnimations else Cobblemon.config.pcProfileAnimations
         val shouldAnimate = when (animationConfig) {
@@ -98,7 +98,7 @@ open class StorageSlot(
         if (!isSlotSelected) {
             // Ensure elements are not hidden behind Pokémon render
             matrices.pushMatrix()
-            matrices.translate(0.0, 0.0, 100.0)
+            matrices.translate(0.0F, 0.0F)
             // Level
             drawScaledText(
                 context = context,
@@ -137,7 +137,7 @@ open class StorageSlot(
 
         // Ensure overlay elements are on top
         matrices.pushMatrix()
-        matrices.translate(0.0, 0.0, 500.0)
+        matrices.translate(0.0F, 0.0F)
 
         val config = parent.pcGui.configuration
         if (pokemon.tetheringId != null && !isSlotSelected) {

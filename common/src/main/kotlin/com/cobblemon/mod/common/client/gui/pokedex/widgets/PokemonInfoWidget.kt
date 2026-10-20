@@ -336,12 +336,8 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
                 )
 
                 matrices.pushMatrix()
-                matrices.translate(
-                    pX.toDouble() + (POKEMON_PORTRAIT_WIDTH.toDouble() + 2) / 2,
-                    pY.toDouble() + portraitStartY - 12,
-                    1000.0 // Prevent model from clipping into background
-                )
-                matrices.scale(scaleAmount, scaleAmount, scaleAmount)
+                matrices.translate((pX.toDouble() + (POKEMON_PORTRAIT_WIDTH.toDouble() + 2) / 2).toFloat(), (pY.toDouble() + portraitStartY - 12).toFloat())
+                matrices.scale((scaleAmount).toFloat(), (scaleAmount).toFloat())
                 val rotationVector = Vector3f(13F, rotationY, 0F)
 
                 drawProfilePokemon(
@@ -371,7 +367,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
 
             // Ensure elements are not hidden behind Pokémon render
             matrices.pushMatrix()
-            matrices.translate(0.0, 0.0, 2000.0)
+            matrices.translate(0.0F, 0.0F)
 
             if (isSelectedPokemonOwned()) {
                 val primaryType = type[0]

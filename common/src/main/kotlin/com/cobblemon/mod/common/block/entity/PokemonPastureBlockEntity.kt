@@ -364,7 +364,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             val pokemonId = tetheringNBT.getUUID(DataKeys.POKEMON_UUID)
             val pcId = tetheringNBT.getUUID(DataKeys.PC_ID)
             val playerId = tetheringNBT.getUUID(DataKeys.TETHERING_PLAYER_ID)
-            val entityId = tetheringNBT.getInt(DataKeys.TETHERING_ENTITY_ID)
+            val entityId = tetheringNBT.getIntOr(DataKeys.TETHERING_ENTITY_ID, 0)
             tetheredPokemon.add(
                 Tethering(
                     minRoamPos = minRoamPos,

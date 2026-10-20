@@ -249,8 +249,8 @@ class BattleSwitchPokemonSelection(
 
                 // Render Pokémon
                 matrixStack.pushMatrix()
-                matrixStack.translate(x + SELECT_WIDTH - (25 / 2.0) - 4, y - 1.0, 0.0)
-                matrixStack.scale(2.5F, 2.5F, 1F)
+                matrixStack.translate((x + SELECT_WIDTH - (25 / 2.0) - 4).toFloat(), (y - 1.0).toFloat())
+                matrixStack.scale(2.5F, 2.5F)
                 drawProfilePokemon(
                     species = pokemon.species.resourceIdentifier,
                     matrixStack = matrixStack,
@@ -264,7 +264,7 @@ class BattleSwitchPokemonSelection(
 
                 // Ensure elements are not hidden behind Pokémon render
                 matrixStack.pushMatrix()
-                matrixStack.translate(0.0, 0.0, 100.0)
+                matrixStack.translate(0.0F, 0.0F)
                 // Held Item
                 val heldItem = pokemon.heldItemNoCopy()
                 if (!heldItem.isEmpty) {

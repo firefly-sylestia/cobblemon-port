@@ -101,7 +101,7 @@ class PartySlotButton(
         )
 
         context.pose().pushMatrix()
-        context.pose().translate(x.toDouble() + 13, y.toDouble() - 2, 0.0)
+        context.pose().translate((x.toDouble() + 13).toFloat(), (y.toDouble() - 2).toFloat())
 
         drawProfilePokemon(
             renderablePokemon = renderablePokemon,
@@ -128,7 +128,7 @@ class PartySlotButton(
 
         // Ensure elements are not hidden behind Pokémon render
         matrices.pushMatrix()
-        matrices.translate(0.0, 0.0, 100.0)
+        matrices.translate(0.0F, 0.0F)
         drawScaledText(
             context = context,
             text = lang("ui.lv.number", pokemon.level!!),

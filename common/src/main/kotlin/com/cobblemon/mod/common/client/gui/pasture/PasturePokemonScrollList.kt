@@ -237,8 +237,8 @@ class PasturePokemonScrollList(
 
             // Render Pokémon
             matrixStack.pushMatrix()
-            matrixStack.translate(x + 11 + (StorageSlot.SIZE / 2.0), y - 1.0, 0.0)
-            matrixStack.scale(2.5F, 2.5F, 1F)
+            matrixStack.translate((x + 11 + (StorageSlot.SIZE / 2.0)).toFloat(), (y - 1.0).toFloat())
+            matrixStack.scale(2.5F, 2.5F)
             state.currentAspects = pokemon.aspects
             drawProfilePokemon(
                 species = pokemon.species,

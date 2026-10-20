@@ -661,7 +661,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
 
         matrices.pushMatrix()
         // Prevent widgets from being overlapped by other components
-        matrices.translate(0.0, 0.0, 1000.0)
+        matrices.translate(0.0F, 0.0F)
 
         // Render all added Widgets
         super.extractRenderState(context, mouseX, mouseY, delta)

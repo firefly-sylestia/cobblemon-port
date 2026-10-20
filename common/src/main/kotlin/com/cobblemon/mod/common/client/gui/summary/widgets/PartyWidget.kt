@@ -140,7 +140,7 @@ class PartyWidget(
 
         if (draggedSlot != null) {
             matrices.pushMatrix()
-            matrices.translate(0.0, 0.0, 500.0)
+            matrices.translate(0.0F, 0.0F)
             draggedSlot!!.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
             matrices.popMatrix()
         }

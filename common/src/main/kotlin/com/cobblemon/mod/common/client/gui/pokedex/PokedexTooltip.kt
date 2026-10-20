@@ -66,7 +66,7 @@ fun renderTooltip(
     val tooltipTop = posY + offsetY
 
     poseStack.pushMatrix()
-    poseStack.translate(0.0, 0.0, 1000.0)
+    poseStack.translate(0.0F, 0.0F)
 
     Minecraft.getInstance().let {
         it.mainRenderTarget.bindWrite(false)

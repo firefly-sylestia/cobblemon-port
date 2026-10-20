@@ -811,7 +811,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             val posY = mouseY - 49
 
             matrices.pushMatrix()
-            matrices.translate(0.0F, 0.0F, 1000.0F)
+            matrices.translate(0.0F, 0.0F)
             blitk(
                 context = context,
                 texture = tooltipMoveInfo,
@@ -918,7 +918,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             )
 
             matrices.pushMatrix()
-            matrices.scale(HALF_SCALE, HALF_SCALE, 1F)
+            matrices.scale((HALF_SCALE).toFloat(), (HALF_SCALE).toFloat())
             MultiLineLabelK.create(
                 component = moveTemplate.description,
                 width = 79 / HALF_SCALE,
@@ -953,7 +953,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         if (ticksElapsed > SCREEN_SAVER_TIMEOUT_TICKS) {
             val opacity = Math.max(0.0, Math.min(1.0, (ticksElapsed - SCREEN_SAVER_TIMEOUT_TICKS) * 0.2))
             poseStack.pushMatrix()
-            poseStack.translate(0.0, 0.0, 100.0)
+            poseStack.translate(0.0F, 0.0F)
             blitk(
                 context = context,
                 texture = screenSaver,

@@ -298,11 +298,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             (y + portraitDiameter + portraitOffsetY).toInt(),
         )
         matrixStack.pushMatrix()
-        matrixStack.translate(
-            portraitStartX + portraitDiameter / 2.0,
-            y.toDouble() + portraitOffsetY - if (isCompact) 15.0 else 5.0,
-            0.0
-        )
+        matrixStack.translate((portraitStartX + portraitDiameter / 2.0).toFloat(), (y.toDouble() + portraitOffsetY - if (isCompact) 15.0 else 5.0).toFloat())
 
         if (ballState != null && ballState.currentPose != "shut")  {
             ballState.currentPose = "shut"
@@ -503,11 +499,11 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         state.updatePartialTicks(partialTicks)
         model.applyAnimations(null, state, 0F, 0F, 0F, 0F, 0F)
 
-        matrixStack.scale(scale, scale, -scale)
-        matrixStack.translate(0.0, 5.5, -4.0)
+        matrixStack.scale((scale).toFloat(), (scale).toFloat())
+        matrixStack.translate(0.0F, 5.5F)
         matrixStack.pushMatrix()
 
-        matrixStack.scale(scale * state.scale, scale * state.scale, 0.1F)
+        matrixStack.scale((scale * state.scale).toFloat(), (scale * state.scale).toFloat())
 
         matrixStack.mulPose(quaternion1)
         matrixStack.mulPose(quaternion2)

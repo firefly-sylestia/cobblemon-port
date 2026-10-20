@@ -286,7 +286,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         descriptionWidget.renderWidget(context, mouseX, mouseY, delta)
 
         matrices.pushMatrix()
-        matrices.translate(0.0, 0.0, 500.0) // Translate on top of other elements
+        matrices.translate(0.0F, 0.0F) // Translate on top of other elements
         blitk(
             texture = scrollBorderTop,
             context = context,

@@ -149,9 +149,9 @@ open class FossilMultiblockEntity(
                 // Otherwise the fetus animation gets interrupted on every block update
                 val animAge = oldMultiblockStructure.fossilState.peekAge() // If someone knows a better way to fetch the age, please do.
                 val partialTicks = oldMultiblockStructure.fossilState.getPartialTicks()
-                FossilMultiblockStructure.fromNbt(storageTag, registryLookup, animAge, partialTicks)
+                FossilMultiblockStructure.fromNbt(storageTag, nbt.lookup(), animAge, partialTicks)
             } else {
-                FossilMultiblockStructure.fromNbt(storageTag, registryLookup)
+                FossilMultiblockStructure.fromNbt(storageTag, nbt.lookup())
             }
         } else {
             null

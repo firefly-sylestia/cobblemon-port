@@ -80,8 +80,8 @@ abstract class PokemonSlotWidget {
                 )
 
                 matrices.pushMatrix()
-                matrices.translate(x + SCROLL_SLOT_SIZE / 2.0, y + 1.0, 0.0)
-                matrices.scale(2.5F, 2.5F, 1F)
+                matrices.translate((x + SCROLL_SLOT_SIZE / 2.0).toFloat(), (y + 1.0).toFloat())
+                matrices.scale(2.5F, 2.5F)
 
                 val state = FloatingState()
                 state.currentAspects = renderablePokemon.aspects
@@ -122,7 +122,7 @@ abstract class PokemonSlotWidget {
 
             // Ensure elements are not hidden behind Pokémon render
             matrices.pushMatrix()
-            matrices.translate(0.0, 0.0, 100.0)
+            matrices.translate(0.0F, 0.0F)
 
             drawScaledText(
                 context = context,

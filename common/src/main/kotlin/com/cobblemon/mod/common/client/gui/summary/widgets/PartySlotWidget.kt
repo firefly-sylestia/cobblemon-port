@@ -156,8 +156,8 @@ class PartySlotWidget(
 
             // Render Pokémon
             matrices.pushMatrix()
-            matrices.translate(x + (PORTRAIT_DIAMETER / 2.0), y - 3.0, 0.0)
-            matrices.scale(2.5F, 2.5F, 1F)
+            matrices.translate((x + (PORTRAIT_DIAMETER / 2.0)).toFloat(), (y - 3.0).toFloat())
+            matrices.scale(2.5F, 2.5F)
 
             val shouldAnimate = when (Cobblemon.config.summaryProfileAnimations) {
                 PokemonGUIAnimationStyle.ALWAYS_ANIMATE -> true

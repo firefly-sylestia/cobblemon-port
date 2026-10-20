@@ -336,7 +336,7 @@ class StorageWidget(
 
         pastureWidget?.extractRenderState(context, mouseX, mouseY, delta)
         matrices.pushMatrix()
-        matrices.translate(0.0, 0.0, 1000.0)
+        matrices.translate(0.0F, 0.0F)
         grabbedSlot?.extractRenderState(context, mouseX, mouseY, delta)
         matrices.popMatrix()
     }

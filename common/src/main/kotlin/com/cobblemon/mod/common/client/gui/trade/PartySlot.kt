@@ -64,8 +64,8 @@ open class PartySlot(
             // context.enableScissor(x - 2, y + 2, x + SIZE + 4, y + SIZE + 4)
             // Render Pokémon
             matrices.pushMatrix()
-            matrices.translate(x + (SIZE / 2.0), y + 1.0, 0.0)
-            matrices.scale(2.5F, 2.5F, 1F)
+            matrices.translate((x + (SIZE / 2.0)).toFloat(), (y + 1.0).toFloat())
+            matrices.scale(2.5F, 2.5F)
             drawProfilePokemon(
                 renderablePokemon = pokemon.asRenderablePokemon(),
                 matrixStack = matrices,
@@ -80,7 +80,7 @@ open class PartySlot(
 
             // Ensure elements are not hidden behind Pokémon render
             matrices.pushMatrix()
-            matrices.translate(0.0, 0.0, 100.0)
+            matrices.translate(0.0F, 0.0F)
             // Level
             drawScaledText(
                 context = context,
@@ -104,7 +104,7 @@ open class PartySlot(
             }
             if (!pokemon.tradeable) {
                 matrices.pushMatrix()
-                matrices.translate(0F, 0F, 10F)
+                matrices.translate(0F, 0F)
                 blitk(
                     context = context,
                     texture = untradeableResource,

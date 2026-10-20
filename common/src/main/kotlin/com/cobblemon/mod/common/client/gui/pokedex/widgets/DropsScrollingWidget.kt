@@ -138,7 +138,7 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
             tickDelta: Float
         ) {
             context.pose().pushMatrix()
-            context.pose().translate(0f, 0f, 100f)
+            context.pose().translate(0F, 0F)
             val itemStack = Minecraft.getInstance().player?.level()?.itemRegistry?.get(entry.item)?.defaultInstance ?: ItemStack.EMPTY
             renderScaledGuiItemIcon(
                 itemStack = itemStack,

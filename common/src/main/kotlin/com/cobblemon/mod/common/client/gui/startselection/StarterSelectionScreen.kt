@@ -313,7 +313,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         val textEntry = currentPokemon?.form?.pokedex?.first()?.asTranslated() ?: lang("ui.starter.random_description")
 
         matrices.pushMatrix()
-        matrices.scale(smallTextScale, smallTextScale, 1F)
+        matrices.scale((smallTextScale).toFloat(), (smallTextScale).toFloat())
         MultiLineLabelK.create(
             component = textEntry,
             width = 114 / smallTextScale,

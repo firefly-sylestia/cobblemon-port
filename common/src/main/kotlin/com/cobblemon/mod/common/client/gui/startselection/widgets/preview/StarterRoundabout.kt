@@ -57,7 +57,7 @@ class StarterRoundabout(
          * - Hiro
          */
         val correctionTerm = -3.0
-        matrices.translate(x.toDouble() + MODEL_WIDTH / 2.0, y.toDouble() - MODEL_HEIGHT.toDouble() + correctionTerm, 0.0)
+        matrices.translate((x.toDouble() + MODEL_WIDTH / 2.0).toFloat(), (y.toDouble() - MODEL_HEIGHT.toDouble() + correctionTerm).toFloat())
 
         // This uses more weird x and y because the component is in an abnormal position, could fix it but also who cares at this point
         context.enableScissor(

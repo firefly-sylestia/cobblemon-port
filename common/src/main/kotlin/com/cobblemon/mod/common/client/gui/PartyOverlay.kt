@@ -183,11 +183,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                 )
 
                 matrices.pushMatrix()
-                matrices.translate(
-                    panelX + portraitFrameOffsetX + selectedOffsetX + PORTRAIT_DIAMETER / 2.0 - 1.0,
-                    y.toDouble() - 12,
-                    0.0
-                )
+                matrices.translate((panelX + portraitFrameOffsetX + selectedOffsetX + PORTRAIT_DIAMETER / 2.0 - 1.0).toFloat(), (y.toDouble() - 12).toFloat())
 
                 val shouldAnimate = when (Cobblemon.config.partyPortraitAnimations) {
                     PokemonGUIAnimationStyle.NEVER_ANIMATE -> false

@@ -187,8 +187,8 @@ class CategoryList(
                     )
                 } else {
                     matrices.pushMatrix()
-                    matrices.translate(startX + (CONTAINER_BUTTON_SIZE / 2.0), startY.toDouble() - 6, 0.0)
-                    matrices.scale(3.5F, 3.5F, 1F)
+                    matrices.translate((startX + (CONTAINER_BUTTON_SIZE / 2.0)).toFloat(), (startY.toDouble() - 6).toFloat())
+                    matrices.scale(3.5F, 3.5F)
 
                     val state = FloatingState()
                     state.currentAspects = category.pokemon[index].aspects

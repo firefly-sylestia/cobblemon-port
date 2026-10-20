@@ -53,13 +53,13 @@ class DialoguePortraitWidget(
         )
 
         context.pose().pushMatrix()
-        context.pose().translate(startX.toDouble() + width / 2, y.toDouble(), 0.0)
+        context.pose().translate((startX.toDouble() + width / 2).toFloat(), (y.toDouble()).toFloat())
         face.render(context, delta)
         context.disableScissor()
         context.pose().popMatrix()
 
         context.pose().pushMatrix()
-        context.pose().translate(0F, 0F, 100F)
+        context.pose().translate(0F, 0F)
         blitk(
             texture = if (face.isLeftSide) frameLeftResource else frameRightResource,
             context = context,

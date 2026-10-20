@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceKey
 object CobblemonEntitySubPredicates : PlatformRegistry<Registry<Codec<out EntitySubPredicate>>, ResourceKey<Registry<Codec<out EntitySubPredicate>>>, Codec<out EntitySubPredicate>>() {
 
     @JvmStatic
-    val POKE_POBBER = this.create("poke_bobber", FishingBobberPredicate.CODEC)
+    val POKE_POBBER = this.create("poke_bobber", FishingBobberPredicate.CODEC.codec())
 
     override val registry: Registry<Codec<out EntitySubPredicate>> = BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE
 

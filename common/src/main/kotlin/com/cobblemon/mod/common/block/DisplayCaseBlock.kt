@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.item.ItemStack
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.util.RandomSource
 
 import net.minecraft.world.level.ScheduledTickAccess
@@ -35,7 +38,6 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
 
@@ -103,18 +105,18 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
         return result
     }
 
-    override fun onRemove(
+    override fun affectNeighborsAfterRemoval(
         state: BlockState,
-        world: Level,
+        world: ServerLevel,
         pos: BlockPos,
-        newState: BlockState,
         moved: Boolean
     ) {
-        val entity = world.getBlockEntity(pos) as DisplayCaseBlockEntity
-        if (!entity.getStack().isEmpty) {
-            Containers.dropContentsOnDestroy(state, newState, world, pos)
+        val entity = world.getBlockEntity(pos) as? DisplayCaseBlockEntity
+        val stack = entity?.getStack() ?: ItemStack.EMPTY
+        if (!stack.isEmpty) {
+            Containers.dropItemStack(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, stack)
         }
-        super.onRemove(state, world, pos, newState, moved)
+        super.affectNeighborsAfterRemoval(state, world, pos, moved)
     }
 
     override fun getRenderShape(state: BlockState) = RenderShape.MODEL
@@ -135,7 +137,7 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
     override fun isPathfindable(state: BlockState, type: PathComputationType): Boolean = false
 
     companion object {
-        val ITEM_DIRECTION = DirectionProperty.create("item_facing")
+        val ITEM_DIRECTION = EnumProperty.create("item_facing", Direction::class.java)
     }
 
 }

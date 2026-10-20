@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.phys.Vec3
+
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.block.entity.LecternBlockEntity
@@ -46,6 +48,15 @@ import net.minecraft.world.level.block.LecternBlock as MinecraftLecternBlock
 
 class LecternBlock(properties: Properties): BaseEntityBlock(properties) {
     companion object {
+        val EMIT_LIGHT: BooleanProperty = BooleanProperty.create("emit_light")
+    }
+
+    init {
+        registerDefaultState(
+            stateDefinition.any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(EMIT_LIGHT, false)
+        )
     }
 
     override fun <T : BlockEntity> getTicker(world: Level, blockState: BlockState, BlockWithEntityType: BlockEntityType<T>) = createTickerHelper(BlockWithEntityType, CobblemonBlockEntities.LECTERN, ViewerCountBlockEntity.TICKER::tick)
@@ -115,7 +126,7 @@ class LecternBlock(properties: Properties): BaseEntityBlock(properties) {
                     else {
                         blockEntity.incrementViewerCount()
                         PokedexUIPacket(type = (blockEntity.getItemStack().item as PokedexItem).type, blockPos = blockPos).sendToPlayer(player as ServerPlayer)
-                        level.playSoundServer(position = blockPos.bottomCenter, sound = CobblemonSounds.POKEDEX_OPEN, volume = 0.25F)
+                        level.playSoundServer(position = Vec3.atBottomCenterOf(blockPos), sound = CobblemonSounds.POKEDEX_OPEN, volume = 0.25F)
                     }
                 }
             }

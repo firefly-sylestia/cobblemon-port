@@ -32,6 +32,55 @@ These instructions apply to the whole repository. The requested port target is M
 - A working mod also needs Minecraft 26.3 client and dedicated-server startup checks and basic gameplay/save-reload checks. Never promise a working JAR before those checks pass.
 - If a check cannot be run, state the exact missing evidence or environment requirement and continue with independent work.
 
+## Environment rules
+
+1. Work only inside this repository. Do not scan or inspect paths outside the project
+   root (no hunting for JDKs, Gradle caches, launcher runtimes, or user profile
+   directories) unless the user explicitly asks for it. Everything needed for the
+   port lives under the repo.
+2. There is no Java 25 on `PATH`, so a local `build` cannot run. CI is the only
+   source of compilation evidence. Never report a compile success, an error count,
+   or a produced JAR unless it came from a CI log or artifact you actually read.
+3. Keep generated helpers inside `fabric-26.3/build/` (ignored by git): `build.log`
+   at the repo root, diagnostics under `fabric-26.3/build/ci/`, API jar and
+   inspectors under `fabric-26.3/build/mcapi/`. Do not commit them.
+
+## Tooling in this repository
+
+| Purpose | Command |
+| --- | --- |
+| Fetch the newest CI log (writes `build.log`, `diagnostics.txt`) | `python fabric-26.3/build/ci/fetch_ci.py --latest` or `fetch_ci.py <sha>` |
+| Per-file compiler errors, repeats collapsed | `python fabric-26.3/build/ci/errors_for.py <path-substring> build.log` |
+| Show a 26.3 class, fields and method signatures | `python fabric-26.3/build/mcapi/inspect.py show <fqcn>` |
+| Find a 26.3 class by regex | `python fabric-26.3/build/mcapi/inspect.py grep <regex>` |
+| Find which classes declare a method name | `python fabric-26.3/build/mcapi/inspect.py method <name>` |
+| Parameter names of 26.3 methods | `python fabric-26.3/build/mcapi/params.py <fqcn>` |
+| Reapply verified 1.21 to 26.3 renames | `python fabric-26.3/build/ci/api_map.py` |
+
+`fabric-26.3/build/mcapi/minecraft.jar` is the de-obfuscated 26.3 API surface. It is
+compiled in the `official` namespace (no intermediary), which is why the access
+widener must also be `official`.
+
+## Working rules
+
+1. **Verify before editing.** Look up the exact 26.3 class, method name, parameter
+   count and parameter types with `inspect.py` before changing a call site. Never
+   infer a signature from 1.21 code, from a README, or from a guess; wrong guesses
+   convert one error into several.
+2. **Fix root causes in batches.** Pick one migration area (advancements/predicates,
+   GUI drawing, render pipeline, registries/items, entities/AI, data/recipes), find
+   every call site with `rg`, migrate them consistently, then rebuild.
+3. **Keep the mapping table current.** Every verified rename goes into
+   `docs/26.3-api-migrations.md` and, when it is a mechanical rewrite, into
+   `fabric-26.3/build/ci/api_map.py` as an idempotent rule.
+4. **Do not silence diagnostics.** No fake stubs, no `@Suppress`, no excluded source
+   trees, no deleted features, no weakened types. Compilation must become correct.
+5. **Ship in batches while CI is slow.** Commit each coherent batch, push the branch,
+   then keep editing the next batch while the run executes; fetch the new log when
+   the run completes and correct anything the log disproves.
+6. **Report honestly.** State the run ID and commit you based a change on, the
+   diagnostic count before and after, and anything that could not be verified.
+
 ## Current known state
 
 See [`docs/26.3-port-progress.md`](docs/26.3-port-progress.md) for the latest supplied CI diagnostics and [`PLAN.md`](PLAN.md) for the next milestones. Update both when new CI evidence materially changes the status.

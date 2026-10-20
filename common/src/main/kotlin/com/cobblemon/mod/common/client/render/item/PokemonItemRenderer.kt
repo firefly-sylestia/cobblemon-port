@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.item
 
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.PoseType
@@ -18,7 +19,7 @@ import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.blaze3d.vertex.VertexMultiConsumer
-import net.minecraft.client.renderer.LightTexture
+import net.minecraft.util.LightCoordsUtil
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -65,7 +66,7 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         matrices.mulPose(rotation)
         rotation.conjugate()
 
-        val renderLayer = RenderType.entityCutout(VaryingModelRepository.getTexture(species.resourceIdentifier, state))
+        val renderLayer = RenderTypes.entityCutout(VaryingModelRepository.getTexture(species.resourceIdentifier, state))
         val isEnchanted = stack.get(DataComponents.ENCHANTMENTS)?.isEmpty == false
         val vertexConsumer: VertexConsumer =
             if (isEnchanted) {
@@ -79,7 +80,7 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
 
         matrices.pushPose()
         val packedLight = if (mode == ItemDisplayContext.GUI) {
-            LightTexture.pack(13, 13)
+            LightCoordsUtil.pack(13, 13)
         } else {
             light
         }

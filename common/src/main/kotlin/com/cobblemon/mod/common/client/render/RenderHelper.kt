@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render
 
 import com.cobblemon.mod.common.api.gui.drawText
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import com.cobblemon.mod.common.api.gui.drawTextJustifiedRight
 import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.client.CobblemonResources
@@ -312,7 +313,7 @@ fun renderBeaconBeam(
     val f12 = -beamRadius
     renderPart(
         matrixStack,
-        buffer.getBuffer(RenderType.beaconBeam(textureLocation, false)),
+        buffer.getBuffer(RenderTypes.beaconBeam(textureLocation, false)),
         red,
         green,
         blue,
@@ -336,7 +337,7 @@ fun renderBeaconBeam(
     f9 = -glowRadius
     renderPart(
         matrixStack,
-        buffer.getBuffer(RenderType.beaconBeam(textureLocation, true)),
+        buffer.getBuffer(RenderTypes.beaconBeam(textureLocation, true)),
         red,
         green,
         blue,

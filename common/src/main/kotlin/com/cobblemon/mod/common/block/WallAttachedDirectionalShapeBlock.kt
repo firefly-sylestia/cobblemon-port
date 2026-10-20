@@ -50,15 +50,6 @@ class WallAttachedDirectionalShapeBlock(settings: Properties, val width: Int = 1
         }
     }
 
-        instance.group(
-            Codec.INT.fieldOf("width").forGetter { it.width },
-            Codec.INT.fieldOf("height").forGetter { it.height },
-            Codec.INT.fieldOf("depth").forGetter { it.depth }
-        ).apply(instance, { properties, width, height, depth ->
-            WallAttachedDirectionalShapeBlock(properties, width, height, depth)
-        })
-    }
-
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         val direction = state.getValue(FACING)
         return rotateShape(Direction.NORTH, direction, convertToShape(width, height, depth))

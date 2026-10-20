@@ -36,7 +36,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.toBlockPos
 import kotlin.math.sqrt
-import net.minecraft.advancements.CriteriaTriggers
+import net.minecraft.advancements.triggers.CriteriaTriggers
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
@@ -823,7 +823,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
                     if (bobberBait.isEmpty)
                         "empty_bait".asIdentifierDefaultingNamespace()
                     else
-                        bobberBait.itemHolder.unwrapKey().map { it.identifier() }.orElse("empty_bait".asIdentifierDefaultingNamespace())
+                        bobberBait.typeHolder.unwrapKey().map { it.identifier() }.orElse("empty_bait".asIdentifierDefaultingNamespace())
                 val pokemonId = spawnedPokemon.pokemon.species.resourceIdentifier
                 CobblemonCriteria.REEL_IN_POKEMON.trigger(player, ReelInPokemonContext(pokemonId, baitId))
 

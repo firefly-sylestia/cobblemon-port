@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block.entity
 
+import com.cobblemon.mod.common.util.normal
 import com.cobblemon.mod.common.util.CobblemonInteractionResults
 
 import com.cobblemon.mod.common.*
@@ -40,7 +41,6 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.Containers
-import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
@@ -272,7 +272,7 @@ open class FossilMultiblockEntity(
         updateMonitorScreen()
         markUpdated(level, pos, state)
 
-        return InteractionResult.sidedSuccess(level.isClientSide)
+        return if (level.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
     }
 
     fun dropDisk(level: Level, pos: BlockPos, state: BlockState) {

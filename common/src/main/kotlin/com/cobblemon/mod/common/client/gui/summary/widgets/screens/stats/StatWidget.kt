@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
@@ -374,7 +374,7 @@ class StatWidget(
                     )
 
                     if (pMouseX >= (x + 59) && pMouseY >= (y + 62.5) && pMouseX <= ((x + 59) + (RIDE_ICON_SIZE * SCALE)) && pMouseY <= ((y + 62.5) + (RIDE_ICON_SIZE * SCALE))) {
-                        context.renderTooltip(
+                        context.setTooltipForNextFrame(
                             Minecraft.getInstance().font,
                             lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}.${rideStyle}")
                                 .append(" | ").append(lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}")),

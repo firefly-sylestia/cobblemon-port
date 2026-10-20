@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.phys.Vec3
+
 import net.minecraft.util.RandomSource
 
 import net.minecraft.world.level.ScheduledTickAccess
@@ -288,7 +290,7 @@ class PastureBlock(settings: Properties): BaseEntityBlock(settings), SimpleWater
             PastureLinkManager.createLink(player.uuid, PastureLink(linkId, pcId, Identifier.tryParse(world.dimensionTypeRegistration().registeredName)!!, getBasePosition(state, pos), perms))
 
             world.playSoundServer(
-                position = pos.bottomCenter,
+                position = Vec3.atBottomCenterOf(pos),
                 sound = CobblemonSounds.PC_ON,
                 volume = 0.5F,
                 pitch = 1F
@@ -331,8 +333,8 @@ class PastureBlock(settings: Properties): BaseEntityBlock(settings), SimpleWater
         return blockState.rotate(mirror.getRotation(blockState.getValue(HorizontalDirectionalBlock.FACING)))
     }
 
-    override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (!state.`is`(newState.block)) super.onRemove(state, world, pos, newState, moved)
+    override fun affectNeighborsAfterRemoval(state: BlockState, world: ServerLevel, pos: BlockPos, moved: Boolean) {
+        super.affectNeighborsAfterRemoval(state, world, pos, moved)
     }
 
     override fun getFluidState(state: BlockState): FluidState {

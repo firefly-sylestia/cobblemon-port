@@ -113,7 +113,7 @@ class CobblemonRandomSurfacePos {
             var pos = pos
             pos = RandomPos.moveUpOutOfSolid(
                 pos,
-                mob.level().maxBuildHeight
+                mob.level().maxY
             ) { blockPos: BlockPos ->
                 if (GoalUtils.isSolid(mob, blockPos)) true
                 val fluidState = mob.level().getFluidState(blockPos)

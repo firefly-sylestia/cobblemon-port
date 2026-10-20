@@ -20,7 +20,7 @@ import net.minecraft.client.KeyMapping
  */
 abstract class CobblemonKeyBinding(
     name: String,
-    type: InputConstants.Type = InputConstants.Type.KEYSYM,
+    type: InputConstants.Type = InputConstants.Type.KEYBOARD,
     key: Int,
     category: String
 ): KeyMapping(name, type, key, category) {

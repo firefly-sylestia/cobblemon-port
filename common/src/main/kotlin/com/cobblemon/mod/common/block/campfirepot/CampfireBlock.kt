@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.block.campfirepot
 
+import net.minecraft.world.phys.Vec3
+import net.minecraft.world.level.block.state.properties.EnumProperty
+
 import net.minecraft.world.level.ScheduledTickAccess
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
@@ -45,7 +48,6 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BooleanProperty
-import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.pathfinder.PathComputationType
@@ -59,7 +61,7 @@ import net.minecraft.world.level.block.CampfireBlock as MCCampfireBlock
 @Suppress("OVERRIDE_DEPRECATION")
 class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock(settings), SimpleWaterloggedBlock {
     companion object {
-        val ITEM_DIRECTION = DirectionProperty.create("item_facing")
+        val ITEM_DIRECTION = EnumProperty.create("item_facing", Direction::class.java)
         val POWERED = BlockStateProperties.POWERED
         val COOKING = BooleanProperty.create("cooking")
         val LID = BooleanProperty.create("lid")
@@ -134,7 +136,7 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
             blockEntity.setPotItem(heldItem.split(1))
 
             level.playSoundServer(
-                position = pos.bottomCenter,
+                position = Vec3.atBottomCenterOf(pos),
                 sound = CobblemonSounds.CAMPFIRE_POT_PLACE,
             )
 
@@ -183,7 +185,7 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
         }
 
         blockEntity.setPotItem(ItemStack.EMPTY)
-        level.playSoundServer(blockPos.bottomCenter, CobblemonSounds.CAMPFIRE_POT_RETRIEVE)
+        level.playSoundServer(Vec3.atBottomCenterOf(blockPos), CobblemonSounds.CAMPFIRE_POT_RETRIEVE)
 
         Containers.dropContents(level, blockPos, blockEntity)
 
@@ -295,37 +297,27 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
         return true
     }
 
-    override fun onRemove(
-        state: BlockState,
-        level: Level,
-        pos: BlockPos,
-        newState: BlockState,
-        movedByPiston: Boolean
-    ) {
-        if (!state.`is`(newState.block)) {
-            val blockEntity = level.getBlockEntity(pos)
-            if (blockEntity is CampfireBlockEntity) {
-                if (level is ServerLevel) {
-                    Containers.dropContents(level, pos, blockEntity)
-                    val potItem = blockEntity.getPotItem() ?: ItemStack.EMPTY
+    override fun affectNeighborsAfterRemoval(state: BlockState, level: ServerLevel, pos: BlockPos, movedByPiston: Boolean) {
+        val blockEntity = level.getBlockEntity(pos)
+        if (blockEntity is CampfireBlockEntity) {
+            Containers.dropContents(level, pos, blockEntity)
+            val potItem = blockEntity.getPotItem() ?: ItemStack.EMPTY
 
-                    if (!potItem.isEmpty) {
-                        val direction = state.getValue(FACING) as Direction
-                        val f = 0.25F * direction.stepX.toFloat()
-                        val g = 0.25F * direction.stepZ.toFloat()
+            if (!potItem.isEmpty) {
+                val direction = state.getValue(FACING) as Direction
+                val f = 0.25F * direction.stepX.toFloat()
+                val g = 0.25F * direction.stepZ.toFloat()
 
-                        val itemEntity = ItemEntity(level, pos.x.toDouble() + 0.5 + f.toDouble(), (pos.y + 1).toDouble(), pos.z.toDouble() + 0.5 + g.toDouble(), potItem)
-                        itemEntity.setDefaultPickUpDelay()
+                val itemEntity = ItemEntity(level, pos.x.toDouble() + 0.5 + f.toDouble(), (pos.y + 1).toDouble(), pos.z.toDouble() + 0.5 + g.toDouble(), potItem)
+                itemEntity.setDefaultPickUpDelay()
 
-                        level.addFreshEntity(itemEntity)
-                    }
-                }
-
-                super.onRemove(state, level, pos, newState, movedByPiston)
-                level.updateNeighbourForOutputSignal(pos, this)
-            } else {
-                super.onRemove(state, level, pos, newState, movedByPiston)
+                level.addFreshEntity(itemEntity)
             }
+
+            super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston)
+            level.updateNeighbourForOutputSignal(pos, this)
+        } else {
+            super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston)
         }
     }
 }

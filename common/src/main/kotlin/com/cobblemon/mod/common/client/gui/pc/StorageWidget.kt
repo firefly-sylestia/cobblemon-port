@@ -401,7 +401,7 @@ class StorageWidget(
 
         if (grabbedSlot == null) {
             if (clickedPokemon != null && pcGui.search.passes(clickedPokemon)) {
-                val shiftClicked = Screen.hasShiftDown()
+                val shiftClicked = Minecraft.getInstance().hasShiftDown()
                 if (shiftClicked) {
                     if (clickedPosition is PCPosition) {
                         val firstEmptySpace = party.slots.indexOfFirst { it == null }

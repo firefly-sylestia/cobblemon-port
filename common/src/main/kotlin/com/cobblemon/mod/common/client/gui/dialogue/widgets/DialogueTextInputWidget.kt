@@ -8,8 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.dialogue.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
-import net.minecraft.client.input.KeyEvent
+import net.minecraft.client.input.MouseButtonEvent
+
+import net.minecraft.client.input.KeyEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.gui.drawCenteredText
 import com.cobblemon.mod.common.api.text.text
@@ -72,7 +74,7 @@ class DialogueTextInputWidget(
             return
         }
         if (cursorPosition != value.length) {
-            moveCursorToEnd(Screen.hasShiftDown())
+            moveCursorToEnd(Minecraft.getInstance().hasShiftDown())
         }
 
         blitk(

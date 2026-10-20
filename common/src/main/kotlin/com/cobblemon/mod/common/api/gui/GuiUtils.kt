@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.gui
 
 import com.cobblemon.mod.common.api.text.font
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay.Companion.PORTRAIT_DIAMETER
 import com.cobblemon.mod.common.client.render.SpriteType
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
@@ -28,7 +29,7 @@ import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.renderer.GameRenderer
-import net.minecraft.client.renderer.LightTexture
+import net.minecraft.util.LightCoordsUtil
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -223,7 +224,7 @@ fun drawPosablePortrait(
         context.put(RenderContext.POSABLE_STATE, state)
         context.put(RenderContext.DO_QUIRKS, doQuirks)
 
-        val renderType = RenderType.entityCutout(texture)
+        val renderType = RenderTypes.entityCutout(texture)
 
         val quaternion1 = Axis.YP.rotationDegrees(-32F * if (reversed) -1F else 1F)
         val quaternion2 = Axis.XP.rotationDegrees(5F)
@@ -250,7 +251,7 @@ fun drawPosablePortrait(
 
         val immediate = Minecraft.getInstance().renderBuffers().bufferSource()
         val buffer = immediate.getBuffer(renderType)
-        val packedLight = LightTexture.pack(11, 7)
+        val packedLight = LightCoordsUtil.pack(11, 7)
 
         val colour = toHex(r, g, b, a)
         model.withLayerContext(immediate, state, VaryingModelRepository.getLayers(identifier, state)) {
@@ -294,7 +295,7 @@ fun drawProfile(
         context.put(RenderContext.POSABLE_STATE, state)
         state.currentModel = model
 
-        val renderType = RenderType.entityCutout(texture)//model.getLayer(texture)
+        val renderType = RenderTypes.entityCutout(texture)//model.getLayer(texture)
 
         state.setPoseToFirstSuitable(PoseType.PORTRAIT)
         state.updatePartialTicks(partialTicks)
@@ -319,7 +320,7 @@ fun drawProfile(
         val light1 = Vector3f(-1F, 1F, 1.0F)
         val light2 = Vector3f(1.3F, -1F, 1.0F)
         RenderSystem.setShaderLights(light1, light2)
-        val packedLight = LightTexture.pack(11, 7)
+        val packedLight = LightCoordsUtil.pack(11, 7)
 
         model.withLayerContext(bufferSource, state, VaryingModelRepository.getLayers(resourceIdentifier, state)) {
             model.render(context, matrixStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, -0x1)

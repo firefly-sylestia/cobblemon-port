@@ -76,7 +76,7 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
         lastInteractedSlot = slot
         onInventoryChanged(level, pos)
 
-        return InteractionResult.sidedSuccess(level.isClientSide)
+        return if (level.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
     }
 
     private fun onInventoryChanged(level: Level, pos: BlockPos) {

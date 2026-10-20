@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.util.normal
 import net.minecraft.world.level.ScheduledTickAccess
 
 //import dev.lambdaurora.lambdynlights.util.SodiumDynamicLightHandler.pos
@@ -222,7 +223,7 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
             return InteractionResult.PASS
         } else if (this.isMaxAge(state)) {
             return if (harvestBerry(world, state, pos, player)) {
-                InteractionResult.sidedSuccess(world.isClientSide)
+                if (world.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
             } else {
                 InteractionResult.PASS
             }

@@ -18,16 +18,17 @@ import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.UseAnim
+import net.minecraft.world.item.ItemUseAnimation
 import net.minecraft.world.level.Level
 
 class SinisterTeaItem : Item(
         Properties().stacksTo(16)
+                // 26.3 moved the "converts to" hint from FoodProperties onto Item.Properties.
+                .usingConvertsTo(Items.BOWL)
                 .food(FoodProperties.Builder()
                         .alwaysEdible()
                         .nutrition(0)
                         .saturationModifier(0.0f)
-                        .usingConvertsTo(Items.BOWL)
                         .build())
 ) {
     override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
@@ -52,7 +53,7 @@ class SinisterTeaItem : Item(
         return super.finishUsingItem(stack, world, user)
     }
 
-    override fun getUseAnimation(stack: ItemStack) = UseAnim.DRINK
+    override fun getUseAnimation(stack: ItemStack) = ItemUseAnimation.DRINK
 
     // todo not sure which one is needed at the moment, but I assume just the eating sound?
     override fun getDrinkingSound(): SoundEvent {

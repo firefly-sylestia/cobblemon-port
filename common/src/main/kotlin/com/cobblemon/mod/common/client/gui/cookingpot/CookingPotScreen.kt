@@ -194,12 +194,12 @@ class CookingPotScreen(
             RenderSystem.disableBlend()
 
             if (isHovering(resultSlot.x, resultSlot.y, 16, 16, mouseX.toDouble(), mouseY.toDouble()) && menu.carried.isEmpty) {
-                context.renderTooltip(font, getTooltipFromContainerItem(resultItem), resultItem.tooltipImage, mouseX, mouseY)
+                context.setTooltipForNextFrame(font, getTooltipFromContainerItem(resultItem), resultItem.tooltipImage, mouseX, mouseY)
             }
         }
 
-        this.renderTooltip(context, mouseX, mouseY)
-        this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY)
+        this.setTooltipForNextFrame(context, mouseX, mouseY)
+        this.recipeBookComponent.setTooltipForNextFrame(context, this.leftPos, this.topPos, mouseX, mouseY)
     }
 
     override fun renderSlot(guiGraphics: GuiGraphicsExtractor, slot: Slot) {
@@ -260,7 +260,7 @@ class CookingPotScreen(
             mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
             mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
         ) {
-            guiGraphics.renderTooltip(
+            guiGraphics.setTooltipForNextFrame(
                 this.font,
                 Component.translatable("jei.tooltip.show.recipes"),
                 mouseX,
@@ -268,7 +268,7 @@ class CookingPotScreen(
             )
             return
         }
-        super.renderTooltip(guiGraphics, mouseX, mouseY)
+        super.setTooltipForNextFrame(guiGraphics, mouseX, mouseY)
     }
 
     private fun overrideRecipeBookFilterButton(filterButton: StateSwitchingButton) {

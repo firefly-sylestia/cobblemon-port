@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.block.tmmachine
 
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.phys.Vec3
+
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.block.entity.TMMachineBlockEntity
@@ -130,7 +133,7 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
             state.hasProperty(OPEN) && state.getValue(OPEN)
         ) {
             level.setBlockAndUpdate(pos, state.setValue(OPEN, false))
-            level.playSoundServer(position = pos.bottomCenter, sound = CobblemonSounds.TM_MACHINE_CLOSE, volume = 1F, pitch = 1F)
+            level.playSoundServer(position = Vec3.atBottomCenterOf(pos), sound = CobblemonSounds.TM_MACHINE_CLOSE, volume = 1F, pitch = 1F)
         }
     }
 
@@ -153,7 +156,7 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
                     val isOpen = state.getValue(OPEN)
                     level.setBlockAndUpdate(pos, state.setValue(OPEN, !isOpen))
                     level.playSoundServer(
-                        position = pos.bottomCenter,
+                        position = Vec3.atBottomCenterOf(pos),
                         sound = if (isOpen) CobblemonSounds.TM_MACHINE_CLOSE else CobblemonSounds.TM_MACHINE_OPEN,
                         volume = 1F,
                         pitch = 1F
@@ -178,7 +181,7 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
                 }
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide)
+        return if (level.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -204,9 +207,12 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
 
     override fun getShape(state: BlockState, getter: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape = if (state.getValue(OPEN)) SHAPE_OPEN else SHAPE
 
-    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, movedByPiston: Boolean) {
-        Containers.dropContentsOnDestroy(state, newState, level, pos)
-        super.onRemove(state, level, pos, newState, movedByPiston)
+    override fun affectNeighborsAfterRemoval(state: BlockState, level: ServerLevel, pos: BlockPos, movedByPiston: Boolean) {
+        val blockEntity = level.getBlockEntity(pos)
+        if (blockEntity is Container) {
+            Containers.dropContents(level, pos, blockEntity)
+        }
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston)
     }
 
     override fun isSignalSource(state: BlockState): Boolean = false

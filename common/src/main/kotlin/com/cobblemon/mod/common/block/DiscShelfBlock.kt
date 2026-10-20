@@ -8,12 +8,13 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.level.block.state.properties.EnumProperty
 import com.cobblemon.mod.common.block.entity.DiscShelfBlockEntity
 import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -24,13 +25,17 @@ import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.Containers
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.VoxelShape
 
 class DiscShelfBlock(properties: Properties) : BaseEntityBlock(properties) {
     companion object {
+        val FACING: EnumProperty<Direction> = HorizontalDirectionalBlock.FACING
+    }
+
+    init {
+        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH))
     }
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
@@ -70,25 +75,21 @@ class DiscShelfBlock(properties: Properties) : BaseEntityBlock(properties) {
         return entity?.items?.count { !it.isEmpty }?.coerceIn(0, 14) ?: 0
     }
 
-    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, movedByPiston: Boolean) {
-        if (!state.`is`(newState.block)) {
-            if (!level.isClientSide && !movedByPiston) {
-                val entity = level.getBlockEntity(pos) as? DiscShelfBlockEntity
-                if (entity != null) {
-                    for (index in entity.items.indices) {
-                        val stack = entity.items[index]
-                        if (!stack.isEmpty) {
-                            Containers.dropItemStack(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, stack)
-                            entity.items[index] = ItemStack.EMPTY
-                        }
+    override fun affectNeighborsAfterRemoval(state: BlockState, level: ServerLevel, pos: BlockPos, movedByPiston: Boolean) {
+        if (!movedByPiston) {
+            val entity = level.getBlockEntity(pos) as? DiscShelfBlockEntity
+            if (entity != null) {
+                for (index in entity.items.indices) {
+                    val stack = entity.items[index]
+                    if (!stack.isEmpty) {
+                        Containers.dropItemStack(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, stack)
+                        entity.items[index] = ItemStack.EMPTY
                     }
-                    level.updateNeighbourForOutputSignal(pos, this)
                 }
+                level.updateNeighbourForOutputSignal(pos, this)
             }
-            super.onRemove(state, level, pos, newState, movedByPiston)
-        } else {
-            super.onRemove(state, level, pos, newState, movedByPiston)
         }
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston)
     }
 
     override fun getShape(

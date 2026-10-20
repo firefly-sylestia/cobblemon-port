@@ -18,7 +18,6 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
-import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
@@ -103,7 +102,7 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
             val blockstate = state.setValue(AGE, 1)
             level.setBlock(pos, blockstate, UPDATE_CLIENTS)
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockstate))
-            return InteractionResult.sidedSuccess(level.isClientSide)
+            return if (level.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
         } else {
             return super.useWithoutItem(state, level, pos, player, hitResult)
         }
@@ -141,3 +140,11 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
     }
 
     companion object {
+        const val MAX_AGE: Int = 3
+        val AGE: IntegerProperty = BlockStateProperties.AGE_3
+        private val SAPLING_SHAPE =
+            box(3.0, 0.0, 3.0, 13.0, 8.0, 13.0)
+        private val MID_GROWTH_SHAPE =
+            box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0)
+    }
+}

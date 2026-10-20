@@ -57,7 +57,7 @@ fun Level.squeezeWithinBounds(pos: BlockPos): BlockPos {
     val border = worldBorder
     return BlockPos(
         pos.x.coerceIn(border.minX.toInt(), border.maxX.toInt()),
-        pos.y.coerceIn(minBuildHeight, maxBuildHeight),
+        pos.y.coerceIn(minY, maxY),
         pos.z.coerceIn(border.minZ.toInt(), border.maxZ.toInt())
     )
 }

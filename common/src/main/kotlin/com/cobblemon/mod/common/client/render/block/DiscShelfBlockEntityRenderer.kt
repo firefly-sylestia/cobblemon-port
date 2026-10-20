@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.block
 
 import com.cobblemon.mod.common.CobblemonItemComponents
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import com.cobblemon.mod.common.block.entity.DiscShelfBlockEntity
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -144,7 +145,7 @@ class DiscShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
             tint: Boolean,
             useTextRenderType: Boolean
     ) {
-        val renderType = if (useTextRenderType) RenderType.text(texture) else RenderType.entityCutout(texture)
+        val renderType = if (useTextRenderType) RenderTypes.text(texture) else RenderTypes.entityCutout(texture)
         val consumer: VertexConsumer = buffer.getBuffer(renderType)
         val matrix: Matrix4f = poseStack.last().pose()
 

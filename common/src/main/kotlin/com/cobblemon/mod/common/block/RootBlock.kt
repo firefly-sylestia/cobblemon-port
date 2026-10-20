@@ -62,7 +62,7 @@ abstract class RootBlock(settings: Properties) : Block(settings), BonemealableBl
             this.attemptShear(world, state, pos) {
                 stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND)
             }
-            return InteractionResult.sidedSuccess(world.isClientSide)
+            return if (world.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
         }
         return super.useWithoutItem(state, world, pos, player, blockHitResult)
     }

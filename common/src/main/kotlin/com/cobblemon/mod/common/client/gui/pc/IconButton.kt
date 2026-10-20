@@ -54,7 +54,7 @@ class IconButton(
 
         if (isHovered()) {
             tooltipKey?.let {
-                context.renderTooltip(Minecraft.getInstance().font, lang(it), mouseX, mouseY)
+                context.setTooltipForNextFrame(Minecraft.getInstance().font, lang(it), mouseX, mouseY)
             }
         }
     }

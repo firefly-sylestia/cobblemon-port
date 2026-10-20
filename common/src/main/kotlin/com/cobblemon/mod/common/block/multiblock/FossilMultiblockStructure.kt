@@ -7,6 +7,7 @@
  */
 
 package com.cobblemon.mod.common.block.multiblock
+import com.cobblemon.mod.common.util.normal
 import com.cobblemon.mod.common.util.putUUID
 import com.cobblemon.mod.common.util.getUUID
 
@@ -214,7 +215,7 @@ class FossilMultiblockStructure (
                         ), false)
                 }
             }
-            return InteractionResult.sidedSuccess(world.isClientSide)
+            return if (world.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
         }
 
         // pure client instances dont know what a valid fossil is so this is my janky workaround

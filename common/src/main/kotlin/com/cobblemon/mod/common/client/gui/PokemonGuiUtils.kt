@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui
 
 import com.cobblemon.mod.common.api.gui.renderSprite
+import net.minecraft.client.renderer.rendertype.RenderTypes
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.client.render.SpriteType
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
@@ -22,7 +23,7 @@ import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.LightTexture
+import net.minecraft.util.LightCoordsUtil
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.Identifier
@@ -117,7 +118,7 @@ fun drawProfilePokemon(
 
         state.currentModel = model
 
-        val renderType = RenderType.entityCutout(texture)
+        val renderType = RenderTypes.entityCutout(texture)
 
         state.setPoseToFirstSuitable(poseType)
         state.updatePartialTicks(partialTicks)
@@ -169,7 +170,7 @@ fun drawProfilePokemon(
         val light1 = Vector3f(-1F, 1F, 1.0F)
         val light2 = Vector3f(1.3F, -1F, 1.0F)
         RenderSystem.setShaderLights(light1, light2)
-        val packedLight = LightTexture.pack(blockLight, 0)
+        val packedLight = LightCoordsUtil.pack(blockLight, 0)
 
         val colour = toHex(r, g, b, a)
         model.withLayerContext(bufferSource, state, VaryingModelRepository.getLayers(species, state)) {

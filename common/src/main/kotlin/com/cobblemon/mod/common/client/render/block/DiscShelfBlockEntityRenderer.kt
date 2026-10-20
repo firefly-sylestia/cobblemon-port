@@ -27,7 +27,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
 import net.minecraft.util.ARGB
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.BlockAndTintGetter
+import net.minecraft.client.renderer.block.BlockAndTintGetter
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import org.joml.Matrix4f
 

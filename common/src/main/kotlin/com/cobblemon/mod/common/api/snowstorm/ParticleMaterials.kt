@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.api.snowstorm
 
-import com.mojang.blaze3d.platform.GlStateManager
+import com.mojang.renderpearl.backend.opengl.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.BufferBuilder
 import com.mojang.blaze3d.vertex.DefaultVertexFormat

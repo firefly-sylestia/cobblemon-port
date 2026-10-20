@@ -9,8 +9,8 @@
 package com.cobblemon.mod.common
 
 import java.util.function.Supplier
-import net.minecraft.client.color.block.BlockColor
-import net.minecraft.client.color.item.ItemColor
+import net.minecraft.client.color.block.BlockTintSource
+import net.minecraft.client.color.item.ItemTintSource
 import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.client.model.geom.builders.LayerDefinition
 import net.minecraft.client.particle.ParticleProvider

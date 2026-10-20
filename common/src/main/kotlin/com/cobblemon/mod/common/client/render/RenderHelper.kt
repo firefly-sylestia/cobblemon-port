@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.rendertype.RenderTypes
 import com.cobblemon.mod.common.api.gui.drawTextJustifiedRight
 import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.client.CobblemonResources
-import com.mojang.blaze3d.platform.GlStateManager
+import com.mojang.renderpearl.backend.opengl.GlStateManager
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack

@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.client.render.color
 
 import com.cobblemon.mod.common.CobblemonItemComponents
-import net.minecraft.client.color.item.ItemColor
+import net.minecraft.client.color.item.ItemTintSource
 import net.minecraft.world.item.ItemStack
 
 object PokeBaitItemColorProvider : ItemColor {

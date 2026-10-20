@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.client.render.color
 
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.cooking.getColourMixFromRideStatBoosts
-import net.minecraft.client.color.item.ItemColor
+import net.minecraft.client.color.item.ItemTintSource
 import net.minecraft.world.item.ItemStack
 
 object AprijuiceItemColorProvider : ItemColor {

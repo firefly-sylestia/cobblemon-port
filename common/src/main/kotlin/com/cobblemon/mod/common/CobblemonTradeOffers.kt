@@ -11,7 +11,7 @@ package com.cobblemon.mod.common
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.npc.VillagerData
+import net.minecraft.world.entity.npc.villager.VillagerData
 import net.minecraft.world.entity.npc.villager.VillagerProfession
 import net.minecraft.world.item.trading.VillagerTrades
 import net.minecraft.world.item.ItemStack

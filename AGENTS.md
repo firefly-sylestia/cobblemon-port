@@ -78,7 +78,12 @@ widener must also be `official`.
 5. **Ship in batches while CI is slow.** Commit each coherent batch, push the branch,
    then keep editing the next batch while the run executes; fetch the new log when
    the run completes and correct anything the log disproves.
-6. **Report honestly.** State the run ID and commit you based a change on, the
+6. **Never rewrite line endings.** A scripted rewrite that reads in text mode and
+   writes with `newline=""` turns CRLF source files into LF and produces a
+   whole-file diff. Read and write bytes (or pass `newline=""` to `open`), and if a
+   legacy CRLF file ends up staged as a full rewrite, re-add it with
+   `git -c core.autocrlf=false add <file>` so only the real change is committed.
+7. **Report honestly.** State the run ID and commit you based a change on, the
    diagnostic count before and after, and anything that could not be verified.
 
 ## Current known state

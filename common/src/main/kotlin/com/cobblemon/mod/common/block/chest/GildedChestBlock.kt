@@ -200,17 +200,19 @@ class GildedChestBlock(settings: Properties, val type: Type = Type.RED) : BaseEn
         return InteractionResult.SUCCESS
     }
 
-    override fun onRemove(
+    override fun affectNeighborsAfterRemoval(
         state: BlockState,
-        world: Level,
+        world: ServerLevel,
         pos: BlockPos,
-        newState: BlockState,
         moved: Boolean
     ) {
         if (!isFake()) {
-            Containers.dropContentsOnDestroy(state, newState, world, pos)
+            val blockEntity = world.getBlockEntity(pos)
+            if (blockEntity is Container) {
+                Containers.dropContents(world, pos, blockEntity)
+            }
         }
-        super.onRemove(state, world, pos, newState, moved)
+        super.affectNeighborsAfterRemoval(state, world, pos, moved)
     }
 
     override fun getRenderShape(state: BlockState) = RenderShape.ENTITYBLOCK_ANIMATED

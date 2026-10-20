@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.phys.Vec3
+
 import net.minecraft.util.RandomSource
 
 import net.minecraft.world.level.ScheduledTickAccess
@@ -257,8 +260,8 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
         return blockState.rotate(mirror.getRotation(blockState.getValue(HorizontalDirectionalBlock.FACING)))
     }
 
-    override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (!state.`is`(newState.block)) super.onRemove(state, world, pos, newState, moved)
+    override fun affectNeighborsAfterRemoval(state: BlockState, world: ServerLevel, pos: BlockPos, moved: Boolean) {
+        super.affectNeighborsAfterRemoval(state, world, pos, moved)
     }
 
     override fun useWithoutItem(
@@ -288,7 +291,7 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
         PCLinkManager.addLink(ProximityPCLink(pc, player.uuid, baseEntity))
         OpenPCPacket(pc).sendToPlayer(player)
         world.playSoundServer(
-            position = blockPos.bottomCenter,
+            position = Vec3.atBottomCenterOf(blockPos),
             sound = CobblemonSounds.PC_ON,
             volume = 0.5F,
             pitch = 1F

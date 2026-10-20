@@ -171,14 +171,12 @@ class RestorationTankBlock(settings: Properties) : MultiblockBlock(settings), Wo
         return 0
     }
 
-    override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (state.block != newState.block) {
-            super.onRemove(state, world, pos, newState, moved)
-            val otherPart = world.getBlockState(getPositionOfOtherPart(state, pos))
+    override fun affectNeighborsAfterRemoval(state: BlockState, world: ServerLevel, pos: BlockPos, moved: Boolean) {
+        super.affectNeighborsAfterRemoval(state, world, pos, moved)
+        val otherPart = world.getBlockState(getPositionOfOtherPart(state, pos))
 
-            if (otherPart.block is RestorationTankBlock) {
-                world.setBlock(getPositionOfOtherPart(state, pos), Blocks.AIR.defaultBlockState(), UPDATE_CLIENTS)
-            }
+        if (otherPart.block is RestorationTankBlock) {
+            world.setBlock(getPositionOfOtherPart(state, pos), Blocks.AIR.defaultBlockState(), UPDATE_CLIENTS)
         }
     }
 

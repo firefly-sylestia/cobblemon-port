@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.server.level.ServerLevel
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.api.text.gray
@@ -125,8 +126,8 @@ class HealingMachineBlock(settings: Properties) : BaseEntityBlock(settings) {
         return blockState.rotate(mirror.getRotation(blockState.getValue(HorizontalDirectionalBlock.FACING)))
     }
 
-    override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (!state.`is`(newState.block)) super.onRemove(state, world, pos, newState, moved)
+    override fun affectNeighborsAfterRemoval(state: BlockState, world: ServerLevel, pos: BlockPos, moved: Boolean) {
+        super.affectNeighborsAfterRemoval(state, world, pos, moved)
     }
 
     override fun useWithoutItem(blockState: BlockState, world: Level, blockPos: BlockPos, player: Player, hit: BlockHitResult): InteractionResult {

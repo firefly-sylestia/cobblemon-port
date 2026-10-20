@@ -7,6 +7,8 @@
  */
 
 package com.cobblemon.mod.common.block.entity
+
+import net.minecraft.world.phys.Vec3
 import com.cobblemon.mod.common.util.hasUUID
 import com.cobblemon.mod.common.util.putUUID
 import com.cobblemon.mod.common.util.getUUID
@@ -123,7 +125,7 @@ class HealingMachineBlockEntity(
         updateBlockChargeLevel(HealingMachineBlock.MAX_CHARGE_LEVEL + 1)
         val world = level ?: return
         if (!world.isClientSide) world.playSoundServer(
-            position = blockPos.bottomCenter,
+            position = Vec3.atBottomCenterOf(blockPos),
             sound = CobblemonSounds.HEALING_MACHINE_ACTIVE,
             volume = 1F,
             pitch = 1F

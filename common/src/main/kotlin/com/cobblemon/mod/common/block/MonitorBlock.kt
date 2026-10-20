@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.server.level.ServerLevel
 import com.cobblemon.mod.common.util.CobblemonInteractionResults
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
@@ -97,12 +98,12 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
         return result
     }
 
-    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, movedByPiston: Boolean) {
-        if (state.block != newState.block && !level.isClientSide && !movedByPiston) {
+    override fun affectNeighborsAfterRemoval(state: BlockState, level: ServerLevel, pos: BlockPos, movedByPiston: Boolean) {
+        if (!movedByPiston) {
             val entity = level.getBlockEntity(pos) as? FossilMultiblockEntity
             entity?.dropDisk(level, pos, state)
         }
-        super.onRemove(state, level, pos, newState, movedByPiston)
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {

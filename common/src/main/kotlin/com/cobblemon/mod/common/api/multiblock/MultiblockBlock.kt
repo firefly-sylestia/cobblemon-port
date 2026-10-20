@@ -56,12 +56,12 @@ abstract class MultiblockBlock(properties: Properties) : BaseEntityBlock(propert
         return super.useWithoutItem(state, world, pos, player, hit)
     }
 
-    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, movedByPiston: Boolean) {
+    override fun affectNeighborsAfterRemoval(state: BlockState, level: ServerLevel, pos: BlockPos, movedByPiston: Boolean) {
         val entity = level.getBlockEntity(pos)
-        if (entity is MultiblockEntity && entity.multiblockStructure != null && state.block != newState.block) {
+        if (entity is MultiblockEntity && entity.multiblockStructure != null) {
             entity.multiblockStructure!!.playerWillDestroy(level, pos, state, null)
         }
-        super.onRemove(state, level, pos, newState, movedByPiston)
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston)
     }
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity? {

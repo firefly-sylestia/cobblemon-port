@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.server.level.ServerLevel
 import com.cobblemon.mod.common.block.entity.DiscShelfBlockEntity
 import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
@@ -75,25 +76,21 @@ class DiscShelfBlock(properties: Properties) : BaseEntityBlock(properties) {
         return entity?.items?.count { !it.isEmpty }?.coerceIn(0, 14) ?: 0
     }
 
-    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, movedByPiston: Boolean) {
-        if (!state.`is`(newState.block)) {
-            if (!level.isClientSide && !movedByPiston) {
-                val entity = level.getBlockEntity(pos) as? DiscShelfBlockEntity
-                if (entity != null) {
-                    for (index in entity.items.indices) {
-                        val stack = entity.items[index]
-                        if (!stack.isEmpty) {
-                            Containers.dropItemStack(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, stack)
-                            entity.items[index] = ItemStack.EMPTY
-                        }
+    override fun affectNeighborsAfterRemoval(state: BlockState, level: ServerLevel, pos: BlockPos, movedByPiston: Boolean) {
+        if (!movedByPiston) {
+            val entity = level.getBlockEntity(pos) as? DiscShelfBlockEntity
+            if (entity != null) {
+                for (index in entity.items.indices) {
+                    val stack = entity.items[index]
+                    if (!stack.isEmpty) {
+                        Containers.dropItemStack(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, stack)
+                        entity.items[index] = ItemStack.EMPTY
                     }
-                    level.updateNeighbourForOutputSignal(pos, this)
                 }
+                level.updateNeighbourForOutputSignal(pos, this)
             }
-            super.onRemove(state, level, pos, newState, movedByPiston)
-        } else {
-            super.onRemove(state, level, pos, newState, movedByPiston)
         }
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston)
     }
 
     override fun getShape(

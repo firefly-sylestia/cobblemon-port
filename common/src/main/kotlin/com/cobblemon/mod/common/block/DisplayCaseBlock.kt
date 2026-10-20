@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 
 import net.minecraft.world.level.ScheduledTickAccess
@@ -103,18 +104,18 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
         return result
     }
 
-    override fun onRemove(
+    override fun affectNeighborsAfterRemoval(
         state: BlockState,
-        world: Level,
+        world: ServerLevel,
         pos: BlockPos,
-        newState: BlockState,
         moved: Boolean
     ) {
-        val entity = world.getBlockEntity(pos) as DisplayCaseBlockEntity
-        if (!entity.getStack().isEmpty) {
-            Containers.dropContentsOnDestroy(state, newState, world, pos)
+        val entity = world.getBlockEntity(pos) as? DisplayCaseBlockEntity
+        val stack = entity?.getStack() ?: ItemStack.EMPTY
+        if (!stack.isEmpty) {
+            Containers.dropItemStack(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, stack)
         }
-        super.onRemove(state, world, pos, newState, moved)
+        super.affectNeighborsAfterRemoval(state, world, pos, moved)
     }
 
     override fun getRenderShape(state: BlockState) = RenderShape.MODEL

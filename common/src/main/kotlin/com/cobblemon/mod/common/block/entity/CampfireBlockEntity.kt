@@ -211,7 +211,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                             )
 
                             level.playSoundServer(
-                                position = pos.bottomCenter,
+                                position = Vec3.atBottomCenterOf(pos),
                                 sound = CobblemonSounds.CAMPFIRE_POT_COOK,
                             )
 

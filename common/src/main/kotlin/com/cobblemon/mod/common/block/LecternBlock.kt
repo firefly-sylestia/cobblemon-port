@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.phys.Vec3
+
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.block.entity.LecternBlockEntity
@@ -124,7 +126,7 @@ class LecternBlock(properties: Properties): BaseEntityBlock(properties) {
                     else {
                         blockEntity.incrementViewerCount()
                         PokedexUIPacket(type = (blockEntity.getItemStack().item as PokedexItem).type, blockPos = blockPos).sendToPlayer(player as ServerPlayer)
-                        level.playSoundServer(position = blockPos.bottomCenter, sound = CobblemonSounds.POKEDEX_OPEN, volume = 0.25F)
+                        level.playSoundServer(position = Vec3.atBottomCenterOf(blockPos), sound = CobblemonSounds.POKEDEX_OPEN, volume = 0.25F)
                     }
                 }
             }

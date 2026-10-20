@@ -175,10 +175,10 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         var blockPos: BlockPos
         if (this.world.getBlockState(target).isAir && !pather.canFly()) {
             blockPos = target.below()
-            while (blockPos.y > this.world.minBuildHeight && this.world.getBlockState(blockPos).isAir) {
+            while (blockPos.y > this.world.minY && this.world.getBlockState(blockPos).isAir) {
                 blockPos = blockPos.below()
             }
-            while (blockPos.y < this.world.maxBuildHeight && this.world.getBlockState(blockPos).isAir) {
+            while (blockPos.y < this.world.maxY && this.world.getBlockState(blockPos).isAir) {
                 blockPos = blockPos.above()
             }
             target = blockPos
@@ -190,7 +190,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             findPath(target, distance)
         } else {
             blockPos = target.above()
-            while (blockPos.y < this.world.maxBuildHeight && this.world.getBlockState(blockPos).isSolid) {
+            while (blockPos.y < this.world.maxY && this.world.getBlockState(blockPos).isSolid) {
                 blockPos = blockPos.above()
             }
             findPath(blockPos, distance)

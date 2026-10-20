@@ -102,7 +102,7 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
             val blockstate = state.setValue(AGE, 1)
             level.setBlock(pos, blockstate, UPDATE_CLIENTS)
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockstate))
-            return InteractionResult.sidedSuccess(level.isClientSide)
+            return if (level.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
         } else {
             return super.useWithoutItem(state, level, pos, player, hitResult)
         }

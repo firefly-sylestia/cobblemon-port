@@ -160,7 +160,7 @@ object CobblemonClient {
         PlatformEvents.CLIENT_ITEM_TOOLTIP.subscribe { event ->
             val stack = event.stack
             val lines = event.lines
-            TooltipManager.generateTooltips(stack, lines, Screen.hasShiftDown())
+            TooltipManager.generateTooltips(stack, lines, Minecraft.getInstance().hasShiftDown())
         }
 
         PlatformEvents.CLIENT_ENTITY_UNLOAD.subscribe { event -> EntitySoundTracker.clear(event.entity.id) }

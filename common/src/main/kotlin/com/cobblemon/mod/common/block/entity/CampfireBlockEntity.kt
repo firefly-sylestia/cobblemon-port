@@ -469,7 +469,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
     fun toggleLid(isOpen: Boolean) {
         level?.let { lvl ->
             lvl.playSoundServer(
-                position = blockPos.center,
+                position = Vec3.atCenterOf(blockPos),
                 sound = if (isOpen) CobblemonSounds.CAMPFIRE_POT_OPEN else CobblemonSounds.CAMPFIRE_POT_CLOSE
             )
             lvl.gameEvent(

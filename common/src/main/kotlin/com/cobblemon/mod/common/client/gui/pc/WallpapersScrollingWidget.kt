@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.common.client.gui.pc
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.Minecraft
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
@@ -117,7 +119,7 @@ class WallpapersScrollingWidget(
             partialTick: Float
         ) {
             val matrices = guiGraphics.pose()
-            val resource = if (Screen.hasShiftDown() && altWallpaper !== null) altWallpaper else wallpaper
+            val resource = if (Minecraft.getInstance().hasShiftDown() && altWallpaper !== null) altWallpaper else wallpaper
             blitk(
                 context = guiGraphics,
                 texture = resource,
@@ -144,8 +146,8 @@ class WallpapersScrollingWidget(
         val mouseY = event.y()
         val button = event.button()
             if (this@WallpapersScrollingWidget.visible && isMouseOver(mouseX, mouseY)) {
-                val appliedWallpaper = if (Screen.hasShiftDown()) altWallpaper ?: wallpaper else wallpaper
-                RequestChangePCBoxWallpaperPacket(pcGui.pc.uuid, storageWidget.box, wallpaper, if (Screen.hasShiftDown()) altWallpaper else null).sendToServer()
+                val appliedWallpaper = if (Minecraft.getInstance().hasShiftDown()) altWallpaper ?: wallpaper else wallpaper
+                RequestChangePCBoxWallpaperPacket(pcGui.pc.uuid, storageWidget.box, wallpaper, if (Minecraft.getInstance().hasShiftDown()) altWallpaper else null).sendToServer()
                 pcGui.pc.boxes[storageWidget.box].wallpaper = appliedWallpaper
                 pcGui.unseenWallpapers.remove(wallpaper)
                 isNew = false

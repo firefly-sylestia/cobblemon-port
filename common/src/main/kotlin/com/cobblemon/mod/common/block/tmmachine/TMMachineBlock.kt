@@ -181,7 +181,7 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
                 }
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide)
+        return if (level.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {

@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.npc.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
@@ -90,7 +91,7 @@ class SimpleNPCTextInputWidget(
                     }
                 }
 
-                this.moveCursorTo(maxOf(0, unwrappedLine.length - 1), Screen.hasShiftDown())
+                this.moveCursorTo(maxOf(0, unwrappedLine.length - 1), Minecraft.getInstance().hasShiftDown())
             }
         }
 

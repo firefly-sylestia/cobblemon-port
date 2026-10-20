@@ -271,7 +271,7 @@ open class FossilMultiblockEntity(
         updateMonitorScreen()
         markUpdated(level, pos, state)
 
-        return InteractionResult.sidedSuccess(level.isClientSide)
+        return if (level.isClientSide) InteractionResult.SUCCESS else InteractionResult.SUCCESS_SERVER
     }
 
     fun dropDisk(level: Level, pos: BlockPos, state: BlockState) {

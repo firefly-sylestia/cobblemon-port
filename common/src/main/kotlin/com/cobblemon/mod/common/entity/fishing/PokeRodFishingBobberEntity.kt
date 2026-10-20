@@ -823,7 +823,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
                     if (bobberBait.isEmpty)
                         "empty_bait".asIdentifierDefaultingNamespace()
                     else
-                        bobberBait.itemHolder.unwrapKey().map { it.identifier() }.orElse("empty_bait".asIdentifierDefaultingNamespace())
+                        bobberBait.typeHolder.unwrapKey().map { it.identifier() }.orElse("empty_bait".asIdentifierDefaultingNamespace())
                 val pokemonId = spawnedPokemon.pokemon.species.resourceIdentifier
                 CobblemonCriteria.REEL_IN_POKEMON.trigger(player, ReelInPokemonContext(pokemonId, baitId))
 

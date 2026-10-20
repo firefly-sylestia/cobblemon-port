@@ -31,7 +31,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
-import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
@@ -147,7 +147,7 @@ object WorldMoLangFunctions : AbstractMoLangFunctionHolder<Holder<Level>>() {
             val x = params.getDouble(0)
             val y = params.getDouble(1)
             val z = params.getDouble(2)
-            val lightning = LightningBolt(EntityType.LIGHTNING_BOLT, world)
+            val lightning = LightningBolt(EntityTypes.LIGHTNING_BOLT, world)
             lightning.setPos(x, y, z)
             world.addFreshEntity(lightning)
             DoubleValue.ONE

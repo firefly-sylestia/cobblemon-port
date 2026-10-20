@@ -12,27 +12,30 @@ import com.cobblemon.mod.common.api.berry.BerryHelper
 import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.util.weightedSelection
+import com.mojang.serialization.MapCodec
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
 import net.minecraft.core.Vec3i
 import net.minecraft.data.worldgen.placement.PlacementUtils
+import net.minecraft.util.RandomSource
 import net.minecraft.util.valueproviders.ClampedNormalInt
 import net.minecraft.world.level.WorldGenLevel
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.GrassBlock
+import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.chunk.status.ChunkStatus
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate
 import net.minecraft.world.level.levelgen.feature.Feature
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration
+import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider
 import net.minecraft.world.level.levelgen.feature.stateproviders.RandomizedIntStateProvider
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter
 
-class BerryGroveFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConfiguration.CODEC){
-    override fun place(context: FeaturePlaceContext<NoneFeatureConfiguration>): Boolean {
-        val worldGenLevel: WorldGenLevel = context.level()
-        val random = context.random()
-        val origin = context.origin()
+class BerryGroveFeature : Feature {
+
+    override fun codec(): MapCodec<BerryGroveFeature> = CODEC
+
+    override fun place(worldGenLevel: WorldGenLevel, chunkGenerator: ChunkGenerator, random: RandomSource, origin: BlockPos): Boolean {
 
         val isGenerating = worldGenLevel.getChunk(origin).persistedStatus != ChunkStatus.FULL
 
@@ -48,16 +51,17 @@ class BerryGroveFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConfigura
             (cond.getGroveSize(random).takeIf { cond.canSpawn(berry, biome) } ) ?: 0
         } ?: 0
         var numTreesLeftToGen = numTreesToGen
-        val defTreeState = BlockStateProvider.simple(pickedTree.defaultBlockState().setValue(BerryBlock.WAS_GENERATED, true))
+        val defTreeState = BlockStateProvider.of(pickedTree.defaultBlockState().setValue(BerryBlock.WAS_GENERATED, true))
 
         val randomTreeStateProvider = RandomizedIntStateProvider(
             defTreeState, BerryBlock.AGE,
             ClampedNormalInt.of(4f, 1f, 3, 5))
         val blockPlaceFeature = PlacementUtils.inlinePlaced(
-            SIMPLE_BLOCK,
-            SimpleBlockConfiguration(randomTreeStateProvider),
-            BlockPredicateFilter.forPredicate(BlockPredicate.matchesTag(CobblemonBlockTags.BERRY_REPLACEABLE)),
-            BlockPredicateFilter.forPredicate(BlockPredicate.matchesTag(Vec3i(0, -1, 0), CobblemonBlockTags.BERRY_WILD_SOIL))
+            Holder.direct<Feature>(SimpleBlockFeature(randomTreeStateProvider)),
+            listOf(
+                BlockPredicateFilter.forPredicate(BlockPredicate.matchesTag(CobblemonBlockTags.BERRY_REPLACEABLE)),
+                BlockPredicateFilter.forPredicate(BlockPredicate.matchesTag(Vec3i(0, -1, 0), CobblemonBlockTags.BERRY_WILD_SOIL))
+            )
         ).value()
         val possiblePositions = listOf(
             origin.north(),
@@ -87,8 +91,8 @@ class BerryGroveFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConfigura
         ).shuffled()
         for (dir in possiblePositions) {
             if (numTreesLeftToGen > 0) {
-                if (blockPlaceFeature?.place(worldGenLevel, context.chunkGenerator(), random, dir) == true) {
-                    worldGenLevel.blockUpdated(dir, worldGenLevel.getBlockState(dir).block)
+                if (blockPlaceFeature.place(worldGenLevel, chunkGenerator, random, dir)) {
+                    worldGenLevel.updateNeighborsAt(dir, worldGenLevel.getBlockState(dir).block)
                     numTreesLeftToGen--
                     val below = worldGenLevel.getBlockState(dir.below())
                     if (below.`is`(Blocks.GRASS_BLOCK) && below.getValue(GrassBlock.SNOWY)) {
@@ -101,4 +105,7 @@ class BerryGroveFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConfigura
         return numTreesToGen != numTreesLeftToGen
     }
 
+    companion object {
+        val CODEC: MapCodec<BerryGroveFeature> = MapCodec.unit { BerryGroveFeature() }
+    }
 }

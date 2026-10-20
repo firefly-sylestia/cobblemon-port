@@ -9,35 +9,39 @@
 package com.cobblemon.mod.common.world.feature
 
 import com.cobblemon.mod.common.block.MintBlock
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.BlockTags
+import net.minecraft.util.RandomSource
 import net.minecraft.world.level.WorldGenLevel
-import net.minecraft.world.level.block.CropBlock.UPDATE_CLIENTS
+import net.minecraft.world.level.block.Block.UPDATE_CLIENTS
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.levelgen.feature.Feature
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext
-import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration
 
-class MintBlockFeature : Feature<BlockStateConfiguration>(BlockStateConfiguration.CODEC) {
+class MintBlockFeature(val state: BlockState) : Feature {
 
-    override fun place(context: FeaturePlaceContext<BlockStateConfiguration>): Boolean {
-        val world = context.level()
-        val blockPos = context.origin()
-        val blockState = context.config().state
+    override fun codec(): MapCodec<MintBlockFeature> = CODEC
+
+    override fun place(worldGenLevel: WorldGenLevel, chunkGenerator: ChunkGenerator, random: RandomSource, origin: BlockPos): Boolean {
+        val blockPos = origin
+        val blockState = state
         val floor = blockPos.below()
 
-        if (!world.getBlockState(floor).`is`(BlockTags.DIRT)) return false
+        if (!worldGenLevel.getBlockState(floor).`is`(BlockTags.DIRT)) return false
 
         // Attempt to get at least one other valid position for the crop
-        val validPlacements = getValidPositions(world, blockPos)
+        val validPlacements = getValidPositions(worldGenLevel, blockPos)
         if (validPlacements.isEmpty()) return false
 
         val minAge = MintBlock.MATURE_AGE - 2
         val maxAge = MintBlock.MATURE_AGE
 
         // Generate the blocks
-        world.setBlock(blockPos, blockState.setValue(MintBlock.AGE, context.random().nextIntBetweenInclusive(minAge, maxAge)), UPDATE_CLIENTS)
+        worldGenLevel.setBlock(blockPos, blockState.setValue(MintBlock.AGE, random.nextIntBetweenInclusive(minAge, maxAge)), UPDATE_CLIENTS)
         validPlacements.shuffled().take(2).forEach { position ->
-            world.setBlock(position, blockState.setValue(MintBlock.AGE, context.random().nextIntBetweenInclusive(minAge, maxAge)), UPDATE_CLIENTS)
+            worldGenLevel.setBlock(position, blockState.setValue(MintBlock.AGE, random.nextIntBetweenInclusive(minAge, maxAge)), UPDATE_CLIENTS)
         }
         return true
     }
@@ -61,4 +65,11 @@ class MintBlockFeature : Feature<BlockStateConfiguration>(BlockStateConfiguratio
         return validPositions
     }
 
+    companion object {
+        val CODEC: MapCodec<MintBlockFeature> = RecordCodecBuilder.mapCodec { instance ->
+            instance.group(
+                BlockState.CODEC.fieldOf("state").forGetter { it.state }
+            ).apply(instance, ::MintBlockFeature)
+        }
+    }
 }

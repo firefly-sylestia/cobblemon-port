@@ -10,36 +10,37 @@ package com.cobblemon.mod.common.world.feature
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.api.tags.CobblemonBiomeTags
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Direction.UP
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.tags.BlockTags
 import net.minecraft.util.RandomSource
-import net.minecraft.world.item.component.CustomData
+import net.minecraft.world.item.component.TypedEntityData
 import net.minecraft.world.level.WorldGenLevel
 import net.minecraft.world.level.block.Block.UPDATE_ALL
 import net.minecraft.world.level.block.Block.UPDATE_CLIENTS
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.LeavesBlock
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity
-import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.entity.BlockEntityTypes
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.chunk.status.ChunkStatus
 import net.minecraft.world.level.levelgen.feature.Feature
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext
 import net.minecraft.world.level.levelgen.feature.TreeFeature
-import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration
 import java.util.function.Consumer
 
-class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfiguration.CODEC) {
+class SaccharineTreeFeature(val state: BlockState) : Feature {
 
-    override fun place(context: FeaturePlaceContext<BlockStateConfiguration>): Boolean {
-        val worldGenLevel: WorldGenLevel = context.level()
-        val random = context.random()
-        val origin = context.origin()
+    override fun codec(): MapCodec<SaccharineTreeFeature> = CODEC
+
+    override fun place(worldGenLevel: WorldGenLevel, chunkGenerator: ChunkGenerator, random: RandomSource, origin: BlockPos): Boolean {
 
         val isGenerating = worldGenLevel.getChunk(origin).persistedStatus != ChunkStatus.FULL
 
@@ -220,7 +221,7 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
     }
 
     private fun populateBeeNest(worldGenLevel: WorldGenLevel, pos: BlockPos) {
-        worldGenLevel.getBlockEntity(pos, BlockEntityType.BEEHIVE)
+        worldGenLevel.getBlockEntity(pos, BlockEntityTypes.BEEHIVE)
             .ifPresent(
                 Consumer { beehiveBlockEntity: BeehiveBlockEntity? ->
                     val randomSource: RandomSource = worldGenLevel.random
@@ -239,7 +240,7 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
                             compoundTag.putString("id", POKEMON_PLACEHOLD_ID)
                             compoundTag.putString("pokemonProperties", properties)
                             val occupant = BeehiveBlockEntity.Occupant(
-                                CustomData.of(compoundTag), randomSource.nextInt(599), 600
+                                TypedEntityData.of(CobblemonEntities.POKEMON, compoundTag), randomSource.nextInt(599), 600
                             )
                             beehiveBlockEntity?.storeBee(occupant)
                         }
@@ -358,6 +359,12 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
     }
 
     companion object {
+        val CODEC: MapCodec<SaccharineTreeFeature> = RecordCodecBuilder.mapCodec { instance ->
+            instance.group(
+                BlockState.CODEC.fieldOf("state").forGetter { it.state }
+            ).apply(instance, ::SaccharineTreeFeature)
+        }
+
         val POKEMON_ARGS = "combee"
         val LEVEL_RANGE = 5..15
         val POKEMON_PLACEHOLD_ID = "cobblemon_pokemon_entity_placeholder"

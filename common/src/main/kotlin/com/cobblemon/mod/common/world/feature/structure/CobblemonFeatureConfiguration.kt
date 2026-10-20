@@ -12,14 +12,13 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.Holder
 import net.minecraft.resources.Identifier
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType
 
 class CobblemonFeatureConfiguration(
     val cobblemonStructures: List<Identifier>,
     val cobblemonProcessors: Holder<StructureProcessorList>,
-) : FeatureConfiguration {
+) {
     init {
         if (cobblemonStructures.isEmpty()) {
             throw IllegalArgumentException("Cobblemon structure lists need at least one entry")

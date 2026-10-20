@@ -9,12 +9,13 @@
 package com.cobblemon.mod.common.block.grower
 
 import com.cobblemon.mod.common.api.apricorn.Apricorn
+import net.minecraft.util.random.WeightedList
 import net.minecraft.world.level.block.grower.TreeGrower
-import java.util.*
 
 class ApricornTreeGrower(apricorn: Apricorn) : TreeGrower(
     apricorn.serializedName,
-    Optional.empty(),
-    Optional.of(apricorn.configuredFeature()),
-    Optional.empty()
+    WeightedList.of(apricorn.configuredFeature()),
+    WeightedList.of(),
+    WeightedList.of(),
+    apricorn.configuredFeature()
 )

@@ -20,7 +20,7 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -69,7 +69,7 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
     }
 
     override fun entityInside(state: BlockState, level: Level, pos: BlockPos, entity: Entity) {
-        if (entity is LivingEntity && entity.type !== EntityType.FOX && entity.type !== EntityType.BEE) {
+        if (entity is LivingEntity && entity.type !== EntityTypes.FOX && entity.type !== EntityTypes.BEE) {
             entity.makeStuckInBlock(state, Vec3(0.8, 0.75, 0.8))
         }
     }

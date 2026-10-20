@@ -11,7 +11,8 @@ Produce a Cobblemon Fabric mod for Minecraft 26.3 that builds in CI, launches on
 - [x] Apply an initial API migration batch covering NBT accessors, game-rule APIs, resource-manager selection, and several Fabric registration/data-generation APIs. See commit `ec54000fa0248360b9b4f83ad5fc100d6297cae3`.
 - [x] Apply the 26.3 access widener in the official namespace and inject the `Bone` interface into `ModelPart`.
 - [x] Move the posable-model skeleton APIs to `ModelPart` and rename GUI callbacks to the extraction API.
-- [ ] Get Kotlin and Java compilation clean. This is the current blocker (4,913 diagnostics across 598 files in run `39293135480`).
+- [ ] Get Kotlin and Java compilation clean. This is the current blocker (3,119 diagnostics across 479 files in run `39359114125`, down from 4,913 across 598 files in run `39293135480`).
+- [x] Migrate advancement predicates/triggers, the `Any` bounds on registry and memory generics, and the item food/sign/smithing APIs. See commits `ceb94312`, `667ba4c3`, `0d9bb60d`.
 - [ ] Produce the remapped Fabric JAR in CI.
 - [ ] Launch a client and dedicated server with the JAR; fix startup, mixin, and registry failures.
 - [ ] Check core gameplay: create/load a world, register Cobblemon content, catch and release a Pokémon, and save/reload.

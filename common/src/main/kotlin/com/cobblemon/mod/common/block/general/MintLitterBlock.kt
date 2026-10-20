@@ -32,7 +32,7 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 import kotlin.math.min
 
-class MintLitterBlock(properties: Properties?) : Block(properties) {
+class MintLitterBlock(properties: Properties) : Block(properties) {
     init {
         registerDefaultState(stateDefinition.any()
             .setValue(FACING, Direction.NORTH)

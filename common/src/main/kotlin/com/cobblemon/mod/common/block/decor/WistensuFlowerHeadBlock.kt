@@ -31,7 +31,7 @@ import net.minecraft.world.phys.shapes.VoxelShape
 import kotlin.math.min
 
 //TODO: Root/connection shit
-class WistensuFlowerHeadBlock(properties: Properties?) : GrowingPlantHeadBlock(properties, Direction.DOWN, SHAPE, false, 0.1), WistensuFlowerBlock {
+class WistensuFlowerHeadBlock(properties: Properties) : GrowingPlantHeadBlock(properties, Direction.DOWN, SHAPE, false, 0.1), WistensuFlowerBlock {
     companion object {
         val SHAPE: VoxelShape = box(1.0, 2.0, 1.0, 15.0, 16.0, 15.0)
     }

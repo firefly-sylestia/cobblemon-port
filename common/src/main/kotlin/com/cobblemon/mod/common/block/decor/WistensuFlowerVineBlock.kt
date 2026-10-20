@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.phys.shapes.VoxelShape
 
 //TODO: Root/connection shit
-class WistensuFlowerVineBlock(properties: Properties?) : GrowingPlantBodyBlock(properties, Direction.DOWN, SHAPE, false), WistensuFlowerBlock
+class WistensuFlowerVineBlock(properties: Properties) : GrowingPlantBodyBlock(properties, Direction.DOWN, SHAPE, false), WistensuFlowerBlock
 {
     companion object {
         val SHAPE: VoxelShape = box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0)

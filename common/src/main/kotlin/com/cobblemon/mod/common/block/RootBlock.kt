@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.level.block.BonemealSource
 import net.minecraft.world.level.ScheduledTickAccess
 
 import com.cobblemon.mod.common.Cobblemon
@@ -98,11 +99,11 @@ abstract class RootBlock(settings: Properties) : Block(settings), BonemealableBl
         else super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random)
     }
 
-    override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState) = this.canSpread(world, pos, state)
+    override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState, source: BonemealSource) = this.canSpread(world, pos, state)
 
-    override fun isBonemealSuccess(world: Level, random: RandomSource, pos: BlockPos, state: BlockState) = this.canSpread(world, pos, state)
+    override fun isBonemealSuccess(world: Level, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource) = this.canSpread(world, pos, state)
 
-    override fun performBonemeal(world: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
+    override fun performBonemeal(world: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource) {
         this.spreadFrom(world, pos, random)
     }
 

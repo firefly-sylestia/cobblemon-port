@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.level.block.BonemealSource
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
 import com.mojang.serialization.MapCodec
@@ -82,7 +83,7 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
         hand: InteractionHand,
         hitResult: BlockHitResult
     ): InteractionResult {
-        return if (isValidBonemealTarget(level, pos, state) && stack.`is`(Items.BONE_MEAL))
+        return if (isValidBonemealTarget(level, pos, state, BonemealSource.INTERACTION) && stack.`is`(Items.BONE_MEAL))
             InteractionResult.SUCCESS
         else super.useItemOn(stack, state, level, pos, player, hand, hitResult)
     }
@@ -112,15 +113,15 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
         builder.add(AGE)
     }
 
-    override fun isValidBonemealTarget(level: LevelReader, pos: BlockPos, state: BlockState): Boolean {
+    override fun isValidBonemealTarget(level: LevelReader, pos: BlockPos, state: BlockState, source: BonemealSource): Boolean {
         return state.getValue(AGE) < MAX_AGE
     }
 
-    override fun isBonemealSuccess(level: Level, random: RandomSource, pos: BlockPos, state: BlockState): Boolean {
+    override fun isBonemealSuccess(level: Level, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource): Boolean {
         return true
     }
 
-    override fun performBonemeal(level: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
+    override fun performBonemeal(level: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource) {
         level.setBlock(
             pos,
             state.setValue(AGE, (state.getValue(AGE) + 1).coerceAtMost(MAX_AGE)),

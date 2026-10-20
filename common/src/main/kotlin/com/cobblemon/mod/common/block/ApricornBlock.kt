@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.level.block.BonemealSource
 import net.minecraft.world.level.ScheduledTickAccess
 
 import com.cobblemon.mod.common.CobblemonSounds
@@ -133,11 +134,11 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
             else super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random)
     }
 
-    override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState) = state.getValue(AGE) < MAX_AGE
+    override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState, source: BonemealSource) = state.getValue(AGE) < MAX_AGE
 
-    override fun isBonemealSuccess(world: Level, random: RandomSource, pos: BlockPos, state: BlockState) = true
+    override fun isBonemealSuccess(world: Level, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource) = true
 
-    override fun performBonemeal(world: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
+    override fun performBonemeal(world: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource) {
         val curAge = state.getValue(AGE)
         val newAge = curAge + 1
         if (newAge > MAX_AGE) return

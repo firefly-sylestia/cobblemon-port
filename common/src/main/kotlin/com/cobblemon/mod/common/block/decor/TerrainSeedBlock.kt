@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block.decor
 
+import net.minecraft.world.level.block.BonemealSource
 import net.minecraft.world.level.ScheduledTickAccess
 
 import net.minecraft.world.level.LevelReader
@@ -117,7 +118,7 @@ class TerrainSeedBlock(private val terrainSeedType: TerrainSeedType, settings: P
         }
     }
 
-    override fun isValidBonemealTarget(level: LevelReader, pos: BlockPos, state: BlockState): Boolean {
+    override fun isValidBonemealTarget(level: LevelReader, pos: BlockPos, state: BlockState, source: BonemealSource): Boolean {
         val posAndState = getLowerHalf(level, pos, state)
         return if (posAndState == null) false else this.canGrow(
             level,
@@ -126,7 +127,7 @@ class TerrainSeedBlock(private val terrainSeedType: TerrainSeedType, settings: P
         )
     }
 
-    override fun performBonemeal(level: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
+    override fun performBonemeal(level: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource) {
         val posAndState = getLowerHalf(level, pos, state)
         if (posAndState != null) {
             grow(level, posAndState.first, posAndState.second, getBonemealAgeIncrease(level))

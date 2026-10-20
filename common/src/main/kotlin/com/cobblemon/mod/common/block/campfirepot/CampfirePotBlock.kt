@@ -132,7 +132,7 @@ class CampfirePotBlock(settings: Properties) : HorizontalDirectionalBlock(settin
         builder.add(FACING, OPEN, OCCUPIED, WATERLOGGED)
     }
 
-    override fun getFluidState(blockState: BlockState): FluidState? {
+    override fun getFluidState(blockState: BlockState): FluidState {
         return if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState);
     }
 }

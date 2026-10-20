@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.level.block.BonemealSource
 import com.cobblemon.mod.common.util.normal
 import net.minecraft.world.level.ScheduledTickAccess
 
@@ -83,9 +84,9 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState) = BerryBlockEntity(pos, state, berryIdentifier)
 
-    override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState) = !this.isMaxAge(state)
+    override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState, source: BonemealSource) = !this.isMaxAge(state)
 
-    override fun isBonemealSuccess(world: Level, random: RandomSource, pos: BlockPos, state: BlockState) = !this.isMaxAge(state)
+    override fun isBonemealSuccess(world: Level, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource) = !this.isMaxAge(state)
 
     // Use Random Tick instead of BlockEntityTicker for performance optimization
     override fun <T : BlockEntity> getTicker(world: Level, blockState: BlockState, blockWithEntityType: BlockEntityType<T>): BlockEntityTicker<T>? = null
@@ -122,7 +123,7 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
             .setValue(IS_ROOTED, false))
     }
 
-    override fun performBonemeal(world: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
+    override fun performBonemeal(world: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource) {
         growHelper(world, random, pos, state, true)
     }
 

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block.decor
 
+import net.minecraft.world.level.block.BonemealSource
 import net.minecraft.world.level.ScheduledTickAccess
 
 
@@ -92,7 +93,7 @@ class WistensuFlowerHeadBlock(properties: Properties?) : GrowingPlantHeadBlock(p
         return copyStateValues(body, head)
     }
 
-    override fun performBonemeal(level: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
+    override fun performBonemeal(level: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource) {
         var blockPos = pos.relative(growthDirection)
         var i = min(state.getValue(AGE), MAX_AGE)
         val j = getBlocksToGrowWhenBonemealed(random)

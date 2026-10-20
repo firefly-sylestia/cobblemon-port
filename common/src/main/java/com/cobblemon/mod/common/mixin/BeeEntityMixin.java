@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.mixin;
 
+import net.minecraft.world.level.block.BonemealSource
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -39,11 +40,11 @@ public abstract class BeeEntityMixin {
         }
 
         ServerLevel level = (ServerLevel) this.bee.level();
-        if (!bonemealable.isValidBonemealTarget(level, pos, blockState)) {
+        if (!bonemealable.isValidBonemealTarget(level, pos, blockState, BonemealSource.MOB)) {
             return null;
         }
 
-        bonemealable.performBonemeal(level, this.bee.getRandom(), pos, blockState);
+        bonemealable.performBonemeal(level, this.bee.getRandom(), pos, blockState, BonemealSource.MOB);
         return level.getBlockState(pos);
     }
 }

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.level.block.BonemealSource
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.util.giveOrDropItemStack
@@ -183,12 +184,12 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
         super.randomTick(state, world, pos, random)
     }
 
-    override fun isValidBonemealTarget(level: LevelReader, pos: BlockPos, state: BlockState): Boolean =
+    override fun isValidBonemealTarget(level: LevelReader, pos: BlockPos, state: BlockState, source: BonemealSource): Boolean =
         state.getValue(AGE) < MAX_AGE && !state.getValue(BlockStateProperties.WATERLOGGED)
 
-    override fun isBonemealSuccess(level: Level, random: RandomSource, pos: BlockPos, state: BlockState) = true
+    override fun isBonemealSuccess(level: Level, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource) = true
 
-    override fun performBonemeal(level: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
+    override fun performBonemeal(level: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState, source: BonemealSource) {
         level.setBlock(pos, changeAge(state, 1), UPDATE_CLIENTS)
     }
 

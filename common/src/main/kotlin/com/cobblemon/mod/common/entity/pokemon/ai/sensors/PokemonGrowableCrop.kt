@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.entity.pokemon.ai.sensors
 
+import net.minecraft.world.level.block.BonemealSource
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import java.util.Optional
@@ -56,6 +57,6 @@ class PokemonGrowableCropSensor : Sensor<PokemonEntity>() {
         val blockState = world.getBlockState(pos)
         val block = blockState.block
 
-        return block is CropBlock && !block.isValidBonemealTarget(world, pos, blockState)
+        return block is CropBlock && !block.isValidBonemealTarget(world, pos, blockState, BonemealSource.INTERACTION)
     }
 }

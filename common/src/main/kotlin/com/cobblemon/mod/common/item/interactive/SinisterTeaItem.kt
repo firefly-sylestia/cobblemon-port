@@ -23,11 +23,12 @@ import net.minecraft.world.level.Level
 
 class SinisterTeaItem : Item(
         Properties().stacksTo(16)
+                // 26.3 moved the "converts to" hint from FoodProperties onto Item.Properties.
+                .usingConvertsTo(Items.BOWL)
                 .food(FoodProperties.Builder()
                         .alwaysEdible()
                         .nutrition(0)
                         .saturationModifier(0.0f)
-                        .usingConvertsTo(Items.BOWL)
                         .build())
 ) {
     override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block.entity
 
+import com.cobblemon.mod.common.util.normal
 import com.cobblemon.mod.common.util.CobblemonInteractionResults
 
 import com.cobblemon.mod.common.*

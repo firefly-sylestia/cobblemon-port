@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.world.feature
 
+import com.cobblemon.mod.common.util.normal
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlocks.TYPE_GEM_CORE
 import com.cobblemon.mod.common.CobblemonBlocks.typeGemBlocks

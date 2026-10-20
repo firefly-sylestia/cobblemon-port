@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.util.normal
 import net.minecraft.world.level.ScheduledTickAccess
 
 //import dev.lambdaurora.lambdynlights.util.SodiumDynamicLightHandler.pos

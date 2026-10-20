@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.block.habitat
 
+import com.mojang.serialization.Codec
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
@@ -167,8 +170,8 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         level?.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_ALL)
     }
 
-    override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.saveAdditional(tag, registryLookup)
+    override fun saveAdditional(tag: ValueOutput) {
+        super.saveAdditional(tag)
         tag.putString(DataKeys.HABITAT_MIMIC, mimicId.toString())
         tag.putString(DataKeys.HABITAT_PHASE_ORDER, phaseOrder.toString())
         // Only save the level range when it's a non-trivial one
@@ -179,32 +182,26 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         tag.putString(DataKeys.HABITAT_SPAWNING_STYLE, spawningStyle.type.toString())
         spawningStyle.writeToNBT(tag)
         HabitatPool.writePoolToNBT(pool = pool, nbt = tag)
-        val speciesListTag = ListTag()
-        displaySpeciesIds.forEach { speciesListTag.add(StringTag.valueOf(it.toString())) }
-        tag.put(DISPLAY_SPECIES_KEY, speciesListTag)
+        val speciesListTag = tag.list(DISPLAY_SPECIES_KEY, Codec.STRING)
+        displaySpeciesIds.forEach { speciesListTag.add(it.toString()) }
     }
 
-    override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.loadAdditional(tag, registryLookup)
-        tag.getString(DataKeys.HABITAT_MIMIC).let {
-            mimicId = Identifier.tryParse(it) ?: BuiltInRegistries.BLOCK.getKey(Blocks.STONE)
-        }
-        displaySpeciesIds = if (tag.contains(DISPLAY_SPECIES_KEY, Tag.TAG_LIST.toInt())) {
-            tag.getList(DISPLAY_SPECIES_KEY).orElse(ListTag())
-                .mapNotNull { speciesTag -> Identifier.tryParse(speciesTag.asString().orElse("")).orElse(null) }
-                .distinct()
-        } else {
-            emptyList()
-        }
+    override fun loadAdditional(tag: ValueInput) {
+        super.loadAdditional(tag)
+        mimicId = tag.getStringOr(DataKeys.HABITAT_MIMIC, mimicId.toString())
+            .let { Identifier.tryParse(it) ?: BuiltInRegistries.BLOCK.getKey(Blocks.STONE) }
+        displaySpeciesIds = tag.listOrEmpty(DISPLAY_SPECIES_KEY, Codec.STRING)
+            .mapNotNull { speciesTag -> Identifier.tryParse(speciesTag) }
+            .distinct()
 
         if (level?.isClientSide == true) {
             return // Client doesn't need to try loading the rest
         }
 
-        phaseOrder = HabitatPhaseOrder.valueOf(tag.getString(DataKeys.HABITAT_PHASE_ORDER).orElse(""))
-        levelRange = tag.getString(DataKeys.HABITAT_LEVEL_RANGE).orElse("").takeIf { it.isNotBlank() }?.let(IntRangeAdapter::deserialize) ?: 1..Cobblemon.config.maxPokemonLevel
-        modifiers = tag.getString(DataKeys.HABITAT_MODIFIERS).orElse("").takeIf { it.isNotBlank() }?.let(PokemonProperties::parse) ?: PokemonProperties()
-        val spawningStyleType = tag.getString(DataKeys.HABITAT_SPAWNING_STYLE).orElse("").asIdentifierDefaultingNamespace()
+        phaseOrder = HabitatPhaseOrder.valueOf(tag.getStringOr(DataKeys.HABITAT_PHASE_ORDER, ""))
+        levelRange = tag.getStringOr(DataKeys.HABITAT_LEVEL_RANGE, "").takeIf { it.isNotBlank() }?.let(IntRangeAdapter::deserialize) ?: 1..Cobblemon.config.maxPokemonLevel
+        modifiers = tag.getStringOr(DataKeys.HABITAT_MODIFIERS, "").takeIf { it.isNotBlank() }?.let(PokemonProperties::parse) ?: PokemonProperties()
+        val spawningStyleType = tag.getStringOr(DataKeys.HABITAT_SPAWNING_STYLE, "").asIdentifierDefaultingNamespace()
         spawningStyle = if (spawningStyleType == ActivatedHabitatSpawning.TYPE) {
             ActivatedHabitatSpawning(this)
         } else {
@@ -223,9 +220,8 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         // Don't tell the client everything, otherwise hackermans may learn too much
         val tag = CompoundTag()
         tag.putString(DataKeys.HABITAT_MIMIC, mimicId.toString())
-        val speciesListTag = ListTag()
-        displaySpeciesIds.forEach { speciesListTag.add(StringTag.valueOf(it.toString())) }
-        tag.put(DISPLAY_SPECIES_KEY, speciesListTag)
+        val speciesListTag = tag.list(DISPLAY_SPECIES_KEY, Codec.STRING)
+        displaySpeciesIds.forEach { speciesListTag.add(it.toString()) }
         return tag
     }
 

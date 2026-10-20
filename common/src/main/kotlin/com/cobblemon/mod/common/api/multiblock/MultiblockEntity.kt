@@ -8,12 +8,14 @@
 
 package com.cobblemon.mod.common.api.multiblock
 
+import com.cobblemon.mod.common.util.putTag
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import com.cobblemon.mod.common.api.multiblock.builder.MultiblockStructureBuilder
 import com.cobblemon.mod.common.util.DataKeys
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtUtils
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
@@ -47,20 +49,20 @@ abstract class MultiblockEntity(
         return result
     }
 
-    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.saveAdditional(nbt, registryLookup)
+    override fun saveAdditional(nbt: ValueOutput) {
+        super.saveAdditional(nbt)
         //Used for checking build conditions in multiblocks (Dont count a block if it has the FORMED flag)
         nbt.putBoolean(DataKeys.FORMED, masterBlockPos != null)
         if (multiblockStructure != null && multiblockStructure!!.controllerBlockPos == blockPos) {
-            nbt.put(DataKeys.MULTIBLOCK_STORAGE, multiblockStructure!!.writeToNbt(registryLookup))
+            nbt.putTag(DataKeys.MULTIBLOCK_STORAGE, multiblockStructure!!.writeToNbt(registryLookup))
         }
         else if (masterBlockPos != null) {
-            nbt.put(DataKeys.CONTROLLER_BLOCK, NbtUtils.writeBlockPos(masterBlockPos))
+            nbt.store(DataKeys.CONTROLLER_BLOCK, BlockPos.CODEC, masterBlockPos)
         }
     }
 
     override fun isValidBlockState(blockState: BlockState) = blockState.block is MultiblockBlock
 
-    abstract override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider)
+    abstract override fun loadAdditional(nbt: ValueInput)
 
 }

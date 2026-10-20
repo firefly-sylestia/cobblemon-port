@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.block.entity
 
+import com.mojang.serialization.Codec
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.berry.Berry
@@ -255,38 +258,32 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         return harvest(world, state, pos, null);
     }
 
-    override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        this.berryIdentifier = Identifier.parse(nbt.getString(BERRY).orElse("").takeIf { it.isNotBlank() } ?: "cobblemon:pecha")
+    override fun loadAdditional(nbt: ValueInput) {
+        this.berryIdentifier = Identifier.parse(nbt.getStringOr(BERRY, "").takeIf { it.isNotBlank() } ?: "cobblemon:pecha")
         this.wasLoading = true
         this.growthPoints.clear()
-        this.growthTimer = nbt.getInt(GROWTH_TIMER).orElse(0).coerceAtLeast(0)
-        this.stageTimer = nbt.getInt(STAGE_TIMER).orElse(0).coerceAtLeast(0)
+        this.growthTimer = nbt.getIntOr(GROWTH_TIMER, 0).coerceAtLeast(0)
+        this.stageTimer = nbt.getIntOr(STAGE_TIMER, 0).coerceAtLeast(0)
         //this.lifeCycles = nbt.getInt(LIFE_CYCLES).coerceAtLeast(0)
-        nbt.getList(GROWTH_POINTS).orElse(ListTag()).filterIsInstance<StringTag>().forEach { element ->
+        nbt.listOrEmpty(GROWTH_POINTS, Codec.STRING).forEach { element ->
             // In case some 3rd party mutates the NBT incorrectly
             try {
-            val identifier = Identifier.parse(element.asString().orElse("")).orElseThrow()
-                this.growthPoints += identifier
+                this.growthPoints += Identifier.parse(element)
             } catch (ignored: IdentifierException) {}
         }
-        this.mulchDuration = nbt.getInt(MULCH_DURATION).orElse(0)
-        this.lastTickTime = nbt.getLong(LAST_TICK_TIME).orElse(0L)
+        this.mulchDuration = nbt.getIntOr(MULCH_DURATION, 0)
+        this.lastTickTime = nbt.getLongOr(LAST_TICK_TIME, 0L)
         this.wasLoading = false
-        if (nbt.contains(GROWTH_POINTS_SEQUENCE)) {
-            growthPointSequence = nbt.getString(GROWTH_POINTS_SEQUENCE).orElse("")
-        }
-        if (nbt.contains(MULCH_VARIANT)) {
-            mulchVariant = MulchVariant.valueOf(nbt.getString(MULCH_VARIANT).orElse(""))
-        }
+        growthPointSequence = nbt.getStringOr(GROWTH_POINTS_SEQUENCE, growthPointSequence)
+        nbt.getString(MULCH_VARIANT).ifPresent { mulchVariant = MulchVariant.valueOf(it) }
         this.renderState?.needsRebuild = true
     }
 
-    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
+    override fun saveAdditional(nbt: ValueOutput) {
         nbt.putInt(GROWTH_TIMER, this.growthTimer)
         nbt.putInt(STAGE_TIMER, this.stageTimer)
-        val list = ListTag()
-        list += this.growthPoints.map { StringTag.valueOf(it.toString()) }
-        nbt.put(GROWTH_POINTS, list)
+        val list = nbt.list(GROWTH_POINTS, Codec.STRING)
+        this.growthPoints.forEach { list.add(it.toString()) }
         nbt.putString(BERRY, berryIdentifier.toString())
         nbt.putInt(MULCH_DURATION, mulchDuration)
         nbt.putString(GROWTH_POINTS_SEQUENCE, growthPointSequence)

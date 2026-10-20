@@ -7,6 +7,8 @@
  */
 
 package com.cobblemon.mod.common.block.entity
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import com.cobblemon.mod.common.util.putUUID
 import com.cobblemon.mod.common.util.getUUID
 
@@ -35,7 +37,6 @@ import com.cobblemon.mod.common.util.DataKeys
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
@@ -240,38 +241,23 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
             .orEmpty()
     }
 
-    override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
-        super.saveAdditional(tag, registries)
+    override fun saveAdditional(tag: ValueOutput) {
+        super.saveAdditional(tag)
 
         saveTint(tag)
 
         tag.putInt(DataKeys.AMOUNT_SPAWNED, amountSpawned)
 
         foodColourComponent?.let { component ->
-            CobblemonItemComponents.FOOD_COLOUR.codec()!!
-                .encodeStart(NbtOps.INSTANCE, component)
-                .result()
-                .ifPresent { encodedTag ->
-                    tag.put(DataKeys.FOOD_COLOUR, encodedTag)
-                }
+            tag.store(DataKeys.FOOD_COLOUR, CobblemonItemComponents.FOOD_COLOUR.codec()!!, component)
         }
 
         baitEffectsComponent?.let { component ->
-            CobblemonItemComponents.BAIT_EFFECTS.codec()!!
-                .encodeStart(NbtOps.INSTANCE, component)
-                .result()
-                .ifPresent { encodedTag ->
-                    tag.put(DataKeys.BAIT_EFFECTS, encodedTag)
-                }
+            tag.store(DataKeys.BAIT_EFFECTS, CobblemonItemComponents.BAIT_EFFECTS.codec()!!, component)
         }
 
         ingredientComponent?.let { component ->
-            CobblemonItemComponents.INGREDIENT.codec()!!
-                .encodeStart(NbtOps.INSTANCE, component)
-                .result()
-                .ifPresent { encodedTag ->
-                    tag.put(DataKeys.INGREDIENTS, encodedTag)
-                }
+            tag.store(DataKeys.INGREDIENTS, CobblemonItemComponents.INGREDIENT.codec()!!, component)
         }
 
         tag.putFloat(DataKeys.TICKS_UNTIL_NEXT_SPAWN, randomTicksUntilNextSpawn)
@@ -281,47 +267,25 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
         }
     }
 
-    override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
-        super.loadAdditional(tag, registries)
+    override fun loadAdditional(tag: ValueInput) {
+        super.loadAdditional(tag)
 
         loadTint(tag)
 
-        amountSpawned = tag.getInt(DataKeys.AMOUNT_SPAWNED).orElse(0)
+        amountSpawned = tag.getIntOr(DataKeys.AMOUNT_SPAWNED, 0)
 
-        if (tag.contains(DataKeys.FOOD_COLOUR)) {
-            CobblemonItemComponents.FOOD_COLOUR.codec()
-                ?.parse(NbtOps.INSTANCE, tag.get(DataKeys.FOOD_COLOUR))
-                ?.result()
-                ?.ifPresent { component ->
-                    foodColourComponent = component
-                }
-        }
+        foodColourComponent = CobblemonItemComponents.FOOD_COLOUR.codec()
+            ?.let { tag.read(DataKeys.FOOD_COLOUR, it).orElse(null) }
 
-        if (tag.contains(DataKeys.BAIT_EFFECTS)) {
-            CobblemonItemComponents.BAIT_EFFECTS.codec()
-                ?.parse(NbtOps.INSTANCE, tag.get(DataKeys.BAIT_EFFECTS))
-                ?.result()
-                ?.ifPresent { component ->
-                    baitEffectsComponent = component
-                }
-        }
+        baitEffectsComponent = CobblemonItemComponents.BAIT_EFFECTS.codec()
+            ?.let { tag.read(DataKeys.BAIT_EFFECTS, it).orElse(null) }
 
-        if (tag.contains(DataKeys.INGREDIENTS)) {
-            CobblemonItemComponents.INGREDIENT.codec()
-                ?.parse(NbtOps.INSTANCE, tag.get(DataKeys.INGREDIENTS))
-                ?.result()
-                ?.ifPresent { component ->
-                    ingredientComponent = component
-                }
-        }
+        ingredientComponent = CobblemonItemComponents.INGREDIENT.codec()
+            ?.let { tag.read(DataKeys.INGREDIENTS, it).orElse(null) }
 
-        if (tag.contains(DataKeys.TICKS_UNTIL_NEXT_SPAWN)) {
-            randomTicksUntilNextSpawn = tag.getFloat(DataKeys.TICKS_UNTIL_NEXT_SPAWN).orElse(0f)
-        }
+        randomTicksUntilNextSpawn = tag.getFloatOr(DataKeys.TICKS_UNTIL_NEXT_SPAWN, randomTicksUntilNextSpawn)
 
-        if (tag.contains(DataKeys.PLACED_BY)) {
-            placedBy = tag.getUUID(DataKeys.PLACED_BY)
-        }
+        placedBy = tag.getUUID(DataKeys.PLACED_BY)
     }
 
     override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {

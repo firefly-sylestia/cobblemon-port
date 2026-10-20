@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.habitats
 
+import net.minecraft.world.level.storage.ValueOutput
+import net.minecraft.world.level.storage.ValueInput
 import com.cobblemon.mod.common.util.readList
 
 import com.cobblemon.mod.common.util.writeCollection
@@ -38,32 +40,31 @@ class HabitatPool {
             name = "Custom"
         }
 
-        fun writePoolToNBT(pool: HabitatPool, nbt: CompoundTag) {
+        fun writePoolToNBT(pool: HabitatPool, nbt: ValueOutput) {
             nbt.putString(DataKeys.HABITAT_POOL_ID, pool.id.toString())
             if (pool.id.path.startsWith("custom__")) {
                 nbt.putString(DataKeys.HABITAT_POOL_NAME, pool.name)
-                val spawnsListNBT = ListTag()
+                val spawnsListNBT = nbt.list(DataKeys.HABITAT_POOL_SPAWNS, CompoundTag.CODEC)
                 for (spawn in pool.spawns) {
                     val spawnTag = CompoundTag()
                     spawn.writeToNBT(spawnTag)
                     spawnsListNBT.add(spawnTag)
                 }
-                nbt.put(DataKeys.HABITAT_POOL_SPAWNS, spawnsListNBT)
             }
         }
 
-        fun readPoolFromNBT(nbt: CompoundTag): HabitatPool {
-            val poolId = nbt.getString(DataKeys.HABITAT_POOL_ID).orElse("").asIdentifierDefaultingNamespace()
-            if (nbt.contains(DataKeys.HABITAT_POOL_NAME)) {
+        fun readPoolFromNBT(nbt: ValueInput): HabitatPool {
+            val poolId = nbt.getStringOr(DataKeys.HABITAT_POOL_ID, "").asIdentifierDefaultingNamespace()
+            if (nbt.getString(DataKeys.HABITAT_POOL_NAME).isPresent) {
                 // It's one that was stored on the block
                 val pool = HabitatPool()
                 pool.id = poolId
-                pool.name = nbt.getString(DataKeys.HABITAT_POOL_NAME).orElse("")
-                val spawnsListNBT = nbt.getList(DataKeys.HABITAT_POOL_SPAWNS).orElse(ListTag())
+                pool.name = nbt.getStringOr(DataKeys.HABITAT_POOL_NAME, "")
+                val spawnsListNBT = nbt.listOrEmpty(DataKeys.HABITAT_POOL_SPAWNS, CompoundTag.CODEC)
                 val spawns = mutableListOf<HabitatSpawn>()
                 spawnsListNBT.forEach { spawnTag ->
                     try {
-                        val spawn = HabitatSpawn().apply { readFromNBT(spawnTag as CompoundTag) }
+                        val spawn = HabitatSpawn().apply { readFromNBT(spawnTag) }
                         spawns.add(spawn)
                     } catch (_: Exception) {
                         // If there's an error reading a spawn, skip it and log the error.

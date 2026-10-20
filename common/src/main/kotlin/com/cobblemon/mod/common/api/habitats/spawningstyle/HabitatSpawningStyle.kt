@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.api.habitats.spawningstyle
 
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.world.level.storage.ValueOutput
+import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.resources.Identifier
 
 /**
@@ -23,6 +24,6 @@ import net.minecraft.resources.Identifier
 sealed interface HabitatSpawningStyle {
     val type: Identifier
 
-    fun writeToNBT(nbt: CompoundTag)
-    fun readFromNBT(nbt: CompoundTag)
+    fun writeToNBT(nbt: ValueOutput)
+    fun readFromNBT(nbt: ValueInput)
 }

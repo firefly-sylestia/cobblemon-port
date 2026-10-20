@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.util
 
+import net.minecraft.world.level.storage.ValueOutput
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.core.UUIDUtil
 import com.cobblemon.mod.common.CobblemonEntities
 import net.minecraft.nbt.CompoundTag
 import java.util.UUID
@@ -31,3 +34,14 @@ fun CompoundTag.getUUID(key: String): UUID {
 }
 
 fun CompoundTag.hasUUID(key: String): Boolean = getIntArray(key).map { it.size == 4 }.orElse(false)
+
+fun ValueOutput.putUUID(key: String, uuid: UUID) = store(key, UUIDUtil.CODEC, uuid)
+
+fun ValueInput.getUUID(key: String): UUID? = read(key, UUIDUtil.CODEC).orElse(null)
+
+fun ValueInput.hasUUID(key: String): Boolean = read(key, UUIDUtil.CODEC).isPresent
+/** Stores [tag] under [key] exactly as `CompoundTag#put` did in 1.21. */
+fun ValueOutput.putTag(key: String, tag: CompoundTag) = store(key, CompoundTag.CODEC, tag)
+
+/** Reads the compound stored under [key], or null when absent. */
+fun ValueInput.getTag(key: String): CompoundTag? = read(key, CompoundTag.CODEC).orElse(null)

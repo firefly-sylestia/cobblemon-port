@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block.entity
 
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.api.fossil.NaturalMaterials
 import com.cobblemon.mod.common.api.multiblock.builder.MultiblockStructureBuilder
@@ -31,14 +33,14 @@ class RestorationTankBlockEntity(
 ) : FossilMultiblockEntity(pos, state, multiblockBuilder, CobblemonBlockEntities.RESTORATION_TANK) {
     val inv = RestorationTankInventory(this)
 
-    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.saveAdditional(nbt, registryLookup)
-        ContainerHelper.saveAllItems(nbt, inv.items, registryLookup)
+    override fun saveAdditional(nbt: ValueOutput) {
+        super.saveAdditional(nbt)
+        ContainerHelper.saveAllItems(nbt, inv.items)
     }
 
-    override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.loadAdditional(nbt, registryLookup)
-        ContainerHelper.loadAllItems(nbt, inv.items, registryLookup)
+    override fun loadAdditional(nbt: ValueInput) {
+        super.loadAdditional(nbt)
+        ContainerHelper.loadAllItems(nbt, inv.items)
     }
 
     class RestorationTankInventory(val tankEntity: RestorationTankBlockEntity) : WorldlyContainer {

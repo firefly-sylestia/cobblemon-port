@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block.entity
 
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.block.chest.GildedChestBlock.Type
@@ -149,18 +151,18 @@ class GildedChestBlockEntity(pos: BlockPos, state: BlockState, val type: Type = 
         world.blockEvent(pos, block, 1, newViewerCount)
     }
 
-    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.saveAdditional(nbt, registryLookup)
+    override fun saveAdditional(nbt: ValueOutput) {
+        super.saveAdditional(nbt)
         if (!trySaveLootTable(nbt)) {
-            ContainerHelper.saveAllItems(nbt, inventoryContents, registryLookup)
+            ContainerHelper.saveAllItems(nbt, inventoryContents)
         }
     }
 
-    override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.loadAdditional(nbt, registryLookup)
+    override fun loadAdditional(nbt: ValueInput) {
+        super.loadAdditional(nbt)
         inventoryContents= NonNullList.withSize(containerSize, ItemStack.EMPTY)
         if (!tryLoadLootTable(nbt)) {
-            ContainerHelper.loadAllItems(nbt, inventoryContents, registryLookup)
+            ContainerHelper.loadAllItems(nbt, inventoryContents)
         }
     }
 

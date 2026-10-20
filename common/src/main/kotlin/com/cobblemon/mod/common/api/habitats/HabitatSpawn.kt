@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.habitats
 
+import net.minecraft.world.level.storage.ValueOutput
+import net.minecraft.world.level.storage.ValueInput
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.spawning.IntRanges
@@ -65,7 +67,7 @@ class HabitatSpawn {
     /** The maximum light level that the Pokémon can spawn in. */
     var maxLight: Int? = null
 
-    fun writeToNBT(nbt: CompoundTag) {
+    fun writeToNBT(nbt: ValueOutput) {
         nbt.putString(DataKeys.HABITAT_POOL_SPAWN_SPECIES, species.resourceIdentifier.toString())
         nbt.putString(DataKeys.HABITAT_POOL_SPAWN_POSITION_TYPE, spawnablePositionType)
         nbt.putFloat(DataKeys.HABITAT_POOL_SPAWN_WEIGHT, weight)
@@ -78,17 +80,17 @@ class HabitatSpawn {
         nbt.putString(DataKeys.HABITAT_POOL_SPAWN_BUCKET, bucket)
     }
 
-    fun readFromNBT(nbt: CompoundTag) {
-        species = PokemonSpecies.getByIdentifier(nbt.getString(DataKeys.HABITAT_POOL_SPAWN_SPECIES).orElse("").asIdentifierDefaultingNamespace())!!
-        spawnablePositionType = nbt.getString(DataKeys.HABITAT_POOL_SPAWN_POSITION_TYPE).orElse("")
-        weight = nbt.getFloat(DataKeys.HABITAT_POOL_SPAWN_WEIGHT).orElse(0f)
-        levelRange = IntRangeAdapter.deserialize(nbt.getString(DataKeys.HABITAT_POOL_SPAWN_LEVEL_RANGE).orElse(""))
-        modifiers = if (nbt.contains(DataKeys.HABITAT_POOL_SPAWN_MODIFIERS)) PokemonProperties.parse(nbt.getString(DataKeys.HABITAT_POOL_SPAWN_MODIFIERS).orElse("")) else null
-        phases = if (nbt.contains(DataKeys.HABITAT_POOL_SPAWN_PHASES)) IntRangesAdapter.basic.deserialize(nbt.getString(DataKeys.HABITAT_POOL_SPAWN_PHASES).orElse("")) else null
-        timeRange = if (nbt.contains(DataKeys.HABITAT_POOL_SPAWN_TIMES)) TimeRange.adapter.deserialize(nbt.getString(DataKeys.HABITAT_POOL_SPAWN_TIMES).orElse("")) else null
-        minLight = if (nbt.contains(DataKeys.HABITAT_POOL_SPAWN_MIN_LIGHT)) nbt.getInt(DataKeys.HABITAT_POOL_SPAWN_MIN_LIGHT).orElse(0) else null
-        maxLight = if (nbt.contains(DataKeys.HABITAT_POOL_SPAWN_MAX_LIGHT)) nbt.getInt(DataKeys.HABITAT_POOL_SPAWN_MAX_LIGHT).orElse(0) else null
-        bucket = if (nbt.contains(DataKeys.HABITAT_POOL_SPAWN_BUCKET)) nbt.getString(DataKeys.HABITAT_POOL_SPAWN_BUCKET).orElse("") else "common"
+    fun readFromNBT(nbt: ValueInput) {
+        species = PokemonSpecies.getByIdentifier(nbt.getStringOr(DataKeys.HABITAT_POOL_SPAWN_SPECIES, "").asIdentifierDefaultingNamespace())!!
+        spawnablePositionType = nbt.getStringOr(DataKeys.HABITAT_POOL_SPAWN_POSITION_TYPE, "")
+        weight = nbt.getFloatOr(DataKeys.HABITAT_POOL_SPAWN_WEIGHT, 0f)
+        levelRange = IntRangeAdapter.deserialize(nbt.getStringOr(DataKeys.HABITAT_POOL_SPAWN_LEVEL_RANGE, ""))
+        modifiers = nbt.getString(DataKeys.HABITAT_POOL_SPAWN_MODIFIERS).orElse(null)?.let(PokemonProperties::parse)
+        phases = nbt.getString(DataKeys.HABITAT_POOL_SPAWN_PHASES).orElse(null)?.let(IntRangesAdapter.basic::deserialize)
+        timeRange = nbt.getString(DataKeys.HABITAT_POOL_SPAWN_TIMES).orElse(null)?.let(TimeRange.adapter::deserialize)
+        minLight = nbt.getInt(DataKeys.HABITAT_POOL_SPAWN_MIN_LIGHT).orElse(null)
+        maxLight = nbt.getInt(DataKeys.HABITAT_POOL_SPAWN_MAX_LIGHT).orElse(null)
+        bucket = nbt.getStringOr(DataKeys.HABITAT_POOL_SPAWN_BUCKET, "common")
     }
 
     fun encode(buffer: RegistryFriendlyByteBuf) {

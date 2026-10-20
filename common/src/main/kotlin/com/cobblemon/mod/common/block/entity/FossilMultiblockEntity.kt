@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.block.entity
 
+import com.cobblemon.mod.common.util.putTag
+import com.cobblemon.mod.common.util.getTag
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import com.cobblemon.mod.common.util.normal
 import com.cobblemon.mod.common.util.CobblemonInteractionResults
 
@@ -32,8 +36,6 @@ import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
-import net.minecraft.nbt.NbtUtils
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
@@ -138,38 +140,31 @@ open class FossilMultiblockEntity(
         }
     }
 
-    override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
+    override fun loadAdditional(nbt: ValueInput) {
         val oldMultiblockStructure = this.multiblockStructure as? FossilMultiblockStructure
-        multiblockStructure = if (nbt.contains(DataKeys.MULTIBLOCK_STORAGE)) {
+        val storageTag = nbt.getTag(DataKeys.MULTIBLOCK_STORAGE)
+        multiblockStructure = if (storageTag != null) {
             if (oldMultiblockStructure?.fossilState != null) {
                 // Copy the fossilState's previous animation time to the new instance
                 // Otherwise the fetus animation gets interrupted on every block update
                 val animAge = oldMultiblockStructure.fossilState.peekAge() // If someone knows a better way to fetch the age, please do.
                 val partialTicks = oldMultiblockStructure.fossilState.getPartialTicks()
-                FossilMultiblockStructure.fromNbt(nbt.getCompound(DataKeys.MULTIBLOCK_STORAGE).orElse(CompoundTag()), registryLookup, animAge, partialTicks)
+                FossilMultiblockStructure.fromNbt(storageTag, registryLookup, animAge, partialTicks)
             } else {
-                FossilMultiblockStructure.fromNbt(nbt.getCompound(DataKeys.MULTIBLOCK_STORAGE).orElse(CompoundTag()), registryLookup)
+                FossilMultiblockStructure.fromNbt(storageTag, registryLookup)
             }
         } else {
             null
         }
-        masterBlockPos = if (nbt.contains(DataKeys.CONTROLLER_BLOCK)) {
-            NbtUtils.readBlockPos(nbt, DataKeys.CONTROLLER_BLOCK).get()
-        } else {
-            null
-        }
-        diskStack = if (nbt.contains(DataKeys.MONITOR_DISK)) {
-            ItemStack.parse(registryLookup, nbt.get(DataKeys.MONITOR_DISK)).orElse(ItemStack.EMPTY)
-        } else {
-            ItemStack.EMPTY
-        }
+        masterBlockPos = nbt.read(DataKeys.CONTROLLER_BLOCK, BlockPos.CODEC).orElse(null)
+        diskStack = nbt.read(DataKeys.MONITOR_DISK, ItemStack.CODEC).orElse(ItemStack.EMPTY)
         updateMonitorScreen()
     }
 
-    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.saveAdditional(nbt, registryLookup)
+    override fun saveAdditional(nbt: ValueOutput) {
+        super.saveAdditional(nbt)
         if (!diskStack.isEmpty) {
-            nbt.put(DataKeys.MONITOR_DISK, ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, diskStack).orThrow)
+            nbt.store(DataKeys.MONITOR_DISK, ItemStack.CODEC, diskStack)
         }
     }
 

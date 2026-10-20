@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.block.entity
 
+import com.cobblemon.mod.common.util.putTag
+import com.cobblemon.mod.common.util.getTag
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.Vec3
 import com.cobblemon.mod.common.util.hasUUID
 import com.cobblemon.mod.common.util.putUUID
@@ -157,23 +161,19 @@ class HealingMachineBlockEntity(
         clearData()
     }
 
-    override fun loadAdditional(
-        compoundTag: CompoundTag,
-        registryLookup: HolderLookup.Provider
-    ) {
-        super.loadAdditional(compoundTag, registryLookup)
+    override fun loadAdditional(compoundTag: ValueInput) {
+        super.loadAdditional(compoundTag)
 
         this.pokeBalls.clear()
 
         if (compoundTag.hasUUID(DataKeys.HEALER_MACHINE_USER)) {
             this.currentUser = compoundTag.getUUID(DataKeys.HEALER_MACHINE_USER)
         }
-        if (compoundTag.contains(DataKeys.HEALER_MACHINE_POKEBALLS)) {
-            val pokeBallsTag = compoundTag.getCompound(DataKeys.HEALER_MACHINE_POKEBALLS)
+        compoundTag.getTag(DataKeys.HEALER_MACHINE_POKEBALLS)?.let { pokeBallsTag ->
             // Keep around for compat with old format
             var index = 0
-            for (key in pokeBallsTag.allKeys) {
-                val pokeBallId = pokeBallsTag.getString(key).orElse("")
+            for (key in pokeBallsTag.keySet()) {
+                val pokeBallId = pokeBallsTag.getStringOr(key, "")
                 if (pokeBallId.isEmpty()) {
                     continue
                 }
@@ -185,27 +185,18 @@ class HealingMachineBlockEntity(
                 index++
             }
         }
-        if (compoundTag.contains(DataKeys.HEALER_MACHINE_TIME_LEFT)) {
-            this.healTimeLeft = compoundTag.getInt(DataKeys.HEALER_MACHINE_TIME_LEFT).orElse(0)
-        }
-        if (compoundTag.contains(DataKeys.HEALER_MACHINE_CHARGE)) {
-            this.healingCharge = compoundTag.getFloat(DataKeys.HEALER_MACHINE_CHARGE).orElse(0f).coerceIn(0F..maxCharge)
-        }
-        if (compoundTag.contains(DataKeys.HEALER_MACHINE_INFINITE)) {
-            this.infinite = compoundTag.getBoolean(DataKeys.HEALER_MACHINE_INFINITE).orElse(false)
-        }
+        this.healTimeLeft = compoundTag.getIntOr(DataKeys.HEALER_MACHINE_TIME_LEFT, healTimeLeft)
+        this.healingCharge = compoundTag.getFloatOr(DataKeys.HEALER_MACHINE_CHARGE, healingCharge).coerceIn(0F..maxCharge)
+        this.infinite = compoundTag.getBooleanOr(DataKeys.HEALER_MACHINE_INFINITE, infinite)
     }
 
-    override fun saveAdditional(
-        compoundTag: CompoundTag,
-        registryLookup: HolderLookup.Provider
-    ) {
-        super.saveAdditional(compoundTag, registryLookup)
+    override fun saveAdditional(compoundTag: ValueOutput) {
+        super.saveAdditional(compoundTag)
 
         if (this.currentUser != null) {
             compoundTag.putUUID(DataKeys.HEALER_MACHINE_USER, this.currentUser!!)
         } else {
-            compoundTag.remove(DataKeys.HEALER_MACHINE_USER)
+            compoundTag.discard(DataKeys.HEALER_MACHINE_USER)
         }
 
         if (this.pokeBalls().isNotEmpty()) {
@@ -213,9 +204,9 @@ class HealingMachineBlockEntity(
             this.pokeBalls().forEach { (index, pokeBall) ->
                 pokeBallsTag.putString(index.toString(), pokeBall.name.toString())
             }
-            compoundTag.put(DataKeys.HEALER_MACHINE_POKEBALLS, pokeBallsTag)
+            compoundTag.putTag(DataKeys.HEALER_MACHINE_POKEBALLS, pokeBallsTag)
         } else {
-            compoundTag.remove(DataKeys.HEALER_MACHINE_POKEBALLS)
+            compoundTag.discard(DataKeys.HEALER_MACHINE_POKEBALLS)
         }
 
         compoundTag.putInt(DataKeys.HEALER_MACHINE_TIME_LEFT, this.healTimeLeft)

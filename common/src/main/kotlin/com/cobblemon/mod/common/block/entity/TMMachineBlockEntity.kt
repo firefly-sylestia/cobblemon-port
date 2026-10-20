@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block.entity
 
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonSounds
@@ -244,24 +246,24 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
         return TMMachineMenu(containerId, inventory, tmMachineInventory, containerData)
     }
 
-    override fun saveAdditional(compound: CompoundTag, registries: HolderLookup.Provider) {
-        super.saveAdditional(compound, registries)
+    override fun saveAdditional(compound: ValueOutput) {
+        super.saveAdditional(compound)
         saveTint(compound)
         compound.putBoolean(BURN_ACTIVE_TAG, burnActive)
         compound.putBoolean(REPEAT_PROCESS_TAG, repeatProcess)
         compound.putInt(BURN_PROGRESS_TAG, burnProgress)
         compound.putString(ACTIVE_MOVE_TAG, activeMove)
-        ContainerHelper.saveAllItems(compound, tmMachineInventory.items, registries)
+        ContainerHelper.saveAllItems(compound, tmMachineInventory.items)
     }
 
-    override fun loadAdditional(compound: CompoundTag, registries: HolderLookup.Provider) {
-        super.loadAdditional(compound, registries)
+    override fun loadAdditional(compound: ValueInput) {
+        super.loadAdditional(compound)
         loadTint(compound)
-        burnActive = compound.getBoolean(BURN_ACTIVE_TAG).orElse(false)
-        repeatProcess = compound.getBoolean(REPEAT_PROCESS_TAG).orElse(false)
-        burnProgress = compound.getInt(BURN_PROGRESS_TAG).orElse(0)
-        activeMove = compound.getString(ACTIVE_MOVE_TAG).orElse("")
-        ContainerHelper.loadAllItems(compound, tmMachineInventory.items, registries)
+        burnActive = compound.getBooleanOr(BURN_ACTIVE_TAG, false)
+        repeatProcess = compound.getBooleanOr(REPEAT_PROCESS_TAG, false)
+        burnProgress = compound.getIntOr(BURN_PROGRESS_TAG, 0)
+        activeMove = compound.getStringOr(ACTIVE_MOVE_TAG, "")
+        ContainerHelper.loadAllItems(compound, tmMachineInventory.items)
     }
 
     override fun getDisplayName(): Component = Component.translatable("block.cobblemon.tm_machine")

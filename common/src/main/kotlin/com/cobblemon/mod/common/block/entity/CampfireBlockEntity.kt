@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block.entity
 
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.cobblemon.mod.common.CobblemonSounds
@@ -31,7 +33,6 @@ import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.NonNullList
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
@@ -408,36 +409,27 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
         level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
     }
 
-    override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
-        super.saveAdditional(tag, registries)
+    override fun saveAdditional(tag: ValueOutput) {
+        super.saveAdditional(tag)
 
         tag.putInt("CookingProgress", this.cookingProgress)
 
-        ContainerHelper.saveAllItems(tag, this.items, registries)
-        potComponent?.let { component ->
-            PotComponent.CODEC.encodeStart(NbtOps.INSTANCE, component)
-                .result()
-                ?.ifPresent { encoded -> tag.put("PotComponent", encoded) }
-        }
+        ContainerHelper.saveAllItems(tag, this.items)
+        potComponent?.let { component -> tag.store("PotComponent", PotComponent.CODEC, component) }
     }
 
-    override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
-        super.loadAdditional(tag, registries)
+    override fun loadAdditional(tag: ValueInput) {
+        super.loadAdditional(tag)
 
-        this.cookingProgress = tag.getInt("CookingProgress").orElse(0)
+        this.cookingProgress = tag.getIntOr("CookingProgress", 0)
 
         // Minecraft doesn't save empty item stacks to the items tag, so we have to manually clear them
         // otherwise they would never clear and seasonings would always render wrongly
 
         clearContent()
-        ContainerHelper.loadAllItems(tag, this.items, registries)
+        ContainerHelper.loadAllItems(tag, this.items)
 
-        if (tag.contains("PotComponent")) {
-            val component = PotComponent.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("PotComponent").orElse(CompoundTag()))
-                .result()
-                ?.orElse(null)
-            potComponent = component
-        }
+        potComponent = tag.read("PotComponent", PotComponent.CODEC).orElse(null)
     }
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {

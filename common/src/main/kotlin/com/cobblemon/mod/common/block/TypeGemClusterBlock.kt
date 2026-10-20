@@ -249,7 +249,7 @@ class TypeGemClusterBlock(
         builder.add(FACING, STAGE, GROWTH_TYPE)
     }
 
-    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState, includeData: Boolean): ItemStack {
         val stack = super.getCloneItemStack(level, pos, state)
         val itemPath = BuiltInRegistries.ITEM.getKey(stack.item).path
         if (itemPath.endsWith("_gem_cluster")) {

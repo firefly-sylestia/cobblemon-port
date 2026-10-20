@@ -36,6 +36,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.entity.projectile.Projectile
+import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -71,22 +72,22 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
         val CANDLE: IntegerProperty = IntegerProperty.create("candle", 0, MapColor.MATERIAL_COLORS.size - 1)
 
         val idToCandleBlock: Map<Int, Block> = mapOf(
-            MapColor.WOOL.id to Blocks.WHITE_CANDLE,
-            MapColor.COLOR_ORANGE.id to Blocks.ORANGE_CANDLE,
-            MapColor.COLOR_MAGENTA.id to Blocks.MAGENTA_CANDLE,
-            MapColor.COLOR_LIGHT_BLUE.id to Blocks.LIGHT_BLUE_CANDLE,
-            MapColor.COLOR_YELLOW.id to Blocks.YELLOW_CANDLE,
-            MapColor.COLOR_LIGHT_GREEN.id to Blocks.LIME_CANDLE,
-            MapColor.COLOR_PINK.id to Blocks.PINK_CANDLE,
-            MapColor.COLOR_GRAY.id to Blocks.GRAY_CANDLE,
-            MapColor.COLOR_LIGHT_GRAY.id to Blocks.LIGHT_GRAY_CANDLE,
-            MapColor.COLOR_CYAN.id to Blocks.CYAN_CANDLE,
-            MapColor.COLOR_PURPLE.id to Blocks.PURPLE_CANDLE,
-            MapColor.COLOR_BLUE.id to Blocks.BLUE_CANDLE,
-            MapColor.COLOR_BROWN.id to Blocks.BROWN_CANDLE,
-            MapColor.COLOR_GREEN.id to Blocks.GREEN_CANDLE,
-            MapColor.COLOR_RED.id to Blocks.RED_CANDLE,
-            MapColor.COLOR_BLACK.id to Blocks.BLACK_CANDLE
+            MapColor.WOOL.id to Blocks.DYED_CANDLE.pick(DyeColor.WHITE) as Block,
+            MapColor.COLOR_ORANGE.id to Blocks.DYED_CANDLE.pick(DyeColor.ORANGE) as Block,
+            MapColor.COLOR_MAGENTA.id to Blocks.DYED_CANDLE.pick(DyeColor.MAGENTA) as Block,
+            MapColor.COLOR_LIGHT_BLUE.id to Blocks.DYED_CANDLE.pick(DyeColor.LIGHT_BLUE) as Block,
+            MapColor.COLOR_YELLOW.id to Blocks.DYED_CANDLE.pick(DyeColor.YELLOW) as Block,
+            MapColor.COLOR_LIGHT_GREEN.id to Blocks.DYED_CANDLE.pick(DyeColor.LIME) as Block,
+            MapColor.COLOR_PINK.id to Blocks.DYED_CANDLE.pick(DyeColor.PINK) as Block,
+            MapColor.COLOR_GRAY.id to Blocks.DYED_CANDLE.pick(DyeColor.GRAY) as Block,
+            MapColor.COLOR_LIGHT_GRAY.id to Blocks.DYED_CANDLE.pick(DyeColor.LIGHT_GRAY) as Block,
+            MapColor.COLOR_CYAN.id to Blocks.DYED_CANDLE.pick(DyeColor.CYAN) as Block,
+            MapColor.COLOR_PURPLE.id to Blocks.DYED_CANDLE.pick(DyeColor.PURPLE) as Block,
+            MapColor.COLOR_BLUE.id to Blocks.DYED_CANDLE.pick(DyeColor.BLUE) as Block,
+            MapColor.COLOR_BROWN.id to Blocks.DYED_CANDLE.pick(DyeColor.BROWN) as Block,
+            MapColor.COLOR_GREEN.id to Blocks.DYED_CANDLE.pick(DyeColor.GREEN) as Block,
+            MapColor.COLOR_RED.id to Blocks.DYED_CANDLE.pick(DyeColor.RED) as Block,
+            MapColor.COLOR_BLACK.id to Blocks.DYED_CANDLE.pick(DyeColor.BLACK) as Block
         )
 
         fun getCandleById(id: Int): Block = idToCandleBlock[id] ?: Blocks.CANDLE
@@ -136,13 +137,13 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
         )
     }
 
-    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(FACING, BITES, CANDLE, BlockStateProperties.LIT)
     }
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = PokeSnackBlockEntity(pos, state)
 
-    override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape? {
+    override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         val snackShapes = when (state.getValue(FACING)) {
             Direction.SOUTH -> SOUTH_SHAPES
             Direction.WEST -> WEST_SHAPES
@@ -189,7 +190,7 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
         level.sendBlockUpdated(pos, state, state, UPDATE_CLIENTS)
     }
 
-    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState, includeData: Boolean): ItemStack {
         val blockEntity = level.getBlockEntity(pos) as? PokeSnackBlockEntity ?: return ItemStack.EMPTY
         return blockEntity.toItemStack()
     }
@@ -355,7 +356,7 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
             level.setBlock(pos, state.setValue(BITES, newBites) as BlockState, UPDATE_ALL)
         }
 
-        level.playSound(null, player?.blockPosition() ?: pos, SoundEvents.GENERIC_EAT, if (player != null) SoundSource.PLAYERS else SoundSource.NEUTRAL)
+        level.playSound(null, player?.blockPosition() ?: pos, SoundEvents.GENERIC_EAT.value(), if (player != null) SoundSource.PLAYERS else SoundSource.NEUTRAL)
         spawnEatParticles(level, pos)
 
         player?.let {

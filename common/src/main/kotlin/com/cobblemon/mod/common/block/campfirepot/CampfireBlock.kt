@@ -271,7 +271,7 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
         }
     }
 
-    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState, includeData: Boolean): ItemStack {
         return if (isSoul) ItemStack(Blocks.SOUL_CAMPFIRE) else ItemStack(Blocks.CAMPFIRE)
     }
 

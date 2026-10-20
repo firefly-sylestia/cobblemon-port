@@ -74,7 +74,7 @@ abstract class MultiblockBlock(properties: Properties) : BaseEntityBlock(propert
     }
 
     //This is done so a block picked with NBT doesnt absolutely DESTROY multiblocks
-    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState, includeData: Boolean): ItemStack {
         val blockEntity = world.getBlockEntity(pos) as? MultiblockEntity ?: return ItemStack.EMPTY
         return if (blockEntity.multiblockStructure == null) super.getCloneItemStack(world, pos, state) else ItemStack.EMPTY
     }

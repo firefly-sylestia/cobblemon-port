@@ -175,7 +175,7 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
     }
 
     // We need to point back to the actual apricorn item, see SweetBerryBushBlock for example
-    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState) = ItemStack(this.apricorn.item())
+    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState, includeData: Boolean) = ItemStack(this.apricorn.item())
 
     private fun doHarvest(world: Level, state: BlockState, pos: BlockPos, player: Player) {
         val resetState = this.harvest(world, state, pos)

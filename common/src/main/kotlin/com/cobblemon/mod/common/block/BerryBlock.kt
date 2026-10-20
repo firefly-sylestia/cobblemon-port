@@ -268,7 +268,7 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
         builder.add(IS_ROOTED)
     }
 
-    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState, includeData: Boolean): ItemStack {
         val berryItem = this.berry()?.item() ?: return ItemStack.EMPTY
         return ItemStack(berryItem)
     }

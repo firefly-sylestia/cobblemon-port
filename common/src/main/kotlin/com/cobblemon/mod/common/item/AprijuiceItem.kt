@@ -123,10 +123,10 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
 
     // todo not sure which one is needed at the moment, but I assume just the eating sound?
     override fun getDrinkingSound(): SoundEvent {
-        return SoundEvents.GENERIC_DRINK
+        return SoundEvents.GENERIC_DRINK.value()
     }
 
     override fun getEatingSound(): SoundEvent {
-        return SoundEvents.GENERIC_DRINK
+        return SoundEvents.GENERIC_DRINK.value()
     }
 }

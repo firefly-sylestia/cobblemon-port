@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.block.decor
 
+import net.minecraft.util.RandomSource
+
+import net.minecraft.world.level.ScheduledTickAccess
+
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -28,13 +32,8 @@ import net.minecraft.world.phys.shapes.VoxelShape
 class WistensuFlowerVineBlock(properties: Properties?) : GrowingPlantBodyBlock(properties, Direction.DOWN, SHAPE, false), WistensuFlowerBlock
 {
     companion object {
-        val CODEC: MapCodec<WistensuFlowerVineBlock> = RecordCodecBuilder.mapCodec {
-            it.group(propertiesCodec()).apply(it, ::WistensuFlowerVineBlock)
-        }
         val SHAPE: VoxelShape = box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0)
     }
-    override fun codec(): MapCodec<WistensuFlowerVineBlock> = CODEC
-
     override fun getHeadBlock(): GrowingPlantHeadBlock {
         return CobblemonBlocks.WISTENSU
     }
@@ -46,11 +45,13 @@ class WistensuFlowerVineBlock(properties: Properties?) : GrowingPlantBodyBlock(p
 
     override fun updateShape(
         state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        level: LevelAccessor,
+        level: LevelReader,
+        ticks: ScheduledTickAccess,
         pos: BlockPos,
-        neighborPos: BlockPos
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
         val updateState = wisternUpdateShape(state, direction, neighborState, level, pos, neighborPos, this)
         if (updateState != null) return updateState

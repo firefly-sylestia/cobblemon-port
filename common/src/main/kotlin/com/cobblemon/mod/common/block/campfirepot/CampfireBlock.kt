@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block.campfirepot
 
+import net.minecraft.world.level.ScheduledTickAccess
+
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
@@ -57,12 +59,6 @@ import net.minecraft.world.level.block.CampfireBlock as MCCampfireBlock
 @Suppress("OVERRIDE_DEPRECATION")
 class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock(settings), SimpleWaterloggedBlock {
     companion object {
-        val CODEC: MapCodec<CampfireBlock> = RecordCodecBuilder.mapCodec {
-            it.group(
-                propertiesCodec(),
-                Codec.BOOL.fieldOf("isSoul").forGetter(CampfireBlock::isSoul)
-            ).apply(it, ::CampfireBlock)
-        }
         val ITEM_DIRECTION = DirectionProperty.create("item_facing")
         val POWERED = BlockStateProperties.POWERED
         val COOKING = BooleanProperty.create("cooking")
@@ -211,14 +207,16 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
 
     override fun updateShape(
         state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        world: LevelAccessor,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
         pos: BlockPos,
-        neighborPos: BlockPos
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
         return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
-        else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+        else super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun getRenderShape(state: BlockState) = RenderShape.MODEL
@@ -228,10 +226,6 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
     }
 
     override fun hasAnalogOutputSignal(state: BlockState): Boolean = true
-
-    override fun codec(): MapCodec<out BaseEntityBlock> {
-        return CODEC
-    }
 
     override fun isPathfindable(state: BlockState, type: PathComputationType): Boolean = false
 

@@ -324,11 +324,11 @@ class TradeGUI(
             context.enableScissor(backgroundX, backgroundY, backgroundX + BASE_BACKGROUND_WIDTH, backgroundY +  BASE_BACKGROUND_HEIGHT)
             offeredPokemonModel?.baseScale = scale
             offeredPokemonModel?.offsetY = scaleOffsetY
-            offeredPokemonModel?.render(context, mouseX, mouseY, delta)
+            offeredPokemonModel?.extractRenderState(context, mouseX, mouseY, delta)
 
             opposingOfferedPokemonModel?.baseScale = scale
             opposingOfferedPokemonModel?.offsetY = scaleOffsetY
-            opposingOfferedPokemonModel?.render(context, mouseX, mouseY, delta)
+            opposingOfferedPokemonModel?.extractRenderState(context, mouseX, mouseY, delta)
             context.disableScissor()
         }
 

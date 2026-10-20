@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pasture
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
@@ -68,9 +69,9 @@ class PastureWidget(
             centered = true
         )
 
-        pastureScrollList.render(context, mouseX, mouseY, delta)
+        pastureScrollList.extractRenderState(context, mouseX, mouseY, delta)
 
-        recallButton.render(context, mouseX, mouseY, delta)
+        recallButton.extractRenderState(context, mouseX, mouseY, delta)
     }
 
     override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {

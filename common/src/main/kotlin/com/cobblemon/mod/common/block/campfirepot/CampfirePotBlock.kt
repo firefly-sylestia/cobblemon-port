@@ -8,6 +8,12 @@
 
 package com.cobblemon.mod.common.block.campfirepot
 
+import net.minecraft.util.RandomSource
+
+import net.minecraft.world.level.ScheduledTickAccess
+
+import net.minecraft.world.level.LevelReader
+
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
@@ -32,7 +38,6 @@ import net.minecraft.world.phys.shapes.VoxelShape
 class CampfirePotBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
-        val CODEC: MapCodec<CampfirePotBlock> = RecordCodecBuilder.mapCodec { it.group(propertiesCodec()).apply(it, ::CampfirePotBlock) }
         val OPEN = BlockStateProperties.OPEN
         val OCCUPIED = BlockStateProperties.OCCUPIED
 
@@ -105,15 +110,22 @@ class CampfirePotBlock(settings: Properties) : HorizontalDirectionalBlock(settin
         return null
     }
 
-    override fun codec(): MapCodec<out HorizontalDirectionalBlock> = CODEC
-
-    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, world: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
+    override fun updateShape(
+        state: BlockState,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
+        pos: BlockPos,
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
+    ): BlockState {
         if (state.getValue(WATERLOGGED)) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
 
         return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
-            else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+            else super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {

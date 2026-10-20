@@ -24,9 +24,6 @@ import net.minecraft.world.phys.shapes.VoxelShape
 
 class MagnetBlock(properties: Properties) : SixFaceRotationalBlock(properties) {
     companion object {
-        val CODEC: MapCodec<MagnetBlock> = RecordCodecBuilder.mapCodec {
-            it.group(propertiesCodec()).apply(it, ::MagnetBlock)
-        }
 
         val FLOOR_NORTH = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.1875, 0.75)
         val WALL_NORTH = Shapes.box(0.25, 0.25, 0.8125, 0.75, 0.75, 1.0)
@@ -40,8 +37,6 @@ class MagnetBlock(properties: Properties) : SixFaceRotationalBlock(properties) {
             .setValue(WATERLOGGED, false)
         )
     }
-
-    override fun codec(): MapCodec<MagnetBlock> = CODEC
 
     override fun getShape(state: BlockState, blockGetter: BlockGetter, pos: BlockPos, collisionContext: CollisionContext): VoxelShape {
         val direction = state.getValue(FACING)

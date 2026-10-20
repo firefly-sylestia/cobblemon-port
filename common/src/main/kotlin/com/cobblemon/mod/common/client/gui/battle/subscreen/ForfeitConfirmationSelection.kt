@@ -100,7 +100,7 @@ class ForfeitConfirmationSelection(
             shadow = true
         )
 
-        acceptButton.render(context, mouseX, mouseY, delta)
-        declineButton.render(context, mouseX, mouseY, delta)
+        acceptButton.extractRenderState(context, mouseX, mouseY, delta)
+        declineButton.extractRenderState(context, mouseX, mouseY, delta)
     }
 }

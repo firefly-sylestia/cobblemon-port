@@ -96,10 +96,10 @@ class BattleGeneralActionSelection(
 
     override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if(lastAnwseredRequest != null) {
-            backButton.render(context, mouseX, mouseY, delta)
+            backButton.extractRenderState(context, mouseX, mouseY, delta)
         }
         for (tile in tiles) {
-            tile.render(context, mouseX, mouseY, delta)
+            tile.extractRenderState(context, mouseX, mouseY, delta)
         }
     }
 

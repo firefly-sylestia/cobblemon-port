@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.level.ScheduledTickAccess
+
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
 import com.mojang.serialization.MapCodec
@@ -49,17 +51,6 @@ class TypeGemClusterBlock(
 ) : DirectionalBlock(settings.pushReaction(PushReaction.POPPED)) {
 
     companion object {
-        val CODEC: MapCodec<TypeGemClusterBlock> = RecordCodecBuilder.mapCodec { instance ->
-            instance.group(
-                propertiesCodec(),
-                Block.CODEC.fieldOf("nextStage").forGetter { it.nextStage },
-                Identifier.CODEC.fieldOf("dropItem").forGetter { it.dropItemId }
-            ).apply(instance) { settings, nextStage, dropItemId ->
-                TypeGemClusterBlock(settings, nextStage, dropItemId).also {
-                    gemToClusterMap[nextStage] = it
-                }
-            }
-        }
         val gemToClusterMap: MutableMap<Block, TypeGemClusterBlock> = mutableMapOf()
 
         val FACING: DirectionProperty = DirectionalBlock.FACING
@@ -216,12 +207,21 @@ class TypeGemClusterBlock(
         }
     }
 
-    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, level: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
+    override fun updateShape(
+        state: BlockState,
+        level: LevelReader,
+        ticks: ScheduledTickAccess,
+        pos: BlockPos,
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
+    ): BlockState {
         val facing = state.getValue(FACING)
         if (direction == facing.opposite && !canSurvive(state, level, pos)) {
             return Blocks.AIR.defaultBlockState()
         }
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos)
+        return super.updateShape(state, level, ticks, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun rotate(state: BlockState, rotation: Rotation): BlockState {
@@ -244,8 +244,6 @@ class TypeGemClusterBlock(
 
     override fun useShapeForLightOcclusion(state: BlockState): Boolean = false
 
-
-    override fun codec(): MapCodec<out DirectionalBlock> = CODEC
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)

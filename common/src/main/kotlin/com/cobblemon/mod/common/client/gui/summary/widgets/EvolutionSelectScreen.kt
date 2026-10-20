@@ -8,7 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
+import com.cobblemon.mod.common.client.gui.CobblemonScrollEntry
+
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionDisplay
@@ -65,7 +68,7 @@ class EvolutionSelectScreen(
         super.extractWidgetRenderState(context, mouseX, mouseY, partialTicks)
     }
 
-    class EvolveSlot(private val pokemon: Pokemon, private val evolution: EvolutionDisplay) : Entry<EvolveSlot>() {
+    class EvolveSlot(private val pokemon: Pokemon, private val evolution: EvolutionDisplay) : Entry<EvolveSlot>(), CobblemonScrollEntry {
         val client: Minecraft = Minecraft.getInstance()
         val state = FloatingState()
         val form: FormData = evolution.species.getForm(evolution.aspects)

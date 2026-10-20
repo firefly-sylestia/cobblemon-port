@@ -35,13 +35,7 @@ class VivichokeBlock(settings: Properties) : CropBlock(settings) {
 
     override fun getBaseSeedId(): ItemLike = CobblemonItems.VIVICHOKE_SEEDS
 
-    override fun codec(): MapCodec<out CropBlock> {
-        return CODEC
-    }
-
     companion object {
-        val CODEC = simpleCodec(::VivichokeBlock)
-
         private val STAGE_0_SHAPE = box(6.0, -1.0, 6.0, 10.0, 2.0, 10.0)
         private val STAGE_1_SHAPE = box(6.0, -1.0, 6.0, 10.0, 5.0, 10.0)
         private val STAGE_2_SHAPE = box(6.0, -1.0, 6.0, 10.0, 7.0, 10.0)

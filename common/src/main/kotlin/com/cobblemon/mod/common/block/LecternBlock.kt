@@ -46,19 +46,7 @@ import net.minecraft.world.level.block.LecternBlock as MinecraftLecternBlock
 
 class LecternBlock(properties: Properties): BaseEntityBlock(properties) {
     companion object {
-        val CODEC: MapCodec<LecternBlock> = simpleCodec(::LecternBlock)
-        val EMIT_LIGHT: BooleanProperty = BooleanProperty.create("emit_light")
     }
-
-    init {
-        registerDefaultState(
-            stateDefinition.any()
-                .setValue(FACING, Direction.NORTH)
-                .setValue(EMIT_LIGHT, false)
-        )
-    }
-
-    override fun codec() = CODEC
 
     override fun <T : BlockEntity> getTicker(world: Level, blockState: BlockState, BlockWithEntityType: BlockEntityType<T>) = createTickerHelper(BlockWithEntityType, CobblemonBlockEntities.LECTERN, ViewerCountBlockEntity.TICKER::tick)
 

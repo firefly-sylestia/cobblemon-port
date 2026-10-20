@@ -71,7 +71,7 @@ class InfoWidget(
             label = lang("ui.info.pokedex_number"),
             value = dexNo.text()
         )
-        pokedexNumberWidget.render(context, pMouseX, pMouseY, pPartialTicks)
+        pokedexNumberWidget.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
         // Size
         val size = if (pokemon.isAlpha) "alpha" else pokemon.getSizeCategory().name.lowercase()
@@ -93,7 +93,7 @@ class InfoWidget(
             label = lang("ui.info.species"),
             value = pokemon.species.translatedName
         )
-        speciesWidget.render(context, pMouseX, pMouseY, pPartialTicks)
+        speciesWidget.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
         // Type
         val type = pokemon.types.map { it.displayName.copy() }.reduce { acc, next -> acc.plus("/").plus(next) }
@@ -104,7 +104,7 @@ class InfoWidget(
             label = lang("ui.info.type"),
             value = type
         )
-        typeWidget.render(context, pMouseX, pMouseY, pPartialTicks)
+        typeWidget.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
         // Original Trainer
         val otName: MutableComponent = pokemon.originalTrainerName?.let { name ->
@@ -120,7 +120,7 @@ class InfoWidget(
             label = lang("ui.info.original_trainer"),
             value = otName
         )
-        otWidget.render(context, pMouseX, pMouseY, pPartialTicks)
+        otWidget.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
 
         // Nature
@@ -134,7 +134,7 @@ class InfoWidget(
             label = lang("ui.info.nature"),
             value = natureText,
         )
-        natureWidget.render(context, pMouseX, pMouseY, pPartialTicks)
+        natureWidget.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
 
         // Ability
@@ -145,7 +145,7 @@ class InfoWidget(
             label = lang("ui.info.ability").bold(),
             value = pokemon.ability.displayName.asTranslated().bold()
         )
-        abilityWidget.render(context, pMouseX, pMouseY, pPartialTicks)
+        abilityWidget.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
         matrices.pushMatrix()
         matrices.scale(HALF_SCALE, HALF_SCALE, 1F)

@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.util.RandomSource
+
+import net.minecraft.world.level.ScheduledTickAccess
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonNetwork
@@ -62,8 +66,6 @@ import java.util.function.BiConsumer
 @Suppress("OVERRIDE_DEPRECATION", "DEPRECATION")
 class PastureBlock(settings: Properties): BaseEntityBlock(settings), SimpleWaterloggedBlock {
     companion object {
-        val CODEC = simpleCodec(::PastureBlock)
-
         val PART: EnumProperty<PasturePart> = EnumProperty.create("part", PasturePart::class.java)
         val ON: BooleanProperty = BooleanProperty.create("on")
 
@@ -173,10 +175,6 @@ class PastureBlock(settings: Properties): BaseEntityBlock(settings), SimpleWater
     }
 
     private fun isBase(state: BlockState): Boolean = state.hasProperty(PART) && state.getValue(PART) == PasturePart.BOTTOM
-
-    override fun codec(): MapCodec<out BaseEntityBlock> {
-        return CODEC
-    }
 
     override fun isPathfindable(
         blockState: BlockState,
@@ -345,14 +343,16 @@ class PastureBlock(settings: Properties): BaseEntityBlock(settings), SimpleWater
 
     override fun updateShape(
         state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        world: LevelAccessor,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
         pos: BlockPos,
-        neighborPos: BlockPos
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
         if (state.getValue(WATERLOGGED)) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
 
         val isPasture = neighborState.`is`(this)

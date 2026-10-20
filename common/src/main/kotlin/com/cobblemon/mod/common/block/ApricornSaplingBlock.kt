@@ -16,15 +16,7 @@ import net.minecraft.world.level.block.SaplingBlock
 
 class ApricornSaplingBlock(properties : Properties, val apricorn: Apricorn) : SaplingBlock(ApricornTreeGrower(apricorn), properties) {
 
-    override fun codec(): MapCodec<out SaplingBlock> {
-        return CODEC
-    }
-
     companion object {
-        val CODEC: MapCodec<ApricornSaplingBlock> = RecordCodecBuilder.mapCodec { it.group(
-            propertiesCodec(),
-            Apricorn.CODEC.fieldOf("apricorn").forGetter(ApricornSaplingBlock::apricorn)
-        ).apply(it, ::ApricornSaplingBlock) }
     }
 
 }

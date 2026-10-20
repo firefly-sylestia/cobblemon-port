@@ -8,7 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.dialogue.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
+import com.cobblemon.mod.common.client.gui.CobblemonScrollEntry
+
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.ScrollingWidget
@@ -185,7 +188,7 @@ class DialogueBox(
         return super.mouseClicked(event, doubleClick)
     }
 
-    class DialogueLine(val line: FormattedCharSequence, val lineColor: Int) : Entry<DialogueLine>() {
+    class DialogueLine(val line: FormattedCharSequence, val lineColor: Int) : Entry<DialogueLine>(), CobblemonScrollEntry {
         override fun getNarration() = "".text()
 
         override fun renderBack(

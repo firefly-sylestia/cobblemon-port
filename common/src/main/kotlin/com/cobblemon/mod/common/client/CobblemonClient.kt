@@ -525,12 +525,13 @@ object CobblemonClient {
     fun beforeChatRender(context: GuiGraphicsExtractor, partialDeltaTicks: Float) {
         val partialDeltaTicks = Minecraft.getInstance().timer // Checking that this even works
 //        ClientTaskTracker.update(partialDeltaTicks / 20f)
+        val tickCounter = Minecraft.getInstance().timer
         if (battle == null) {
-            overlay.render(context, partialDeltaTicks)
+            overlay.extractRenderState(context, tickCounter)
         } else {
-            battleOverlay.render(context, partialDeltaTicks)
+            battleOverlay.extractRenderState(context, tickCounter)
         }
-        rideControlsOverlay.render(context, partialDeltaTicks)
+        rideControlsOverlay.extractRenderState(context, tickCounter)
     }
 
     @Suppress("UNCHECKED_CAST")

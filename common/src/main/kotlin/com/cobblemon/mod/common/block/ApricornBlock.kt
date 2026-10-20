@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.level.ScheduledTickAccess
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.apricorn.Apricorn
 import com.cobblemon.mod.common.api.events.CobblemonEvents
@@ -119,14 +121,16 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
 
     override fun updateShape(
         state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        world: LevelAccessor,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
         pos: BlockPos,
-        neighborPos: BlockPos
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
         return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
-            else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+            else super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState) = state.getValue(AGE) < MAX_AGE
@@ -215,15 +219,7 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
         return true
     }
 
-    override fun codec(): MapCodec<out HorizontalDirectionalBlock> {
-        return CODEC
-    }
-
     companion object {
-        val CODEC: MapCodec<ApricornBlock> = RecordCodecBuilder.mapCodec { it.group(
-            propertiesCodec(),
-            Apricorn.CODEC.fieldOf("apricorn").forGetter(ApricornBlock::apricorn)
-        ).apply(it, ::ApricornBlock) }
 
         val AGE = BlockStateProperties.AGE_3
         const val MAX_AGE = BlockStateProperties.MAX_AGE_3

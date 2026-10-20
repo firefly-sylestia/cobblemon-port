@@ -8,6 +8,12 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.util.RandomSource
+
+import net.minecraft.world.level.ScheduledTickAccess
+
+import net.minecraft.world.level.LevelReader
+
 import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
 import com.cobblemon.mod.common.item.PokeBallItem
 import com.mojang.serialization.MapCodec
@@ -70,14 +76,16 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
 
     override fun updateShape(
         state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        world: LevelAccessor,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
         pos: BlockPos,
-        neighborPos: BlockPos
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
         return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
-        else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+        else super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun useWithoutItem(
@@ -124,14 +132,9 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
 
     override fun hasAnalogOutputSignal(state: BlockState): Boolean = true
 
-    override fun codec(): MapCodec<out BaseEntityBlock> {
-        return CODEC
-    }
-
     override fun isPathfindable(state: BlockState, type: PathComputationType): Boolean = false
 
     companion object {
-        val CODEC = simpleCodec(::DisplayCaseBlock)
         val ITEM_DIRECTION = DirectionProperty.create("item_facing")
     }
 

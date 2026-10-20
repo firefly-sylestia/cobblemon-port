@@ -50,9 +50,7 @@ class WallAttachedDirectionalShapeBlock(settings: Properties, val width: Int = 1
         }
     }
 
-    override fun codec(): MapCodec<WallAttachedDirectionalShapeBlock> = RecordCodecBuilder.mapCodec { instance ->
         instance.group(
-            propertiesCodec(),
             Codec.INT.fieldOf("width").forGetter { it.width },
             Codec.INT.fieldOf("height").forGetter { it.height },
             Codec.INT.fieldOf("depth").forGetter { it.depth }

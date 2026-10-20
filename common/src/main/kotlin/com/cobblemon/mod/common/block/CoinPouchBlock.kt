@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.util.RandomSource
+
+import net.minecraft.world.level.ScheduledTickAccess
+
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
@@ -63,25 +67,23 @@ class CoinPouchBlock(settings: Properties, val small: Boolean) : HorizontalDirec
         return null
     }
 
-    override fun codec(): MapCodec<out HorizontalDirectionalBlock> {
-        return CODEC
-    }
-
     @Deprecated("Deprecated in Java")
     override fun updateShape(
         state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        world: LevelAccessor,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
         pos: BlockPos,
-        neighborPos: BlockPos
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
         if (state.getValue(WATERLOGGED)) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
 
         return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
-            else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+            else super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -102,10 +104,6 @@ class CoinPouchBlock(settings: Properties, val small: Boolean) : HorizontalDirec
     companion object {
         val NATURAL: BooleanProperty = BooleanProperty.create("natural")
 
-        val CODEC: MapCodec<CoinPouchBlock> = RecordCodecBuilder.mapCodec { it.group(
-            propertiesCodec(),
-            PrimitiveCodec.BOOL.fieldOf("small").forGetter(CoinPouchBlock::small)
-        ).apply(it, ::CoinPouchBlock) }
 
         private val SMALL_SHAPE = Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.3125, 0.6875)
     }

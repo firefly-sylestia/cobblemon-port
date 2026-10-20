@@ -188,7 +188,7 @@ class BattleMoveSelection(
         moveTiles.forEach {
             it.render(context, mouseX, mouseY, delta)
         }
-        backButton.render(context, mouseX, mouseY, delta)
+        backButton.extractRenderState(context, mouseX, mouseY, delta)
         gimmickButtons.forEach {
             it.render(context, mouseX, mouseY, delta)
         }

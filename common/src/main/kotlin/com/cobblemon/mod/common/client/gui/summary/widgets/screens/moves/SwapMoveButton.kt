@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.MoveTemplate
@@ -51,7 +52,7 @@ class SwapMoveButton(
         private val addMoveButtonResource = cobblemonResource("textures/gui/summary/summary_move_add.png")
     }
 
-    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val swapScreen = movesWidget.summary.sideScreen
         val selected = if (swapScreen is MoveSwapScreen) swapScreen.replacedMove?.template == move else false
         blitk(

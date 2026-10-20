@@ -144,7 +144,7 @@ class BattleSwitchPokemonSelection(
 
         tiles.forEach { it.render(context, mouseX.toDouble(), mouseY.toDouble(), delta) }
         if(!request.forceSwitch) {
-            backButton.render(context, mouseX, mouseY, delta)
+            backButton.extractRenderState(context, mouseX, mouseY, delta)
         }
     }
 

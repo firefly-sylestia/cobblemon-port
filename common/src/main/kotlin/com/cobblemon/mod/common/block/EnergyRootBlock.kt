@@ -29,13 +29,7 @@ class EnergyRootBlock(settings: Properties) : RootBlock(settings) {
 
     override fun shearedDrop(): ItemStack = CobblemonItems.ENERGY_ROOT.defaultInstance
 
-    override fun codec(): MapCodec<out Block> {
-        return CODEC
-    }
-
     companion object {
-        private val CODEC = simpleCodec(::EnergyRootBlock)
-
         private val AABB = Shapes.box(0.2, 0.1, 0.2, 0.8, 1.0, 0.8)
     }
 

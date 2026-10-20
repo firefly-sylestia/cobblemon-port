@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pc
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
@@ -54,7 +55,7 @@ open class StorageSlot(
     override fun playDownSound(soundManager: SoundManager) {
     }
 
-    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         if (shouldRender()) {
             renderSlot(context, x, y, delta)
         }

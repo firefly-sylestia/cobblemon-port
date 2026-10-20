@@ -158,7 +158,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
                 messagePane = BattleMessagePane(CobblemonClient.battle!!.messages)
             }
             messagePane.opacity = 0.3F
-            messagePane.render(context, 0, 0, 0F)
+            messagePane.extractRenderState(context, 0, 0, 0F)
         }
     }
 

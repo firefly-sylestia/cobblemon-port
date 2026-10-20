@@ -43,8 +43,6 @@ import net.minecraft.world.phys.shapes.VoxelShape
 
 class NutBushBlock(properties: Properties) : BushBlock(properties), BonemealableBlock {
 
-    override fun codec(): MapCodec<NutBushBlock> = CODEC
-
     override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
         return ItemStack(CobblemonItems.GALARICA_NUTS)
     }
@@ -143,13 +141,3 @@ class NutBushBlock(properties: Properties) : BushBlock(properties), Bonemealable
     }
 
     companion object {
-        val CODEC: MapCodec<NutBushBlock> = simpleCodec(::NutBushBlock)
-
-        const val MAX_AGE: Int = 3
-        val AGE: IntegerProperty = BlockStateProperties.AGE_3
-        private val SAPLING_SHAPE =
-            box(3.0, 0.0, 3.0, 13.0, 8.0, 13.0)
-        private val MID_GROWTH_SHAPE =
-            box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0)
-    }
-}

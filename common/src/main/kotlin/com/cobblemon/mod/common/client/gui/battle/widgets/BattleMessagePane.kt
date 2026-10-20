@@ -8,7 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.battle.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
+import com.cobblemon.mod.common.client.gui.CobblemonScrollEntry
+
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.battle.ClientBattleMessageQueue
@@ -202,7 +205,7 @@ class BattleMessagePane(
                 && mouseY < bottom
     }
 
-    class BattleMessageLine(val pane: BattleMessagePane, val line: FormattedCharSequence) : Entry<BattleMessageLine>() {
+    class BattleMessageLine(val pane: BattleMessagePane, val line: FormattedCharSequence) : Entry<BattleMessageLine>(), CobblemonScrollEntry {
         override fun getNarration() = "".text()
         override fun extractRenderState(
             context: GuiGraphicsExtractor,

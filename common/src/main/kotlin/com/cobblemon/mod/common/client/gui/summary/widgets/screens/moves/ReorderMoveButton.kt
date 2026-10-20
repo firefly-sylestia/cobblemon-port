@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
@@ -46,7 +47,7 @@ class ReorderMoveButton(
         return false
     }
 
-    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val offsetY = if (isUp) OFFSET_Y_UP else OFFSET_Y_DOWN
 
         blitk(

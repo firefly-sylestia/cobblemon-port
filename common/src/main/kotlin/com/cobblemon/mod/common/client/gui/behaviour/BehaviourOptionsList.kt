@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.behaviour
 
+import com.cobblemon.mod.common.client.gui.CobblemonScrollEntry
+
 import com.cobblemon.mod.common.CobblemonBehaviours
 import com.cobblemon.mod.common.api.ai.CobblemonBehaviour
 import com.cobblemon.mod.common.api.gui.blitk
@@ -68,7 +70,7 @@ class BehaviourOptionsList(
         addEntry(BehaviourOptionSlot(this, entry, behaviour, alignButtonRight))
     }
 
-    class BehaviourOptionSlot(val parent: BehaviourOptionsList, val resourceLocation: Identifier, val behaviour: CobblemonBehaviour, val alignButtonRight: Boolean = true) : Entry<BehaviourOptionSlot>() {
+    class BehaviourOptionSlot(val parent: BehaviourOptionsList, val resourceLocation: Identifier, val behaviour: CobblemonBehaviour, val alignButtonRight: Boolean = true) : Entry<BehaviourOptionSlot>(), CobblemonScrollEntry {
         companion object {
             val SLOT_WIDTH = 140
             val BUTTON_WIDTH = 16

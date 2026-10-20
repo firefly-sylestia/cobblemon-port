@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
@@ -128,7 +129,7 @@ class EvolutionTreeWidget(
             shadow = true
         )
 
-        expandButton.render(guiGraphics, mouseX, mouseY, partialTick)
+        expandButton.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
 
         rootTreeDrawingNode?.let {
             enableScissors(guiGraphics)

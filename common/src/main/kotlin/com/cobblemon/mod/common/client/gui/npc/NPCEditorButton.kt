@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.npc
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
@@ -45,7 +46,7 @@ class NPCEditorButton(
     var isWidgetActive = false
     var startHoverX = -1
 
-    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTicks: Float) {
         val matrices = context.pose()
 
         // Left border

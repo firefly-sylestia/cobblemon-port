@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.level.ScheduledTickAccess
+
+import net.minecraft.world.level.LevelReader
+
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonSounds
@@ -41,7 +45,6 @@ import net.minecraft.world.phys.shapes.VoxelShape
 @Suppress("OVERRIDE_DEPRECATION")
 class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWaterloggedBlock {
     companion object {
-        val CODEC = simpleCodec(::HeartyGrainsBlock)
         const val MATURE_AGE = 6
         const val AGE_AFTER_HARVEST = 3 // Last single block stage
         val AGE: IntegerProperty = IntegerProperty.create("age", 0, MATURE_AGE)
@@ -67,8 +70,6 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
             box(0.0, 0.0, 0.0, 16.0, 15.0, 16.0),  // Stage 6
         )
     }
-
-    override fun codec(): MapCodec<out CropBlock> = CODEC
 
     init {
         this.registerDefaultState(
@@ -124,14 +125,16 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
 
     override fun updateShape(
         state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        world: LevelAccessor,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
         pos: BlockPos,
-        neighborPos: BlockPos
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
         if (state.getValue(WATERLOGGED)) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
         if (!state.canSurvive(world, pos)) return Blocks.AIR.defaultBlockState()
         val doubleBlockHalf = state.getValue(HALF)

@@ -8,7 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.npc.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
+import com.cobblemon.mod.common.client.gui.CobblemonScrollEntry
+
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable.MoLangVariableType
@@ -122,7 +125,7 @@ class ConfigVariableList(
 
     fun isHovered(mouseX: Double, mouseY: Double) = mouseX.toFloat() in (x.toFloat()..(x.toFloat() + WIDTH)) && mouseY.toFloat() in (y.toFloat()..(y.toFloat() + HEIGHT))
 
-    class ConfigVariable(val variable: MoLangConfigVariable, val value: String, private val parent: ConfigVariableList) : Entry<ConfigVariable>() {
+    class ConfigVariable(val variable: MoLangConfigVariable, val value: String, private val parent: ConfigVariableList) : Entry<ConfigVariable>(), CobblemonScrollEntry {
         val client: Minecraft = Minecraft.getInstance()
         var _focused = false
         var children = mutableListOf<GuiEventListener>()

@@ -44,7 +44,7 @@ class InfoOneLineWidget(
             font = FONT,
             withinRowVerticalTextOffset = WITHIN_ROW_VERTICAL_OFFSET
         )
-        label.render(context, pMouseX, pMouseY, pPartialTicks)
+        label.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
         // Value
         val value = InfoBlockWidget(
@@ -56,7 +56,7 @@ class InfoOneLineWidget(
             font = FONT,
             withinRowVerticalTextOffset = WITHIN_ROW_VERTICAL_OFFSET
         )
-        value.render(context, pMouseX, pMouseY, pPartialTicks)
+        value.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
     }
 
 }

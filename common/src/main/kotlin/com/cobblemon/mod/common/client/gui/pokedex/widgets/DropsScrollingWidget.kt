@@ -106,21 +106,17 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
         }
     }
 
-    override fun renderItem(
+    override fun extractItem(
         context: GuiGraphicsExtractor,
         mouseX: Int,
         mouseY: Int,
         delta: Float,
-        index: Int,
-        x: Int,
-        y: Int,
-        entryWidth: Int,
-        entryHeight: Int
+        entry: DropWidgetEntry
     ) {
-        val entry =  this.getEntry(index)
-        entry.render(
-            context, index, y + 2, x, entryWidth, entryHeight, mouseX, mouseY,
-            hovered == entry, delta
+        val index = children().indexOf(entry)
+        entry.extractRenderState(
+            context, index, getRowTop(index) + 2, getRowLeft(), getRowWidth(), slotHeight,
+            mouseX, mouseY, getHovered() == entry, delta
         )
     }
 

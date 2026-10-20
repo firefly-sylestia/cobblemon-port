@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.ColourLibrary
@@ -126,7 +127,7 @@ class MarksWidget(
             )
         }
 
-        marksScrollList.render(context, mouseX, mouseY, partialTicks)
+        marksScrollList.extractRenderState(context, mouseX, mouseY, partialTicks)
         if (hoveredMark !== null && marksScrollList.isMouseOver(mouseX.toDouble(), mouseY.toDouble())) {
             context.renderTooltip(Minecraft.getInstance().font, hoveredMark!!.getName(), mouseX, mouseY)
         }

@@ -283,7 +283,7 @@ class HabitatSpawnEditorGUI(
 
         guiGraphics.enableScissor(0, getOptionsTop(), width, getOptionsBottom())
         optionWidgets.forEach { widget ->
-            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+            widget.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         }
 
         labels.forEach { (label, pos) ->
@@ -294,7 +294,7 @@ class HabitatSpawnEditorGUI(
         guiGraphics.disableScissor()
 
         footerWidgets.forEach { widget ->
-            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+            widget.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         }
 
         validationErrors.values.firstOrNull()?.let { errorKey ->

@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Move
 import com.cobblemon.mod.common.api.moves.Moves
@@ -153,12 +154,12 @@ class MoveSlotWidget(
             )
 
             // Reorder Buttons
-            moveUpButton.render(context, pMouseX, pMouseY, pPartialTicks)
-            moveDownButton.render(context, pMouseX, pMouseY, pPartialTicks)
+            moveUpButton.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
+            moveDownButton.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
         }
 
         // Switch Move Button
-        switchMoveButton.render(context, pMouseX, pMouseY, pPartialTicks)
+        switchMoveButton.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
     }
 
     override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {

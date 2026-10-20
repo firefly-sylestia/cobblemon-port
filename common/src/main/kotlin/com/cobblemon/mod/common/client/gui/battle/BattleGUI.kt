@@ -8,8 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.battle
 
-import net.minecraft.client.input.MouseButtonEvent
-import net.minecraft.client.input.CharacterEvent
+import net.minecraft.client.input.MouseButtonEvent
+
+import net.minecraft.client.input.CharacterEvent
+
 import com.cobblemon.mod.common.battles.PassActionResponse
 import com.cobblemon.mod.common.battles.ShowdownActionResponse
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -119,7 +121,7 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
         }
 
         if (battle.spectating) {
-            specBackButton.render(context, mouseX, mouseY, delta)
+            specBackButton.extractRenderState(context, mouseX, mouseY, delta)
         }
 
         val currentSelection = getCurrentActionSelection()

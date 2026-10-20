@@ -354,7 +354,7 @@ class HabitatEditGUI(
 
         guiGraphics.enableScissor(0, getOptionsTop(), width, getOptionsBottom())
         optionWidgets.forEach { widget ->
-            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+            widget.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         }
         val optionsBottom = getOptionsBottom()
         labels.forEach { (label, pos) ->
@@ -365,7 +365,7 @@ class HabitatEditGUI(
         guiGraphics.disableScissor()
 
         footerWidgets.forEach { widget ->
-            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+            widget.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         }
 
         validationErrors.values.firstOrNull()?.let { errorKey ->

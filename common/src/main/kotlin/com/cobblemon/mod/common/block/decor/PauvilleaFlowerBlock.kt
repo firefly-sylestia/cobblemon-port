@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block.decor
 
+import net.minecraft.world.level.ScheduledTickAccess
+
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
@@ -51,12 +53,21 @@ class PauvilleaFlowerBlock(properties: Properties?) : DirectionalBlock(propertie
         return null
     }
 
-    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, level: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
+    override fun updateShape(
+        state: BlockState,
+        level: LevelReader,
+        ticks: ScheduledTickAccess,
+        pos: BlockPos,
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
+    ): BlockState {
         val facing = state.getValue(FACING)
         if (direction == facing.opposite && !canSurvive(state, level, pos)) {
             return Blocks.AIR.defaultBlockState()
         }
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos)
+        return super.updateShape(state, level, ticks, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun canSurvive(state: BlockState, level: LevelReader, pos: BlockPos): Boolean {
@@ -64,8 +75,6 @@ class PauvilleaFlowerBlock(properties: Properties?) : DirectionalBlock(propertie
         val blockState = level.getBlockState(pos.relative(direction.opposite))
         return blockState.isCollisionShapeFullBlock(level, pos) or blockState.canOcclude()
     }
-
-    override fun codec(): MapCodec<PauvilleaFlowerBlock> = CODEC
 
     override fun getShape(state: BlockState, blockGetter: BlockGetter, pos: BlockPos, collisionContext: CollisionContext): VoxelShape {
         return when (state.getValue(FACING)) {
@@ -79,9 +88,6 @@ class PauvilleaFlowerBlock(properties: Properties?) : DirectionalBlock(propertie
     }
 
     companion object {
-        val CODEC: MapCodec<PauvilleaFlowerBlock> = RecordCodecBuilder.mapCodec {
-            it.group(propertiesCodec()).apply(it, ::PauvilleaFlowerBlock)
-        }
         val FLOOR = Shapes.box(0.075, 0.0, 0.075, 0.925, 0.4375, 0.925)
         val WALL_NORTH = Shapes.box(0.0, 0.0, 0.8125, 1.0, 1.0, 1.0)
         val WALL_EAST = Shapes.box(0.0, 0.0, 0.0, 0.1875, 1.0, 1.0)

@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.util.RandomSource
+
+import net.minecraft.world.level.ScheduledTickAccess
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
@@ -52,7 +56,6 @@ import net.minecraft.world.phys.shapes.VoxelShape
 
 class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterloggedBlock {
     companion object {
-        val CODEC = simpleCodec(::PCBlock)
         val PART = EnumProperty.create("part", PCPart::class.java)
         val ON = BooleanProperty.create("on")
         val NATURAL = BooleanProperty.create("natural")
@@ -230,8 +233,6 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
         return super.playerWillDestroy(world, pos, state, player)
     }
 
-    override fun codec() = CODEC
-
     @Deprecated("Deprecated in Java")
     override fun isPathfindable(
         blockState: BlockState,
@@ -311,14 +312,16 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
 
     override fun updateShape(
         state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        world: LevelAccessor,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
         pos: BlockPos,
-        neighborPos: BlockPos
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
         if (state.getValue(WATERLOGGED)) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
 
         val isPC = neighborState.`is`(this)

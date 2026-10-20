@@ -81,10 +81,6 @@ class MintBlock(private val mintType: MintType, settings: Properties) : CropBloc
         world.setBlock(pos, state.setValue(AGE, newAge), UPDATE_CLIENTS)
     }
 
-    override fun codec(): MapCodec<out CropBlock> {
-        return CODEC
-    }
-
     @Suppress("unused")
     enum class MintType : StringRepresentable {
 
@@ -130,11 +126,6 @@ class MintBlock(private val mintType: MintType, settings: Properties) : CropBloc
     }
 
     companion object {
-        val CODEC: MapCodec<MintBlock> = RecordCodecBuilder.mapCodec { it.group(
-            MintType.CODEC.fieldOf("mintType").forGetter(MintBlock::mintType),
-            propertiesCodec()
-        ).apply(it, ::MintBlock) }
-
         val AGE: IntegerProperty = CropBlock.AGE
         const val MATURE_AGE = MAX_AGE
         val IS_WILD: BooleanProperty = BooleanProperty.create("is_wild")

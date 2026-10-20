@@ -103,11 +103,6 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
             Shapes.box(0.3125, 0.9375, 0.0, 0.375, 1.0, 1.0)
         )
 
-        val CODEC: MapCodec<TMMachineBlock> = RecordCodecBuilder.mapCodec { instance ->
-            instance.group(
-                Properties.CODEC.fieldOf("properties").forGetter { it.properties }
-            ).apply(instance, ::TMMachineBlock)
-        }
     }
 
     init {
@@ -189,8 +184,6 @@ class TMMachineBlock(properties: Properties) : BaseEntityBlock(properties), Simp
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(FACING, WATERLOGGED, EMPTY, ACTIVE, OPEN, DISPENSED)
     }
-
-    override fun codec(): MapCodec<TMMachineBlock> = CODEC
 
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
 

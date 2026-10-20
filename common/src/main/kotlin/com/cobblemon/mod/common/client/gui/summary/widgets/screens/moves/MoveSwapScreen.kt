@@ -8,7 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves
 
-import net.minecraft.client.input.MouseButtonEvent
+import com.cobblemon.mod.common.client.gui.CobblemonScrollEntry
+
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
@@ -54,7 +57,7 @@ class MoveSwapScreen(
         return super.addEntry(entry)
     }
 
-    class MoveSlot(val pane: MoveSwapScreen, val move: MoveTemplate?, val ppRaisedStages: Int, pokemon: Pokemon) : Entry<MoveSlot>() {
+    class MoveSlot(val pane: MoveSwapScreen, val move: MoveTemplate?, val ppRaisedStages: Int, pokemon: Pokemon) : Entry<MoveSlot>(), CobblemonScrollEntry {
         override fun getNarration() = move?.displayName ?: lang("ui.moves.forget")
         val elementalType = move?.getEffectiveElementalType(pokemon) ?: ElementalTypes.NORMAL
         override fun extractRenderState(

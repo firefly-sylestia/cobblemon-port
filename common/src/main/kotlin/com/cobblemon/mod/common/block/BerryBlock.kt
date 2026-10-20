@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.level.ScheduledTickAccess
+
 //import dev.lambdaurora.lambdynlights.util.SodiumDynamicLightHandler.pos
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.berry.Berries
@@ -236,13 +238,18 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
                 || state.getValue(IS_ROOTED)
     }
 
-    override fun codec(): MapCodec<out BaseEntityBlock> {
-        return CODEC
-    }
-
     @Deprecated("Deprecated in Java")
-    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, world: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
-        return if (state.canSurvive(world, pos)) super.updateShape(state, direction, neighborState, world, pos, neighborPos) else Blocks.AIR.defaultBlockState()
+    override fun updateShape(
+        state: BlockState,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
+        pos: BlockPos,
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
+    ): BlockState {
+        return if (state.canSurvive(world, pos)) super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random) else Blocks.AIR.defaultBlockState()
     }
 
     override fun setPlacedBy(world: Level, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
@@ -281,10 +288,6 @@ class BerryBlock(private val berryIdentifier: Identifier, settings: Properties) 
     override fun getRenderShape(blockState: BlockState) = RenderShape.MODEL
 
     companion object {
-        val CODEC: MapCodec<BerryBlock> = RecordCodecBuilder.mapCodec { it.group(
-            Identifier.CODEC.fieldOf("berry").forGetter(BerryBlock::berryIdentifier),
-            propertiesCodec()
-        ).apply(it, ::BerryBlock) }
 
         const val MATURE_AGE = 3
         const val FLOWER_AGE = 4

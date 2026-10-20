@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pc
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
@@ -252,9 +253,9 @@ class StorageWidget(
                 )
             }
 
-            this.releaseButton.render(context, mouseX, mouseY, delta)
-            this.releaseYesButton.render(context, mouseX, mouseY, delta)
-            this.releaseNoButton.render(context, mouseX, mouseY, delta)
+            this.releaseButton.extractRenderState(context, mouseX, mouseY, delta)
+            this.releaseYesButton.extractRenderState(context, mouseX, mouseY, delta)
+            this.releaseNoButton.extractRenderState(context, mouseX, mouseY, delta)
         }
 
         val boxWallpaper = pc.boxes[box].wallpaper
@@ -306,7 +307,7 @@ class StorageWidget(
 
         if (screenLoaded) {
             this.boxSlots.forEach { slot ->
-                slot.render(context, mouseX, mouseY, delta)
+                slot.extractRenderState(context, mouseX, mouseY, delta)
                 val pokemon = slot.getPokemon()
                 if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)
                     && pokemon != null && pokemon != pcGui.previewPokemon
@@ -322,7 +323,7 @@ class StorageWidget(
         // Party slots
         if (pcGui.configuration.showParty) {
             this.partySlots.forEach { slot ->
-                slot.render(context, mouseX, mouseY, delta)
+                slot.extractRenderState(context, mouseX, mouseY, delta)
                 val pokemon = slot.getPokemon()
                 if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)
                     && pokemon != null && pokemon != pcGui.previewPokemon
@@ -333,10 +334,10 @@ class StorageWidget(
             }
         }
 
-        pastureWidget?.render(context, mouseX, mouseY, delta)
+        pastureWidget?.extractRenderState(context, mouseX, mouseY, delta)
         matrices.pushMatrix()
         matrices.translate(0.0, 0.0, 1000.0)
-        grabbedSlot?.render(context, mouseX, mouseY, delta)
+        grabbedSlot?.extractRenderState(context, mouseX, mouseY, delta)
         matrices.popMatrix()
     }
 

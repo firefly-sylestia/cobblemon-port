@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.cookingpot
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.api.gui.blitk
@@ -171,10 +172,10 @@ class CookingPotScreen(
 
         if (this.recipeBookComponent.isVisible && this.widthTooNarrow) {
             this.renderBackground(context, mouseX, mouseY, partialTicks)
-            this.recipeBookComponent.render(context, mouseX, mouseY, partialTicks)
+            this.recipeBookComponent.extractRenderState(context, mouseX, mouseY, partialTicks)
         } else {
             super.extractRenderState(context, mouseX, mouseY, partialTicks)
-            this.recipeBookComponent.render(context, mouseX, mouseY, partialTicks)
+            this.recipeBookComponent.extractRenderState(context, mouseX, mouseY, partialTicks)
             this.recipeBookComponent.renderGhostRecipe(context, this.leftPos, this.topPos, true, partialTicks)
         }
 

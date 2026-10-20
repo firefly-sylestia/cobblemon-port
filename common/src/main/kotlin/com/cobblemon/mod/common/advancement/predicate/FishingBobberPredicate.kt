@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 class FishingBobberPredicate(val inOpenWater: Boolean) : EntitySubPredicate {
-    override fun codec(): MapCodec<FishingBobberPredicate> = CODEC
+    fun codec(): MapCodec<FishingBobberPredicate> = CODEC
     override fun matches(entity: Entity, serverLevel: ServerLevel, vec3: Vec3?): Boolean {
         return (entity as? PokeRodFishingBobberEntity)?.inOpenWater == this.inOpenWater
     }

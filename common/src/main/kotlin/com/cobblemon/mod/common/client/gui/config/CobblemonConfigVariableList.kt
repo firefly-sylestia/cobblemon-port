@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.config
 
+import com.cobblemon.mod.common.client.gui.CobblemonScrollEntry
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen.Companion.HEIGHT
@@ -138,7 +140,7 @@ class CobblemonConfigVariableList(
 
     abstract class CobblemonConfigVariableListEntry(
         val parent: CobblemonConfigVariableList,
-    ) : Entry<CobblemonConfigVariableListEntry>() {
+    ) : Entry<CobblemonConfigVariableListEntry>(), CobblemonScrollEntry {
         val children = mutableListOf<GuiEventListener>()
         var tooltip: Tooltip? = null
 

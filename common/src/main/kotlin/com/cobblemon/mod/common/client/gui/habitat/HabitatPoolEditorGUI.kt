@@ -205,13 +205,13 @@ class HabitatPoolEditorGUI(
         }
 
         optionWidgets.forEach { widget ->
-            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+            widget.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         }
 
         guiGraphics.disableScissor()
 
         footerWidgets.forEach { widget ->
-            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+            widget.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
         }
     }
 

@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.block.general
 
+import net.minecraft.util.RandomSource
+
+import net.minecraft.world.level.ScheduledTickAccess
+
 import com.cobblemon.mod.common.util.rotateShape
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -53,11 +57,13 @@ class MintLitterBlock(properties: Properties?) : Block(properties) {
 
     override fun updateShape(
         state: BlockState,
-        direction: Direction?,
-        neighborState: BlockState?,
-        level: LevelAccessor?,
-        pos: BlockPos?,
-        neighborPos: BlockPos?
+        level: LevelReader,
+        ticks: ScheduledTickAccess,
+        pos: BlockPos,
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
         return if (!state.canSurvive(level, pos)) Blocks.AIR.defaultBlockState() else super.updateShape(
             state,
@@ -103,10 +109,6 @@ class MintLitterBlock(properties: Properties?) : Block(properties) {
     }
 
     companion object {
-        val CODEC: MapCodec<MintLitterBlock> = RecordCodecBuilder.mapCodec {
-            it.group(
-                propertiesCodec()
-            ).apply(it, ::MintLitterBlock) }
 
         val AMOUNT = IntegerProperty.create("amount", 1, 4)
         const val MAX_AMOUNT: Int = 4

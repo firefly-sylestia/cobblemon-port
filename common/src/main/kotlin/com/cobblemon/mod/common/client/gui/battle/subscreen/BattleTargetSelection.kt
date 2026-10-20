@@ -350,7 +350,7 @@ class BattleTargetSelection(
         targetTiles.forEach {
             it.render(context, mouseX, mouseY, delta)
         }
-        backButton.render(context, mouseX, mouseY, delta)
+        backButton.extractRenderState(context, mouseX, mouseY, delta)
     }
 
     override fun mousePrimaryClicked(mouseX: Double, mouseY: Double): Boolean {

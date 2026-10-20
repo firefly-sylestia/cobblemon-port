@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.interact.wheel
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -64,7 +65,7 @@ class InteractWheelButton(
     private var passedTicks = 0F
     private val blinkInterval = 35
 
-    override fun extractWidgetRenderState(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun extractContents(context: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
         passedTicks += delta
 

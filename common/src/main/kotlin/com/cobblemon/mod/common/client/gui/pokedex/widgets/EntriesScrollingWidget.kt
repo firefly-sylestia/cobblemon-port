@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
@@ -101,23 +102,19 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
         )
     }
 
-    override fun renderItem(
+    override fun extractItem(
         context: GuiGraphicsExtractor,
         mouseX: Int,
         mouseY: Int,
         delta: Float,
-        index: Int,
-        x: Int,
-        y: Int,
-        entryWidth: Int,
-        entryHeight: Int
+        entry: PokemonScrollSlotRow
     ) {
-        val entry =  this.getEntry(index)
-        entry.x = x
-        entry.y = y
-        entry.render(
-            context, index, y, x, entryWidth, entryHeight, mouseX, mouseY,
-            focused == entry, delta
+        val index = children().indexOf(entry)
+        entry.x = getRowLeft()
+        entry.y = getRowTop(index)
+        entry.extractRenderState(
+            context, index, entry.y, entry.x, getRowWidth(), slotHeight,
+            mouseX, mouseY, getHovered() == entry, delta
         )
     }
 

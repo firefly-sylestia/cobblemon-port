@@ -55,37 +55,6 @@ import net.minecraft.world.phys.shapes.VoxelShape
 @Suppress("DEPRECATED", "OVERRIDE_DEPRECATION")
 class HealingMachineBlock(settings: Properties) : BaseEntityBlock(settings) {
     companion object {
-        val CODEC: MapCodec<HealingMachineBlock> = simpleCodec(::HealingMachineBlock)
-
-        private val NORTH_SOUTH_AABB = Shapes.or(
-            Shapes.box(0.0, 0.0, 0.0, 1.0, 0.625, 1.0),
-            Shapes.box(0.0625, 0.625, 0.0, 0.9375, 0.875, 0.125),
-            Shapes.box(0.0625, 0.625, 0.875, 0.9375, 0.875, 1.0),
-            Shapes.box(0.0625, 0.625, 0.125, 0.1875, 0.75, 0.875),
-            Shapes.box(0.8125, 0.625, 0.125, 0.9375, 0.75, 0.875),
-            Shapes.box(0.1875, 0.625, 0.125, 0.8125, 0.6875, 0.875)
-        )
-
-        private val WEST_EAST_AABB = Shapes.or(
-            Shapes.box(0.0, 0.0, 0.0, 1.0, 0.625, 1.0),
-            Shapes.box(0.875, 0.625, 0.0625, 1.0, 0.875, 0.9375),
-            Shapes.box(0.0, 0.625, 0.0625, 0.125, 0.875, 0.9375),
-            Shapes.box(0.125, 0.625, 0.0625, 0.875, 0.75, 0.1875),
-            Shapes.box(0.125, 0.625, 0.8125, 0.875, 0.75, 0.9375),
-            Shapes.box(0.125, 0.625, 0.1875, 0.875, 0.6875, 0.8125)
-        )
-
-        // Charge level 6 is used only when healing machine is active
-        const val MAX_CHARGE_LEVEL = 5
-        val CHARGE_LEVEL: IntegerProperty = IntegerProperty.create("charge", 0, MAX_CHARGE_LEVEL + 1)
-        val NATURAL: BooleanProperty = BooleanProperty.create("natural")
-    }
-
-    init {
-        registerDefaultState(stateDefinition.any()
-            .setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH)
-            .setValue(NATURAL, false)
-            .setValue(CHARGE_LEVEL, 0))
     }
 
     @Deprecated("Deprecated in Java")
@@ -103,10 +72,6 @@ class HealingMachineBlock(settings: Properties) : BaseEntityBlock(settings) {
 
     override fun getStateForPlacement(blockPlaceContext: BlockPlaceContext): BlockState {
         return this.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, blockPlaceContext.horizontalDirection)
-    }
-
-    override fun codec(): MapCodec<out BaseEntityBlock> {
-        return CODEC
     }
 
     override fun isPathfindable(

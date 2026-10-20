@@ -75,20 +75,6 @@ class SweetIncenseBlock(properties: Properties) : BaseEntityBlock(properties), S
         return SweetIncenseBlockEntity(pos, state)
     }
 
-    val CODEC: MapCodec<SweetIncenseBlock> = RecordCodecBuilder.mapCodec { instance ->
-        instance.group(
-                Codec.BOOL.fieldOf("lit").forGetter { it.defaultBlockState().getValue(LIT) },
-                propertiesCodec()
-        ).apply(instance) { lit, properties ->
-            SweetIncenseBlock(properties).apply {
-                registerDefaultState(this.defaultBlockState().setValue(LIT, lit))
-            }
-        }
-    }
-
-    override fun codec(): MapCodec<out SweetIncenseBlock> {
-        return CODEC
-    }
 
     override fun getRenderShape(state: BlockState) = RenderShape.MODEL
 

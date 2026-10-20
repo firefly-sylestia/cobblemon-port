@@ -74,13 +74,7 @@ class MedicinalLeekBlock(settings: Properties) : CropBlock(settings) {
         return floor.`is`(CobblemonBlockTags.MEDICINAL_LEEK_PLANTABLE) && fluidState.amount == 8 && fluidState.`is`(FluidTags.WATER)
     }
 
-    override fun codec(): MapCodec<out CropBlock> {
-        return CODEC
-    }
-
     companion object {
-        val CODEC = simpleCodec(::MedicinalLeekBlock)
-
         const val MATURE_AGE = 3
         val AGE: IntegerProperty= BlockStateProperties.AGE_3
         val AGE_TO_SHAPE = arrayOf(

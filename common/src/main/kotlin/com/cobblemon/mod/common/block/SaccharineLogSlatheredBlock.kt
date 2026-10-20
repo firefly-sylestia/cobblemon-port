@@ -38,25 +38,6 @@ class SaccharineLogSlatheredBlock(properties: Properties) : HorizontalDirectiona
     companion object {
         const val HONEY_TYPE_MAX = 5
 
-        val CODEC: MapCodec<SaccharineLogSlatheredBlock> = simpleCodec(::SaccharineLogSlatheredBlock)
-        val HONEY_TYPE: IntegerProperty = IntegerProperty.create("honey_type", 0, HONEY_TYPE_MAX)
-
-        fun createBehavior(): DispenseItemBehavior {
-            return DispenseItemBehavior { source, stack ->
-                val level = source.level
-                val pos = source.pos.relative(source.state.getValue(DispenserBlock.FACING))
-                val blockState = level.getBlockState(pos)
-
-                val waterBottle = PotionContents.createItemStack(Items.POTION, Potions.WATER).item
-
-                if (blockState.block is SaccharineLogSlatheredBlock && stack.`is`(waterBottle)) {
-                    val newState = CobblemonBlocks.SACCHARINE_LOG.defaultBlockState()
-                        .setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS))
-                    SaccharineLogBlock.changeLogTypeDispenser(level, pos, newState, stack, source)
-                }
-                stack
-            }
-        }
     }
 
     init {
@@ -67,8 +48,6 @@ class SaccharineLogSlatheredBlock(properties: Properties) : HorizontalDirectiona
                 .setValue(HONEY_TYPE, 0)
         )
     }
-
-    override fun codec() = CODEC
 
     override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hitResult: BlockHitResult): InteractionResult {
         val itemStack = player.getItemInHand(hand)

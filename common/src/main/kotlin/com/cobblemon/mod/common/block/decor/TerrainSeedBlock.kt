@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.block.decor
 
+import net.minecraft.world.level.ScheduledTickAccess
+
+import net.minecraft.world.level.LevelReader
+
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonSounds
@@ -37,10 +41,6 @@ import net.minecraft.world.phys.shapes.VoxelShape
 @Suppress("OVERRIDE_DEPRECATION")
 class TerrainSeedBlock(private val terrainSeedType: TerrainSeedType, settings: Properties) : CropBlock(settings) {
     companion object {
-        val CODEC: MapCodec<TerrainSeedBlock> = RecordCodecBuilder.mapCodec { it.group(
-            TerrainSeedType.CODEC.fieldOf("terrainSeedType").forGetter(TerrainSeedBlock::terrainSeedType),
-            propertiesCodec()
-        ).apply(it, ::TerrainSeedBlock) }
         const val MATURE_AGE = 4
         val AGE: IntegerProperty = IntegerProperty.create("age", 0, MATURE_AGE)
         val HALF: EnumProperty<DoubleBlockHalf> = BlockStateProperties.DOUBLE_BLOCK_HALF
@@ -60,10 +60,6 @@ class TerrainSeedBlock(private val terrainSeedType: TerrainSeedType, settings: P
             box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0), // Stage 3
             box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0),  // Stage 4
         )
-    }
-
-    override fun codec(): MapCodec<out CropBlock> {
-        return CODEC
     }
 
     init {
@@ -104,9 +100,18 @@ class TerrainSeedBlock(private val terrainSeedType: TerrainSeedType, settings: P
         return blockState.isAir || blockState.`is`(this.terrainSeedType.getCropBlock())
     }
 
-    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, world: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
+    override fun updateShape(
+        state: BlockState,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
+        pos: BlockPos,
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
+    ): BlockState {
         return if (state.getValue(AGE) >= 2) {
-            super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+            super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random)
         } else {
             if (state.canSurvive(world, pos)) state else Blocks.AIR.defaultBlockState()
         }

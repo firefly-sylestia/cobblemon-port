@@ -338,7 +338,7 @@ class PCGUI(
 
         // Render Model Portrait
         if (search.passes(previewPokemon)) {
-            modelWidget?.render(context, mouseX, mouseY, delta)
+            modelWidget?.extractRenderState(context, mouseX, mouseY, delta)
         }
 
         // Render Base Resource

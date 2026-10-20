@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Move
@@ -91,7 +92,7 @@ class MovesWidget(
         )
 
         moves.forEach {
-            it.render(context, pMouseX, pMouseY, pPartialTicks)
+            it.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
         }
 
         // Move icons

@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.block.chest
 
+import net.minecraft.world.level.ScheduledTickAccess
+
+import net.minecraft.world.level.LevelReader
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
@@ -63,13 +67,6 @@ class GildedChestBlock(settings: Properties, val type: Type = Type.RED) : BaseEn
     }
 
     companion object {
-        val CODEC: MapCodec<GildedChestBlock> = RecordCodecBuilder.mapCodec {
-            it.group(
-                propertiesCodec(),
-                Type.CODEC.fieldOf("chestType").forGetter(GildedChestBlock::type)
-            ).apply(it, ::GildedChestBlock)
-        }
-
         val POKEMON_ARGS = "gimmighoul"
         val LEVEL_RANGE = 5..30
 
@@ -105,14 +102,16 @@ class GildedChestBlock(settings: Properties, val type: Type = Type.RED) : BaseEn
 
     override fun updateShape(
         state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        world: LevelAccessor,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
         pos: BlockPos,
-        neighborPos: BlockPos
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
-        if (state.getValue(WATERLOGGED)) world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
-        return super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+        if (state.getValue(WATERLOGGED)) ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+        return super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random)
     }
 
     override fun getFluidState(state: BlockState): FluidState {
@@ -263,10 +262,6 @@ class GildedChestBlock(settings: Properties, val type: Type = Type.RED) : BaseEn
     @Deprecated("Deprecated in Java")
     override fun isPathfindable(state: BlockState, type: PathComputationType): Boolean {
         return false
-    }
-
-    override fun codec(): MapCodec<out BaseEntityBlock> {
-        return CODEC
     }
 
     override fun setPlacedBy(

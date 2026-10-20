@@ -60,10 +60,6 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
         )
     }
 
-    override fun codec(): MapCodec<out BaseEntityBlock> {
-        return CODEC
-    }
-
     override fun getStateForPlacement(blockPlaceContext: BlockPlaceContext): BlockState {
         return defaultBlockState().setValue(HORIZONTAL_FACING, blockPlaceContext.horizontalDirection)
     }
@@ -161,8 +157,6 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
     }
 
     companion object {
-        val CODEC = simpleCodec(::MonitorBlock)
-
         //0 is off
         val SCREEN = EnumProperty.create("screen", MonitorScreen::class.java)
         val HITBOX_SOUTH = Shapes.or(

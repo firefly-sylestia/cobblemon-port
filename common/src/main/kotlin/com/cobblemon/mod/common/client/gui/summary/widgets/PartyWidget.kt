@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
@@ -123,7 +124,7 @@ class PartyWidget(
             shadow = true
         )
 
-        swapButton.render(context, pMouseX, pMouseY, pPartialTicks)
+        swapButton.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
 
         blitk(
             context = context,
@@ -135,12 +136,12 @@ class PartyWidget(
             scale = SCALE
         )
 
-        partySlots.forEach { it.render(context, pMouseX, pMouseY, pPartialTicks) }
+        partySlots.forEach { it.extractRenderState(context, pMouseX, pMouseY, pPartialTicks) }
 
         if (draggedSlot != null) {
             matrices.pushMatrix()
             matrices.translate(0.0, 0.0, 500.0)
-            draggedSlot!!.render(context, pMouseX, pMouseY, pPartialTicks)
+            draggedSlot!!.extractRenderState(context, pMouseX, pMouseY, pPartialTicks)
             matrices.popMatrix()
         }
     }

@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
@@ -404,12 +405,12 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
             }
 
             if (hasKnowledge) {
-                if (genderButton.visible) genderButton.render(context, mouseX, mouseY, delta)
+                if (genderButton.visible) genderButton.extractRenderState(context, mouseX, mouseY, delta)
 
-                shinyButton.render(context, mouseX, mouseY, delta)
+                shinyButton.extractRenderState(context, mouseX, mouseY, delta)
 
                 variationButtons.forEach {
-                    it.getWidget().render(context, mouseX, mouseY, delta)
+                    it.getWidget().extractRenderState(context, mouseX, mouseY, delta)
 
                     // Tooltip
                     if (it.isVisible() && it.getWidget().isButtonHovered(mouseX, mouseY)) {
@@ -429,8 +430,8 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
                 val showableForms = CobblemonClient.clientPokedexData.getEncounteredForms(currentEntry)
 
                 if (showableForms.size > 1 && showableForms.size > selectedFormIndex) {
-                    formLeftButton.render(context, mouseX, mouseY, delta)
-                    formRightButton.render(context, mouseX, mouseY, delta)
+                    formLeftButton.extractRenderState(context, mouseX, mouseY, delta)
+                    formRightButton.extractRenderState(context, mouseX, mouseY, delta)
 
                     val form = showableForms[selectedFormIndex]
                     val formName = if (form.displayForm.lowercase() == "normal") "" else "-${
@@ -457,7 +458,7 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
                     scale = SCALE
                 )
 
-                cryButton.render(context, mouseX, mouseY, delta)
+                cryButton.extractRenderState(context, mouseX, mouseY, delta)
 
                 // Animation
                 blitk(
@@ -470,8 +471,8 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
                     scale = SCALE
                 )
 
-                animationLeftButton.render(context, mouseX, mouseY, delta)
-                animationRightButton.render(context, mouseX, mouseY, delta)
+                animationLeftButton.extractRenderState(context, mouseX, mouseY, delta)
+                animationRightButton.extractRenderState(context, mouseX, mouseY, delta)
             } else if (renderablePokemon == null) {
                 // Render unimplemented label
                 if (!species.implemented) {

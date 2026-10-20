@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.block
 
+import net.minecraft.world.level.ScheduledTickAccess
+
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.api.multiblock.MultiblockBlock
 import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
@@ -225,12 +227,14 @@ class RestorationTankBlock(settings: Properties) : MultiblockBlock(settings), Wo
     }
 
     override fun updateShape(
-            state: BlockState,
-            direction: Direction,
-            neighborState: BlockState,
-            world: LevelAccessor,
-            pos: BlockPos,
-            neighborPos: BlockPos
+        state: BlockState,
+        world: LevelReader,
+        ticks: ScheduledTickAccess,
+        pos: BlockPos,
+        direction: Direction,
+        neighborPos: BlockPos,
+        neighborState: BlockState,
+        random: RandomSource
     ): BlockState {
         val isTank = neighborState.`is`(this)
         val part = state.getValue(PART)
@@ -264,13 +268,7 @@ class RestorationTankBlock(settings: Properties) : MultiblockBlock(settings), Wo
         return false
     }
 
-    override fun codec(): MapCodec<out BaseEntityBlock> {
-        return CODEC
-    }
-
     companion object {
-        val CODEC = simpleCodec(::RestorationTankBlock)
-
         val PART = EnumProperty.create("part", TankPart::class.java)
         val TRIGGERED = BlockStateProperties.TRIGGERED
         val ON = BooleanProperty.create("on")

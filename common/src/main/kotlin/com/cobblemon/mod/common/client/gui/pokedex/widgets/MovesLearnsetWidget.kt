@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
-import net.minecraft.client.input.MouseButtonEvent
+import net.minecraft.client.input.MouseButtonEvent
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.MoveTemplate
@@ -235,8 +236,8 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
                 centered = true
             )
 
-            formLeftButton.render(context, mouseX, mouseY, delta)
-            formRightButton.render(context, mouseX, mouseY, delta)
+            formLeftButton.extractRenderState(context, mouseX, mouseY, delta)
+            formRightButton.extractRenderState(context, mouseX, mouseY, delta)
         }
 
         blitk(
@@ -267,11 +268,11 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             shadow = true
         )
 
-        categoryUpButton.render(context, mouseX, mouseY, delta)
-        categoryDownButton.render(context, mouseX, mouseY, delta)
+        categoryUpButton.extractRenderState(context, mouseX, mouseY, delta)
+        categoryDownButton.extractRenderState(context, mouseX, mouseY, delta)
 
         sortButtons.forEachIndexed { index, button ->
-            button.render(context, mouseX, mouseY, delta)
+            button.extractRenderState(context, mouseX, mouseY, delta)
 
             if (button.isButtonHovered(mouseX, mouseY)) {
                 renderTooltip(context, lang("ui.sort.${LearnsetSort.entries[index].name.lowercase()}").bold(), mouseX, mouseY, delta, -14)

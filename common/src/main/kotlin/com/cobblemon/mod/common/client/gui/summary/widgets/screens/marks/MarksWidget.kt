@@ -129,7 +129,7 @@ class MarksWidget(
 
         marksScrollList.extractRenderState(context, mouseX, mouseY, partialTicks)
         if (hoveredMark !== null && marksScrollList.isMouseOver(mouseX.toDouble(), mouseY.toDouble())) {
-            context.renderTooltip(Minecraft.getInstance().font, hoveredMark!!.getName(), mouseX, mouseY)
+            context.setTooltipForNextFrame(Minecraft.getInstance().font, hoveredMark!!.getName(), mouseX, mouseY)
         }
     }
 

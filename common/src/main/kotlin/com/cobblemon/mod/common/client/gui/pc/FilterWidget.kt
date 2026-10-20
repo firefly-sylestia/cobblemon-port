@@ -68,7 +68,7 @@ class FilterWidget(
         renderCursor(context, input)
 
         if (iconHovered(mouseX, mouseY)) {
-            context.renderTooltip(Minecraft.getInstance().font, lang("ui.pc.filter.tooltip"), mouseX, mouseY)
+            context.setTooltipForNextFrame(Minecraft.getInstance().font, lang("ui.pc.filter.tooltip"), mouseX, mouseY)
         }
     }
 

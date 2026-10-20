@@ -228,7 +228,7 @@ class InfoWidget(
 
         if (pMouseX >= (x + 107.5) && pMouseY >= (y + 6.5) && pMouseX <= ((x + 107.5) + (SIZE_ICON_WIDTH * SCALE)) && pMouseY <= ((y + 6.5) + (SIZE_ICON_HEIGHT * SCALE))) {
             val sizeLabel = if (pokemon.isAlpha) lang("ui.pokemon.alpha") else lang("size_category.prefix", PokemonSizeCategory.translationKey(pokemon.getSizeCategory()).text())
-            context.renderTooltip( Minecraft.getInstance().font, sizeLabel, pMouseX, pMouseY)
+            context.setTooltipForNextFrame( Minecraft.getInstance().font, sizeLabel, pMouseX, pMouseY)
         }
     }
 }

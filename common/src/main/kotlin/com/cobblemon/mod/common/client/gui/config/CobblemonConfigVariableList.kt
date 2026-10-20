@@ -110,7 +110,7 @@ class CobblemonConfigVariableList(
 
         val hoveredVariableTooltip = this.hovered?.tooltip
         if (isMouseInsideScrollList(mouseX, mouseY) && hoveredVariableTooltip != null) {
-            guiGraphics.renderTooltip(minecraft.font, hoveredVariableTooltip.toCharSequence(minecraft), mouseX, mouseY)
+            guiGraphics.setTooltipForNextFrame(minecraft.font, hoveredVariableTooltip.toCharSequence(minecraft), mouseX, mouseY)
         }
     }
 

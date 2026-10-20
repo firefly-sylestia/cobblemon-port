@@ -83,7 +83,7 @@ class InteractWheelButton(
 
         if(isEnabled && isHovered(mouseX.toFloat(), mouseY.toFloat())){
             tooltipText?.let {
-                context.renderTooltip(Minecraft.getInstance().font, Component.translatable(it), mouseX, mouseY)
+                context.setTooltipForNextFrame(Minecraft.getInstance().font, Component.translatable(it), mouseX, mouseY)
             }
         }
 

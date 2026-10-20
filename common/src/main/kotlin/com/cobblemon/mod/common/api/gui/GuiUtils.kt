@@ -28,7 +28,7 @@ import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.renderer.GameRenderer
-import net.minecraft.client.renderer.LightTexture
+import net.minecraft.util.LightCoordsUtil
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -250,7 +250,7 @@ fun drawPosablePortrait(
 
         val immediate = Minecraft.getInstance().renderBuffers().bufferSource()
         val buffer = immediate.getBuffer(renderType)
-        val packedLight = LightTexture.pack(11, 7)
+        val packedLight = LightCoordsUtil.pack(11, 7)
 
         val colour = toHex(r, g, b, a)
         model.withLayerContext(immediate, state, VaryingModelRepository.getLayers(identifier, state)) {
@@ -319,7 +319,7 @@ fun drawProfile(
         val light1 = Vector3f(-1F, 1F, 1.0F)
         val light2 = Vector3f(1.3F, -1F, 1.0F)
         RenderSystem.setShaderLights(light1, light2)
-        val packedLight = LightTexture.pack(11, 7)
+        val packedLight = LightCoordsUtil.pack(11, 7)
 
         model.withLayerContext(bufferSource, state, VaryingModelRepository.getLayers(resourceIdentifier, state)) {
             model.render(context, matrixStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, -0x1)

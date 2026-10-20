@@ -798,7 +798,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                     mouseX >= itemX && mouseX < itemX + 16 &&
                     mouseY >= itemY && mouseY < itemY + 16
                 ) {
-                    context.renderTooltip(Minecraft.getInstance().font, itemStack, mouseX, mouseY)
+                    context.setTooltipForNextFrame(Minecraft.getInstance().font, itemStack, mouseX, mouseY)
                 }
             }
         }
@@ -1267,7 +1267,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
 
         renderMoveInfo(graphics, mouseX, mouseY)
 
-        this.renderTooltip(graphics, mouseX, mouseY)
+        this.setTooltipForNextFrame(graphics, mouseX, mouseY)
 
         renderHeldMoveInfoTooltip(graphics, mouseX, mouseY)
     }

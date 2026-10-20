@@ -63,7 +63,7 @@ class SummaryTab(
         }
 
         if (label !== null && isMouseOver(pMouseX.toDouble(), pMouseY.toDouble())) {
-            context.renderTooltip(Minecraft.getInstance().font, label, pMouseX, pMouseY)
+            context.setTooltipForNextFrame(Minecraft.getInstance().font, label, pMouseX, pMouseY)
         }
     }
 

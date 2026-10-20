@@ -25,7 +25,7 @@ object CobblemonRecipeSerializers : PlatformRegistry<Registry<RecipeSerializer<*
     val COOKING_POT_COOKING: RecipeSerializer<*> = register("cobblemon:cooking_pot", CookingPotRecipe.Serializer())
     val COOKING_POT_SHAPELESS: RecipeSerializer<*> = register("cobblemon:cooking_pot_shapeless", CookingPotShapelessRecipe.Serializer())
 
-    val BREWING_STAND: RecipeSerializer<*> = register("cobblemon:brewing_stand", BrewingStandRecipe.Serializer())
+    val BREWING_STAND: RecipeSerializer<*> = register("cobblemon:brewing_stand", BrewingStandRecipe.SERIALIZER)
     
     override val registry: Registry<RecipeSerializer<*>>
         get() = BuiltInRegistries.RECIPE_SERIALIZER

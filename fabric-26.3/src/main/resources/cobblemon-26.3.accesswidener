@@ -109,3 +109,19 @@ transitive-accessible method net/minecraft/client/model/HumanoidModel poseRightA
 transitive-accessible method net/minecraft/client/model/HumanoidModel poseLeftArm (Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V
 
 transitive-accessible method net/minecraft/world/level/block/BaseEntityBlock createTickerHelper (Lnet/minecraft/world/level/block/entity/BlockEntityType;Lnet/minecraft/world/level/block/entity/BlockEntityType;Lnet/minecraft/world/level/block/entity/BlockEntityTicker;)Lnet/minecraft/world/level/block/entity/BlockEntityTicker;
+transitive-accessible field net/minecraft/world/entity/ai/Brain schedule Lnet/minecraft/world/attribute/EnvironmentAttribute;
+transitive-accessible field net/minecraft/world/entity/Entity tags Ljava/util/Set;
+transitive-accessible field net/minecraft/server/level/ServerPlayer server Lnet/minecraft/server/MinecraftServer;
+transitive-accessible method net/minecraft/server/level/ServerPlayer respawnEntityOnShoulder (Lnet/minecraft/nbt/CompoundTag;)V
+transitive-accessible field net/minecraft/world/level/block/LecternBlock SHAPE_COLLISION Lnet/minecraft/world/phys/shapes/VoxelShape;
+transitive-accessible field net/minecraft/world/item/Item craftingRemainingItem Lnet/minecraft/world/item/ItemStackTemplate;
+transitive-accessible field net/minecraft/world/entity/player/Inventory selected I
+transitive-accessible field net/minecraft/client/gui/components/AbstractWidget tooltip Lnet/minecraft/client/gui/components/WidgetTooltipHolder;
+transitive-accessible field net/minecraft/client/Camera position Lnet/minecraft/world/phys/Vec3;
+transitive-accessible field net/minecraft/client/Camera yRot F
+transitive-accessible field net/minecraft/client/Camera xRot F
+transitive-accessible field net/minecraft/client/Camera entity Lnet/minecraft/world/entity/Entity;
+transitive-accessible field net/minecraft/client/renderer/GameRenderer mainCamera Lnet/minecraft/client/Camera;
+transitive-accessible field net/minecraft/server/level/ServerPlayer shoulderEntityLeft Lnet/minecraft/nbt/CompoundTag;
+transitive-accessible field net/minecraft/server/level/ServerPlayer shoulderEntityRight Lnet/minecraft/nbt/CompoundTag;
+transitive-accessible field net/minecraft/world/entity/player/Inventory items Lnet/minecraft/core/NonNullList;
